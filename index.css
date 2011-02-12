@@ -1,0 +1,11 @@
+body {
+	background-color: #E5E5E5;
+}
+
+table#main {
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:20px;
+    width:815px;
+	 background-color: #FFFFFF;
+}
