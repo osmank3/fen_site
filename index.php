@@ -10,9 +10,7 @@
 </head>
 <body>
 <?php
-/*if (!logined) {
-include "login.php"
-}
+/*if (!logined) include "giris.php";
 elseif {*/
 ?>
 <table id="main">
@@ -31,17 +29,17 @@ elseif {*/
     <td><img src="xxx.png" width="100%" height="150px" alt="" /></td>
 </tr>
 <tr>
-    <td><table>
+    <td><table width="100%">
         <tr>
-            <td><br />
+            <td width="95px" valign="top"><br />
                 <a href="http://localhost/~osman/fen/" title="Ana Sayfa">Ana Sayfa</a><br />
-                <a href="#" title="Son Yazılar">Son Yazılar</a><br />
-                <a href="#" title="Son Dosyalar">Son Dosyalar</a><br />
+                <a href="?sayfa=sonyazilar" title="Son Yazılar">Son Yazılar</a><br />
+                <a href="?sayfa=sondosyalar" title="Son Dosyalar">Son Dosyalar</a><br />
             <h5>Kategoriler</h5>
                 <a href="#" title="xxx">xxx</a><br />
                 <a href="#" title="xxx">xxx</a><br />
             </td>
-            <td><?php include "page.php" ?></td>
+            <td valign="top"><?php include "sayfa.php" ?></td>
         </tr>
     </table></td>
 </tr>
