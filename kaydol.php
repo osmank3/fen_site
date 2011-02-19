@@ -1,13 +1,23 @@
 <?php
+include "mysql.php";
+
 function formgoster($hata = "") { echo '
 <table style="width:270px; margin:7em auto;">
 <tr><td colspan="2" ><p align="center">' . $hata . '</p></td></tr>
 <form method="post">
-<tr><td> İsim:</td><td><input type="text" name="isim" /></td></tr>
-<tr><td> Soyisim:</td><td><input type="text" name="soyisim" /></td></tr>
-<tr><td> E-posta:</td><td><input type="text" name="email" /></td></tr>
+<tr><td> İsim:</td><td><input type="text" name="isim" ';
+if ($_POST["isim"]) echo "value='$_POST[isim]'";
+echo '/></td></tr>
+<tr><td> Soyisim:</td><td><input type="text" name="soyisim" ';
+if ($_POST["soyisim"]) echo "value='$_POST[soyisim]'";
+echo '/></td></tr>
+<tr><td> E-posta:</td><td><input type="text" name="email" ';
+if ($_POST["email"]) echo "value='$_POST[email]'";
+echo '/></td></tr>
 <tr><td><br /></td><td></td></tr>
-<tr><td> Kullanıcı Adı:</td><td><input type="text" name="kullanici" /></td></tr>
+<tr><td> Kullanıcı Adı:</td><td><input type="text" name="kullanici" ';
+if ($_POST["kullanici"]) echo "value='$_POST[kullanici]'";
+echo '/></td></tr>
 <tr><td> Parola:</td><td><input type="password" name="parola" /></td></tr>
 <tr><td> Parola(tekrar):</td><td><input type="password" name="parolatekrar" /></td></tr>
 <tr><td></td><td align="right"><input type="submit" value="Kaydol" /></td></tr>
@@ -26,12 +36,6 @@ if($_GET)
 {
     if($_GET["kod"])
     {
-        $db = mysql_connect("localhost","fen","123321");
-        if (!$db)
-        {
-            die('Could not connect: ' . mysql_error());
-        }
-        mysql_select_db("fen", $db);
         $sorgu = "SELECT kullanici FROM kullanici";
         $sonuc = mysql_query($sorgu,$db);
         while ($satir = mysql_fetch_array($sonuc))
@@ -57,30 +61,35 @@ elseif ($_POST)
     elseif($_POST["parola"] != $_POST["parolatekrar"]) {formgoster("parolalar uyuşmuyor");}
     else
     {
-        $aktifKod = md5($_POST["kullanici"], $raw_output = null);
-        echo $aktifKod;
-        $parola = md5($_POST["parola"], $raw_output = null);
-        $db = mysql_connect("localhost","fen","123321");
-        if (!$db)
-        {
-            die('Could not connect: ' . mysql_error());
-        }
-        mysql_select_db("fen", $db);
-        $sorgu = "INSERT INTO kullanici(kullanici, isim, soyisim, posta, parola, aktif, yonaktif)
-            VALUES
-            ('$_POST[kullanici]', '$_POST[isim]', '$_POST[soyisim]', '$_POST[email]', '$parola', 'False', 'False')";
-        mysql_query($sorgu,$db);
+        $sorgu = "SELECT * FROM kullanici WHERE kullanici = '$_POST[kullanici]'";
         
-        $posta_metin = postaMetin($aktifKod);
-                
-        $mail = mail( $_POST["email"], "Subject: Fen bilgisi aktivasyon.",
-        $posta_metin, "From: osmank3@gmail.com" );
-        if ($mail)
+        if( mysql_num_rows(mysql_query($sorgu, $db)) != 1 )
         {
-            echo "Fen Bilgisi sitesine üyeliğinizin tamamlanması için e-posta adresinize gönderilen aktivasyon bağlantısına tıklamanız gerekmektedir.";
-            echo "<br /><a href='./'>Ana sayfa</a>";
+            $aktifKod = md5($_POST["kullanici"], $raw_output = null);
+            echo $aktifKod;
+            $parola = md5($_POST["parola"], $raw_output = null);
+            
+            $sorgu = "INSERT INTO kullanici(kullanici, isim, soyisim, posta, parola)
+                VALUES
+                ('$_POST[kullanici]', '$_POST[isim]', '$_POST[soyisim]', '$_POST[email]', '$parola')";
+            mysql_query($sorgu,$db);
+            
+            $posta_metin = postaMetin($aktifKod);
+                    
+            $mail = mail( $_POST["email"], "Subject: Fen bilgisi aktivasyon.",
+            $posta_metin, "From: osmank3@gmail.com" );
+            if ($mail)
+            {
+                echo "Fen Bilgisi sitesine üyeliğinizin tamamlanması için e-posta adresinize gönderilen aktivasyon bağlantısına tıklamanız gerekmektedir.";
+                echo "<br /><a href='./'>Ana sayfa</a>";
+            }
+            else { echo "mail gönderilemiyi!"; }
         }
-        else { echo "mail gönderilemiyi!"; }
+        else
+        {
+            unset($_POST["kullanici"]);
+            formgoster("kullanıcı zaten kayıtlı farklı bir kullanıcı adı deneyin.");
+        }
 
     }
 }
