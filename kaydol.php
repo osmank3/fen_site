@@ -25,9 +25,10 @@ echo '/></td></tr>
 </table>';
 }
 function postaMetin($kod) {
+    global $anasayfa
 $metin = "Fen Bilgisi sitesine üyeliğinizin gerçekleşmesi için aşağıdaki bağlantıya tıklayın
 
-http://localhost/~osmank3/kaydol.php?kod=$kod
+".$anasayfa ."kaydol.php?kod=$kod
 
 Bağlantıya tıklanamıyorsa tarayıcınızın adres çubuğuna yapıştırınız." ;
 return $metin;
@@ -77,7 +78,7 @@ elseif ($_POST)
             $posta_metin = postaMetin($aktifKod);
                     
             $mail = mail( $_POST["email"], "Subject: Fen bilgisi aktivasyon.",
-            $posta_metin, "From: osmank3@gmail.com" );
+            $posta_metin, "From: $eposta" );
             if ($mail)
             {
                 echo "Fen Bilgisi sitesine üyeliğinizin tamamlanması için e-posta adresinize gönderilen aktivasyon bağlantısına tıklamanız gerekmektedir.";

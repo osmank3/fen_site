@@ -13,7 +13,7 @@
 <tr>
     <td>
         <table width="100%"><tr><td style="text-align: left">
-            <a href="http://localhost/~osman/fen/" title="Ana Sayfa">Ana Sayfa</a>
+            <?php echo "<a href='$anasayfa' title='Ana Sayfa'>";?>Ana Sayfa</a>
         </td>
         <td style="text-align: right">
             <?php echo $kullanici; ?>
@@ -29,7 +29,7 @@
     <td><table width="100%">
         <tr>
             <td width="95px" valign="top"><br />
-                <a href="http://localhost/~osman/fen/" title="Ana Sayfa">Ana Sayfa</a><br />
+                <?php echo "<a href='$anasayfa' title='Ana Sayfa'>";?>Ana Sayfa</a><br />
                 <a href="?sayfa=sonyazilar" title="Son Yazılar">Son Yazılar</a><br />
                 <a href="?sayfa=sondosyalar" title="Son Dosyalar">Son Dosyalar</a><br />
             <h5>Kategoriler</h5>
