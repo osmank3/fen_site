@@ -23,7 +23,7 @@
     </td>
 </tr>
 <tr>
-    <td><img src="xxx.png" width="100%" height="150px" alt="" /></td>
+    <td><img src="fen.png" width="100%" height="150px" alt="" /></td>
 </tr>
 <tr>
     <td><table width="100%">
