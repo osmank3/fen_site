@@ -2,10 +2,12 @@
 switch($_GET["sayfa"])
 {
     case "sonyazilar":
-        include "sonyazi.php";
+        $sonbicimi = "yazi";
+        include "son.php";
         break;
     case "sondosyalar":
-        include "sondosya.php";
+        $sonbicimi = "dosya";
+        include "son.php";
         break;
 }
 switch($_GET["kategori"])
@@ -18,6 +20,7 @@ switch ($_GET["oturum"])
     case "kapat":
         unset($_SESSION["giris"]);
         unset($_SESSION["kullanici"]);
+        unset($_SESSION["kid"]);
         echo "<script> window.top.location = './'; </script>";
         break;
 }

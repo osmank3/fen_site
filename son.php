@@ -1,12 +1,15 @@
 <?php
-function formgoster($hata = "") { echo "
-<table>
+//global $sonbicimi;
+function formgoster($hata = "") {
+    global $sonbicimi;
+if ($sonbicimi == "dosya"){
+    echo "<table>
 <form name='dosya' method='post' enctype='multipart/form-data'>
     <tr><td colspan='2' align='center'> $hata </td></tr>
     <tr><td align='center'><b>Özet: </b><input type='text' name='ozet' /></td><td align='center'>
         <input type='file' name='dosya' id='dosya' /></td></tr>
     <tr><td align='center'><b>Kategori: </b><select name='kategori'>
-        <option value=''>Kategori Seçin</option>
+        <option value='diğer'>Kategori Seçin</option>
         <option value='xxx1'>xxx1</option>
         <option value='xxx2'>xxx2</option>
         <option value='xxx3'>xxx3</option>
@@ -16,9 +19,28 @@ function formgoster($hata = "") { echo "
 </form>
 </table>";
 }
+elseif($sonbicimi == "yazi") {
+    echo "
+<table>
+<form method='post'>
+<tr><td colspan='3' align='center'>$hata</td></tr>
+<tr><td>Başlık: </td><td colspan='2'><input size='55' type='text' name='baslik'/></td></tr>
+<tr><td colspan='3'><textarea id='comment' name='yazi' cols='62' rows='4' aria-required='true'></textarea></td></tr>
+<tr><td>Kategori: </td><td><select name='kategori'>
+    <option value='diğer'>Kategori Seçin</option>
+    <option value='xxx1'>xxx1</option>
+    <option value='xxx2'>xxx2</option>
+    <option value='xxx3'>xxx3</option> 
+</select></td>
+<td align='right'>
+    <input type='hidden' name='formbicimi' value='yazi' />
+    <input type='submit' value='Yazı Gönder' /></td></tr>
+</form></table>";
+}
+}
 function kisiadi($id) {
     
-    include "mysql.php";
+    global $db;
     
     $sorgu = "SELECT isim, soyisim FROM kullanici WHERE id = '$id'";
     $sonuc = mysql_query($sorgu,$db);
@@ -32,19 +54,32 @@ function kisiadi($id) {
 }
 function verial() {
     
-    include "mysql.php";
+    global $db;
+    global $sonbicimi;    
     
-    $sorgu = "SELECT id, k_id, isim, adres, ozet, kategori FROM dosya ORDER BY id DESC";
-    $sonuc = mysql_query($sorgu, $db);
+    if ($sonbicimi == "dosya")
+        { $sorgu = "SELECT id, k_id, isim, adres, ozet, kategori FROM dosya ORDER BY id DESC"; }
+    elseif($sonbicimi == "yazi")
+        { $sorgu = "SELECT id, k_id, baslik, icerik, kategori FROM yazi ORDER BY id DESC"; }
+    $sonuc = mysql_query($sorgu, $db) or die(mysql_error());
     while ($satir = mysql_fetch_array($sonuc))
     {
         $kisi = kisiadi($satir["k_id"]);
         
-        echo "<p><table><tr><td colspan='2' align='left'><b>Dosya: </b><a href='$satir[adres]'>$satir[isim]</a></td>
-              <td align='right'><i>$kisi</i></td></tr>";
-        echo "<tr><td colspan='3'><b>Özet:</b> $satir[ozet]</td></tr>";
+        if ($sonbicimi == "dosya")
+        {
+            echo "<p><table><tr><td colspan='2' align='left'><b>Dosya: </b><a href='$satir[adres]'>$satir[isim]</a></td>
+                  <td align='right'><i>$kisi</i></td></tr>
+                  <tr><td colspan='3'><b>Özet:</b> $satir[ozet]</td></tr>";
+        }
+        elseif($sonbicimi == "yazi")
+        {
+            echo "<p><table><tr><td colspan='2' align='left'><b>Başlık: </b>$satir[baslik]</td>
+                  <td align='right'><i>$kisi</i></td></tr>
+                  <tr><td colspan='3'><b>İçerik:</b> $satir[icerik]</td></tr>";
+        }
         
-        $sorgu2 = "SELECT icerik, k_id FROM yorum WHERE yer='dosya' AND yer_id='$satir[id]' ORDER BY id";
+        $sorgu2 = "SELECT icerik, k_id FROM yorum WHERE yer='$sonbicimi' AND yer_id='$satir[id]' ORDER BY id";
         $sonuc2 = mysql_query($sorgu2, $db);
         
         $satirsay = mysql_num_rows($sonuc2) + 1;
@@ -71,8 +106,18 @@ if ($_POST)
     {
         case "yorum":
             $sorgu = "INSERT INTO yorum (k_id, yer, yer_id, icerik) VALUES
-                      ('$_SESSION[kid]', 'dosya', '$_POST[id]', '$_POST[icerik]')";
+                      ('$_SESSION[kid]', '$sonbicimi', '$_POST[id]', '$_POST[icerik]')";
             mysql_query($sorgu, $db);
+            break;
+        case "yazi":
+            if (!$_POST["baslik"]) {echo "başlık giriniz";}
+            elseif(!$_POST["yazi"]) {echo "yazı giriniz";}
+            else
+            {
+                $sorgu = "INSERT INTO yazi (k_id, baslik, icerik, kategori) VALUES
+                          ('$_SESSION[kid]', '$_POST[baslik]', '$_POST[yazi]', '$_POST[kategori]')";
+                mysql_query($sorgu, $db);
+            }
             break;
         case "dosya":
             if ($_FILES["dosya"]["error"] > 0)
