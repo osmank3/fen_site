@@ -40,7 +40,7 @@ function verial() {
     {
         $kisi = kisiadi($satir["k_id"]);
         
-        echo "<p><table><tr><td colspan='2' align='left'><b>Dosya: </b><a href='$satir[adres]'>$satir[isim]</td>
+        echo "<p><table><tr><td colspan='2' align='left'><b>Dosya: </b><a href='$satir[adres]'>$satir[isim]</a></td>
               <td align='right'><i>$kisi</i></td></tr>";
         echo "<tr><td colspan='3'><b>Özet:</b> $satir[ozet]</td></tr>";
         
