@@ -65,22 +65,37 @@ function verial() {
     $sonuc = mysql_query($sorgu, $db) or die(mysql_error());
     while ($satir = mysql_fetch_array($sonuc))
     {
+        if ($satir["goster"] == "False")
+        {
+            continue;
+        }
+
         $kisi = kisiadi($satir["k_id"]);
         
         if ($sonbicimi == "dosya")
         {
             echo "<p><table><tr><td colspan='2' align='left'><b>Dosya: </b><a href='$satir[adres]'>$satir[isim]</a></td>
                   <td align='right'><i>$kisi</i></td></tr>
-                  <tr><td colspan='3'><b>Özet:</b> $satir[ozet]</td></tr>";
+                  <tr><td colspan='3'><b>Özet:</b> $satir[ozet] ";
+            if ($_SESSION["kid"] == $satir["k_id"])
+            {
+                echo "<a href='?sil=dosya&sil_id={$satir["id"]}'>sil</a>";
+            }
+            echo "</td></tr>";
         }
         elseif($sonbicimi == "yazi")
         {
             echo "<p><table><tr><td colspan='2' align='left'><b>Başlık: </b>$satir[baslik]</td>
                   <td align='right'><i>$kisi</i></td></tr>
-                  <tr><td colspan='3'><b>İçerik:</b> $satir[icerik]</td></tr>";
+                  <tr><td colspan='3'><b>İçerik:</b> $satir[icerik] ";
+            if ($_SESSION["kid"] == $satir["k_id"])
+            {
+                echo "<a href='?sil=yazi&sil_id={$satir["id"]}'>sil</a>";
+            }
+            echo "</td></tr>";
         }
         
-        $sorgu2 = "SELECT icerik, k_id FROM yorum WHERE yer='$sonbicimi' AND yer_id='$satir[id]' ORDER BY id";
+        $sorgu2 = "SELECT id, icerik, k_id, goster FROM yorum WHERE yer='$sonbicimi' AND yer_id='$satir[id]' ORDER BY id";
         $sonuc2 = mysql_query($sorgu2, $db);
         
         $satirsay = mysql_num_rows($sonuc2) + 1;
@@ -89,8 +104,17 @@ function verial() {
         {
             while ($satir2 = mysql_fetch_array($sonuc2))
             {
+                if ($satir2["goster"] == "False")
+                {
+                    continue;
+                }
                 $kisiyor = kisiadi($satir2["k_id"]);
-                echo "<td colspan='2'><i>$kisiyor</i>:<br/>$satir2[icerik]</td></tr><tr>";
+                echo "<td colspan='2'><i>$kisiyor</i>:<br/>$satir2[icerik] ";
+                if ($_SESSION["kid"] == $satir2["k_id"])
+                {
+                    echo "<a href='?sil=yorum&sil_id={$satir2["id"]}'>sil</a>";
+                }
+                echo "</td></tr><tr>";
             }
         }
         echo "<td colspan='2'><form name='yorum' method='post'>
