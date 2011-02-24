@@ -21,6 +21,16 @@ function girisyap($id, $kullanici)
     $_SESSION["kullanici"] = $kullanici;
     echo "<script> window.top.location = './'; </script>";
 }
+echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Fen Bilgisi</title>
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta http-equiv="content-style-type" content="text/css">
+</head>
+<body>';
 if ($_POST)
 {
     if (!$_POST["kullanici"])
@@ -51,4 +61,5 @@ if ($_POST)
 }
 else
 { formgoster(); }
+echo "</body></html>";
 ?> 

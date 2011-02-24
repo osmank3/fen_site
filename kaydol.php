@@ -1,4 +1,5 @@
 <?php
+include "ayar.php";
 include "mysql.php";
 
 function formgoster($hata = "") { echo '
@@ -25,10 +26,10 @@ echo '/></td></tr>
 </table>';
 }
 function postaMetin($kod) {
-    global $anasayfa
+    global $anasayfa;
 $metin = "Fen Bilgisi sitesine üyeliğinizin gerçekleşmesi için aşağıdaki bağlantıya tıklayın
 
-".$anasayfa ."kaydol.php?kod=$kod
+{$anasayfa}kaydol.php?kod=$kod
 
 Bağlantıya tıklanamıyorsa tarayıcınızın adres çubuğuna yapıştırınız." ;
 return $metin;
@@ -67,7 +68,7 @@ elseif ($_POST)
         if( mysql_num_rows(mysql_query($sorgu, $db)) != 1 )
         {
             $aktifKod = md5($_POST["kullanici"], $raw_output = null);
-            echo $aktifKod;
+            //echo $aktifKod;
             $parola = md5($_POST["parola"], $raw_output = null);
             
             $sorgu = "INSERT INTO kullanici(kullanici, isim, soyisim, posta, parola)

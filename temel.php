@@ -17,7 +17,7 @@
         </td>
         <td style="text-align: right">
             <?php echo $kullanici; ?>
-            <a href="#" title="Profil">Profil</a>
+            <!--<a href="#" title="Profil">Profil</a>-->
             <a href="?oturum=kapat" title="Çıkış">Çıkış</a>
         </td></tr></table>
     </td>
@@ -33,15 +33,15 @@
                 <a href="?sayfa=sonyazilar" title="Son Yazılar">Son Yazılar</a><br />
                 <a href="?sayfa=sondosyalar" title="Son Dosyalar">Son Dosyalar</a><br />
             <h5>Kategoriler</h5>
-                <a href="#" title="xxx">xxx</a><br />
-                <a href="#" title="xxx">xxx</a><br />
+                <!--<a href="#" title="xxx">xxx</a><br />
+                <a href="#" title="xxx">xxx</a><br />-->
             </td>
             <td valign="top"><?php include "sayfa.php" ?></td>
         </tr>
     </table></td>
 </tr>
 <tr>
-    <td style="text-align: center">Bu sitenin tüm içeriği CC by-nc-sa ile lisanslanmıştır.</td>
+    <td style="text-align: center">Bu sitenin tüm içeriği CC by-nc-sa ile lisanslanmıştır. <b>Site test aşamasındadır.</b></td>
 </tr>
 </table>
 </body>

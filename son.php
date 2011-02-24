@@ -7,6 +7,7 @@ if ($sonbicimi == "dosya"){
 <form name='dosya' method='post' enctype='multipart/form-data'>
     <tr><td colspan='2' align='center'> $hata </td></tr>
     <tr><td align='center'><b>Özet: </b><input type='text' name='ozet' /></td><td align='center'>
+        <input type='hidden' name='MAX_FILE_SIZE' value='30000000' />
         <input type='file' name='dosya' id='dosya' /></td></tr>
     <tr><td align='center'><b>Kategori: </b><select name='kategori'>
         <option value='diğer'>Kategori Seçin</option>
@@ -58,9 +59,9 @@ function verial() {
     global $sonbicimi;    
     
     if ($sonbicimi == "dosya")
-        { $sorgu = "SELECT id, k_id, isim, adres, ozet, kategori FROM dosya ORDER BY id DESC"; }
+        { $sorgu = "SELECT id, k_id, isim, adres, ozet, kategori, goster FROM dosya ORDER BY id DESC"; }
     elseif($sonbicimi == "yazi")
-        { $sorgu = "SELECT id, k_id, baslik, icerik, kategori FROM yazi ORDER BY id DESC"; }
+        { $sorgu = "SELECT id, k_id, baslik, icerik, kategori, goster FROM yazi ORDER BY id DESC"; }
     $sonuc = mysql_query($sorgu, $db) or die(mysql_error());
     while ($satir = mysql_fetch_array($sonuc))
     {
