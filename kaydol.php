@@ -34,6 +34,18 @@ $metin = "Fen Bilgisi sitesine üyeliğinizin gerçekleşmesi için aşağıdaki
 Bağlantıya tıklanamıyorsa tarayıcınızın adres çubuğuna yapıştırınız." ;
 return $metin;
 }
+
+echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Fen Bilgisi</title>
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta http-equiv="content-style-type" content="text/css">
+</head>
+<body>';
+
 if($_GET)
 {
     if($_GET["kod"])
@@ -96,4 +108,6 @@ elseif ($_POST)
     }
 }
 else
-{ formgoster(); } ?> 
+{ formgoster(); }
+echo "</body></html>";
+?> 

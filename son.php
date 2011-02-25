@@ -74,9 +74,9 @@ function verial() {
         
         if ($sonbicimi == "dosya")
         {
-            echo "<p><table><tr><td colspan='2' align='left'><b>Dosya: </b><a href='$satir[adres]'>$satir[isim]</a></td>
+            echo "<p><table><tr><td colspan='2' align='left'><b><a href='$satir[adres]'>$satir[isim]</a></b></td>
                   <td align='right'><i>$kisi</i></td></tr>
-                  <tr><td colspan='3'><b>Özet:</b> $satir[ozet] ";
+                  <tr><td colspan='3'>$satir[ozet] ";
             if ($_SESSION["kid"] == $satir["k_id"])
             {
                 echo "<a href='?sil=dosya&sil_id={$satir["id"]}'>sil</a>";
@@ -85,9 +85,9 @@ function verial() {
         }
         elseif($sonbicimi == "yazi")
         {
-            echo "<p><table><tr><td colspan='2' align='left'><b>Başlık: </b>$satir[baslik]</td>
+            echo "<p><table><tr><td colspan='2' align='left'><b>$satir[baslik]</b></td>
                   <td align='right'><i>$kisi</i></td></tr>
-                  <tr><td colspan='3'><b>İçerik:</b> $satir[icerik] ";
+                  <tr><td colspan='3'>$satir[icerik] ";
             if ($_SESSION["kid"] == $satir["k_id"])
             {
                 echo "<a href='?sil=yazi&sil_id={$satir["id"]}'>sil</a>";
