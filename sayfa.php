@@ -1,23 +1,23 @@
 <?php 
 switch($_GET["sayfa"])
 {
-    case "sonyazilar":
-        $sonbicimi = "yazi";
-        include "son.php";
+    case "yazilar":
+        $bicim = "yazi";
+        include "icerik.php";
         break;
-    case "sondosyalar":
-        $sonbicimi = "dosya";
-        include "son.php";
-        break;
-}
-switch($_GET["kategori"])
-{
-    case "xxx":
+    case "dosyalar":
+        $bicim = "dosya";
+        include "icerik.php";
         break;
 }
-switch ($_GET["oturum"])
+if($_GET["kategori"])
 {
-    case "kapat":
+    $kategori = $_GET["kategori"];
+    include "kategori.php";
+}
+switch ($_GET["hesap"])
+{
+    case "cıkıs":
         unset($_SESSION["giris"]);
         unset($_SESSION["kullanici"]);
         unset($_SESSION["kid"]);
@@ -27,23 +27,26 @@ switch ($_GET["oturum"])
 switch ($_GET["sil"])
 {
     case "dosya":
-        $sorgu = "UPDATE dosya SET goster='False' WHERE id=$_GET[sil_id]";
+        $sorgu = "UPDATE {$dbOnek}icerik SET goster='False' WHERE id=$_GET[sil_id]";
         mysql_query($sorgu, $db);
-        echo "<script>window.history.back()</script>";
+        unset($_POST);
+        echo "<script> document.location.href = '$_SERVER[HTTP_REFERER]' </script>";
         break;
     case "yazi":
-        $sorgu = "UPDATE yazi SET goster='False' WHERE id=$_GET[sil_id]";
+        unset($_POST);
+        $sorgu = "UPDATE {$dbOnek}icerik SET goster='False' WHERE id=$_GET[sil_id]";
         mysql_query($sorgu, $db);
-        echo "<script>window.history.back()</script>";
+        echo "<script> document.location.href = '$_SERVER[HTTP_REFERER]' </script>";
         break;
     case "yorum":
-        $sorgu = "UPDATE yorum SET goster='False' WHERE id=$_GET[sil_id]";
+        unset($_POST);
+        $sorgu = "UPDATE {$dbOnek}yorum SET goster='False' WHERE id=$_GET[sil_id]";
         mysql_query($sorgu, $db);
-        echo "<script>window.history.back()</script>";
+        echo "<script> document.location.href = '$_SERVER[HTTP_REFERER]' </script>";
         break;
 }
 if (!$_GET)
 {
-    echo "Ana Sayfa";
+    include "icerik.php";
 }
 ?>
