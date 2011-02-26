@@ -22,8 +22,15 @@
                 <a href="?sayfa=yazilar" title="Sadece Yazılar">Sadece Yazılar</a><br />
                 <a href="?sayfa=dosyalar" title="Sadece Dosyalar">Sadece Dosyalar</a><br />
             <h5>Kategoriler</h5>
-                <!--<a href="#" title="xxx">xxx</a><br />
-                <a href="#" title="xxx">xxx</a><br />-->
+                <a href="?kategori=bilimindogasi" title="Bilimin Doğası">Bilimin Doğası</a><br />
+                <a href="?kategori=cevre" title="Çevre Bilimi">Çevre Bilimi</a><br />
+                <a href="?kategori=fenlab" title="Fen Laboratuvarı">Fen Laboratuvarı</a><br />
+                <a href="?kategori=genetik" title="Genetik">Genetik</a><br />
+                <a href="?kategori=olcme" title="Ölçme Değerlendirme">Ölçme Değerlendirme</a><br />
+                <a href="?kategori=ozelogretim" title="Özel Öğretim">Özel Öğretim</a><br />
+                <a href="?kategori=toplum" title="Topluma Hizmet">Topluma Hizmet</a><br />
+                <a href="?kategori=yer" title="Yer Bilimi">Yer Bilimi</a><br />
+                <a href="?kategori=diger" title="Diğer">Diğer</a><br />
             </td>
             <td valign="top"><?php include "sayfa.php" ?></td>
         </tr>

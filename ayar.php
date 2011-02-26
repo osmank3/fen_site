@@ -8,5 +8,5 @@ $dbSunucu = "localhost";
 $dbKullanici = "fen";
 $dbParola = "123321";
 $dbTablo = "fen";
-$dbOnek = "fen_"
+$dbOnek = "fen_";
 ?>

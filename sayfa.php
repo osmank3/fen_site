@@ -47,6 +47,7 @@ switch ($_GET["sil"])
 }
 if (!$_GET)
 {
+    echo "<h3>Ana Sayfa</h3>";
     include "icerik.php";
 }
 ?>

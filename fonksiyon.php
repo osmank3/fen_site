@@ -19,6 +19,22 @@ Bağlantıya tıklanamıyorsa tarayıcınızın adres çubuğuna yapıştırın�
     return $metin;
 }
 
+function kategoriUzun($kategori)
+{
+    $kategoriler = array();
+    $kategoriler["bilimindogasi"] = "Bilimin Doğası";
+    $kategoriler["cevre"] = "Çevre Bilimi";
+    $kategoriler["fenlab"] = "Fen Laboratuvarı";
+    $kategoriler["genetik"] = "Genetik";
+    $kategoriler["olcme"] = "Ölçme Değerlendirme";
+    $kategoriler["ozelogretim"] = "Özel Öğretim";
+    $kategoriler["toplum"] = "Topluma Hizmet";
+    $kategoriler["yer"] = "Yer Bilimi";
+    $kategoriler["diger"] = "Diğer";
+    
+    return $kategoriler[$kategori];
+}
+
 function kisiadi($id)
 {
     //kişi adlarını "isim soyisim" şeklinde dönen fonksiyon
@@ -66,10 +82,16 @@ function formgoster($formbicimi, $hata = "")
                           <input type='hidden' name='MAX_FILE_SIZE' value='30000000' />
                           <input type='file' name='dosya' id='dosya' /></td></tr>
                       <tr><td align='center'><b>Kategori: </b><select name='kategori'>
-                          <option value='diğer'>Kategori Seçin</option>
-                          <option value='xxx1'>xxx1</option>
-                          <option value='xxx2'>xxx2</option>
-                          <option value='xxx3'>xxx3</option>
+                          <option value='diger'>Kategori Seçin</option>
+                          <option value='bilimindogasi'>Bilimin Doğası</option>
+                          <option value='cevre'>Çevre Bilimi</option>
+                          <option value='fenlab'>Fen Laboratuvarı</option>
+                          <option value='genetik'>Genetik</option>
+                          <option value='olcme'>Ölçme Değerlendirme</option>
+                          <option value='ozelogretim'>Özel Öğretim</option>
+                          <option value='toplum'>Topluma Hizmet</option>
+                          <option value='yer'>Yer Bilimi</option>
+                          <option value='diger'>Diğer</option>
                       </select></td><td align='center'>
                           <input type='hidden' name='formbicimi' value='dosya' />
                           <input type='submit' value='Dosyayı Gönder' /></td></tr>
@@ -84,10 +106,16 @@ function formgoster($formbicimi, $hata = "")
                   <tr><td>Başlık: </td><td colspan='2'><input size='55' type='text' name='baslik'/></td></tr>
                   <tr><td colspan='3'><textarea id='comment' name='yazi' cols='62' rows='4' aria-required='true'></textarea></td></tr>
                   <tr><td>Kategori: </td><td><select name='kategori'>
-                      <option value='diğer'>Kategori Seçin</option>
-                      <option value='xxx1'>xxx1</option>
-                      <option value='xxx2'>xxx2</option>
-                      <option value='xxx3'>xxx3</option> 
+                      <option value='diger'>Kategori Seçin</option>
+                      <option value='bilimindogasi'>Bilimin Doğası</option>
+                      <option value='cevre'>Çevre Bilimi</option>
+                      <option value='fenlab'>Fen Laboratuvarı</option>
+                      <option value='genetik'>Genetik</option>
+                      <option value='olcme'>Ölçme Değerlendirme</option>
+                      <option value='ozelogretim'>Özel Öğretim</option>
+                      <option value='toplum'>Topluma Hizmet</option>
+                      <option value='yer'>Yer Bilimi</option>
+                      <option value='diger'>Diğer</option>
                   </select></td>
                   <td align='right'>
                       <input type='hidden' name='formbicimi' value='yazi' />
@@ -160,7 +188,8 @@ function tablola($id, $bicim = NULL)
         $sonuc2 = mysql_query($sorgu2, $db);
         
         $satirsay = mysql_num_rows($sonuc2) + 1;
-        echo   "<tr><td rowspan='$satirsay' valign='top'><a href='?kategori=$bilgi[kategori]'>$bilgi[kategori]</a></td>";
+        $kategoriAdi = kategoriUzun($bilgi[kategori]);
+        echo   "<tr><td rowspan='$satirsay' valign='top'><a href='?kategori=$bilgi[kategori]'>$kategoriAdi</a></td>";
         
         if ($satirsay > 1)
         {
