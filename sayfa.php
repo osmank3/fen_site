@@ -9,15 +9,27 @@ switch($_GET["sayfa"])
         $bicim = "dosya";
         include "icerik.php";
         break;
+    case "yeniyazi":
+        $bicim = "yeniyazi";
+        include "icerik.php";
+        break;
+    case "yenidosya":
+        $bicim = "yenidosya";
+        include "icerik.php";
+        break;
 }
 if($_GET["kategori"])
 {
     $kategori = $_GET["kategori"];
     include "kategori.php";
 }
+if($_GET["icerik"])
+{
+    tablola($_GET["icerik"]);
+}
 switch ($_GET["hesap"])
 {
-    case "cıkıs":
+    case "cikis":
         unset($_SESSION["giris"]);
         unset($_SESSION["kullanici"]);
         unset($_SESSION["kid"]);

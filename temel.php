@@ -7,7 +7,7 @@
         <td style="text-align: right">
             <?php echo $kullanici; ?>
             <!--<a href="#" title="Profil">Profil</a>-->
-            <a href="?hesap=cıkıs" title="Çıkış">Çıkış</a>
+            <a href="?hesap=cikis" title="Çıkış">Çıkış</a>
         </td></tr></table>
     </td>
 </tr>
@@ -21,6 +21,9 @@
                 <?php echo "<a href='$anasayfa' title='Ana Sayfa'>";?>Ana Sayfa</a><br />
                 <a href="?sayfa=yazilar" title="Sadece Yazılar">Sadece Yazılar</a><br />
                 <a href="?sayfa=dosyalar" title="Sadece Dosyalar">Sadece Dosyalar</a><br />
+            <h5>Yeni</h5>
+                <a href="?sayfa=yeniyazi" title="Yazı ekle">Yazı</a><br />
+                <a href="?sayfa=yenidosya" title="Dosya ekle">Dosya</a><br />
             <h5>Kategoriler</h5>
                 <a href="?kategori=bilimindogasi" title="Bilimin Doğası">Bilimin Doğası</a><br />
                 <a href="?kategori=cevre" title="Çevre Bilimi">Çevre Bilimi</a><br />

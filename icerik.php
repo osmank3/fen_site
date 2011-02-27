@@ -16,6 +16,7 @@ if ($_POST)
                 $sorgu = "INSERT INTO {$dbOnek}icerik (k_id, bicim, baslik, yazi, kategori) VALUES
                           ('$_SESSION[kid]', 'yazi', '$_POST[baslik]', '$_POST[yazi]', '$_POST[kategori]')";
                 mysql_query($sorgu, $db);
+                echo "<script> alert('Yazı başarıyla eklendi.');</script>";
             }
             break;
         case "dosya":
@@ -37,11 +38,13 @@ if ($_POST)
                     $sorgu = "INSERT INTO {$dbOnek}icerik (k_id, bicim, baslik, adres, yazi, kategori) VALUES
                             ('$_SESSION[kid]', 'dosya', '{$_FILES["dosya"]["name"]}', 'dosya/{$_FILES["dosya"]["name"]}', '$_POST[yazi]', '$_POST[kategori]')";
                     mysql_query($sorgu, $db);
+                    echo "<script> alert('Dosya başarıyla eklendi.');</script>";
                 }
             }
             break;
     }
 }
+$icerikVar = True;
 switch ($bicim)
 {
     case "dosya":
@@ -52,14 +55,25 @@ switch ($bicim)
         $sorgu = "SELECT id, bicim FROM {$dbOnek}icerik WHERE bicim='$bicim' ORDER BY id DESC";
         formgoster("yazi");
         break;
+    case "yenidosya":
+        formgoster("dosya");
+        $icerikVar = False;
+        break;
+    case "yeniyazi":
+        formgoster("yazi");
+        $icerikVar = False;
+        break;
     default:
         $sorgu = "SELECT id, bicim FROM {$dbOnek}icerik ORDER BY id DESC";
         break;
 }
-$sonuc = mysql_query($sorgu, $db);
-
-while($satir = mysql_fetch_array($sonuc))
+if ($icerikVar == True)
 {
-    tablola($satir["id"], $satir["bicim"]);
+    $sonuc = mysql_query($sorgu, $db);
+
+    while($satir = mysql_fetch_array($sonuc))
+    {
+        tablola($satir["id"], $satir["bicim"]);
+    }
 }
 ?>

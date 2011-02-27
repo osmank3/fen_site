@@ -170,6 +170,7 @@ function tablola($id, $bicim = NULL)
         
         $kisi = kisiadi($bilgi["k_id"]);
         echo   "<p><table width='100%'>
+                <tr><td width='25%'></td colspan='3'><td width='75%'></td></tr>
                 <tr>
                     <td colspan='2' align='left'>
                         <a href='?icerik=$id'><b>$bilgi[baslik]</b></a> ";
@@ -177,7 +178,7 @@ function tablola($id, $bicim = NULL)
         echo   "</td><td colspan='2' align='right'><i>$kisi</i></td>
                 </tr>
                 <tr>
-                     <td colspan='3' width='100%'>$bilgi[yazi]</td>";
+                     <td colspan='3'>$bilgi[yazi]</td>";
                      if ($_SESSION["kid"] == $bilgi["k_id"])
                      {
                          echo "<td align='center'><a href='?sil=dosya&sil_id=$id'>sil</a></td>";

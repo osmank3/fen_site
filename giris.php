@@ -11,7 +11,6 @@ if ($_POST)
             else
             {
                 $sorgu = "SELECT id, parola, aktif FROM {$dbOnek}kullanici WHERE kullanici = '$_POST[giriskullanici]'";
-                echo $sorgu;
                 $sonuc = mysql_query($sorgu,$db);
 
                 if( mysql_num_rows($sonuc) == 1 )
@@ -74,13 +73,13 @@ if ($_POST)
             break;
     }
 }
-echo "<table style='width:270px; margin:7em auto;'>
+echo "<table style='margin:7em auto;'>
         <tr>
             <td valign='top' align='center'><h4>Giriş Yap</h4>";
 if ($_POST["formbicimi"] == "giris") formgoster("giris", $hata);
 else formgoster("giris");
 echo "      </td>
-            <td valign='center'><<<<<<hr /><hr />>>>>></td>
+            <td width='50px'><br /></td>
             <td valing='top' align='center'><h4>Kayıt Ol</h4>";
 if ($_POST["formbicimi"] == "kaydol") formgoster("kaydol", $hata);
 else formgoster("kaydol");
