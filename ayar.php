@@ -2,6 +2,7 @@
 //site ayarları
 $anasayfa = "http://localhost/~osman/fen/";
 $eposta = "osmank3@gmail.com";
+$grupEposta = "osmank3@gmail.com";
 
 //veritabanı ayarları
 $dbSunucu = "localhost";

@@ -56,7 +56,7 @@ if ($_POST)
                     $posta_metin = aktifPosta($aktifKod);
                             
                     $mail = mail( $_POST["email"], "Subject: Fen bilgisi aktivasyon.",
-                    $posta_metin, "From: $eposta" );
+                                  $posta_metin, "From: $eposta" );
                     if ($mail)
                     {
                         $hata = "Fen Bilgisi sitesine üyeliğinizin tamamlanması için e-posta adresinize gönderilen aktivasyon bağlantısına tıklamanız gerekmektedir.";
@@ -74,6 +74,7 @@ if ($_POST)
     }
 }
 echo "<table style='margin:7em auto;'>
+        <tr><td colspan='3' align='center'><h1><a href='$anasayfa'>Fen Bilgisi 3B</a></h1></td></tr>
         <tr>
             <td valign='top' align='center'><h4>Giriş Yap</h4>";
 if ($_POST["formbicimi"] == "giris") formgoster("giris", $hata);

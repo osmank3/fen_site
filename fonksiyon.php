@@ -218,4 +218,68 @@ function tablola($id, $bicim = NULL)
                  </td></tr></table></p>";
     }
 }
+
+function grubaPosta($tablo, $id)
+{
+    //yeni içeriği google gruba postalayan fonksiyon 
+    global $db;
+    global $dbOnek;
+    global $anasayfa;
+    global $eposta;
+    global $grupEposta;
+    
+    switch($tablo)
+    {
+        case "icerik":
+            $sorgu = "SELECT * FROM {$dbOnek}icerik WHERE id='$id'";
+            $sonuc = mysql_query($sorgu, $db);
+            if (mysql_num_rows($sonuc) == 1)
+            {
+                $bilgi = mysql_fetch_assoc($sonuc);
+                $kisiadi = kisiadi($bilgi["k_id"]);
+                $kategori = kategoriUzun($bilgi["kategori"]);
+                $konu = $bilgi["baslik"];
+                if ($bilgi["bicim"] == "yazi")
+                {
+                    $metin = "Yazan: $kisiadi\n\n$bilgi[yazi]\n\n$kategori\n\n
+                              \r--Bu e-posta otomatik oluşturulmuştur.--";
+                }
+                elseif ($bilgi["bicim"] == "dosya")
+                {
+                    if (substr($bilgi["adres"], 0, 4) == "http")
+                    {
+                        $adres = $bilgi["adres"];
+                    }
+                    else
+                    {
+                        $adres = "{$anasayfa}{$bilgi["adres"]}";
+                    }
+                    $metin = "Yükleyen: $kisiadi\n\n$bilgi[yazi]\n\nİndir: $adres\n\n$kategori\n
+                              \r--Bu e-posta $anasayfa tarafından otomatik oluşturulmuştur.--";
+                }
+                mail( $grupEposta, $konu, $metin, "From: $eposta" );
+            }
+            break;
+            
+        case "yorum":
+            $sorgu = "SELECT * FROM {$dbOnek}yorum WHERE id='$id'";
+            $sonuc = mysql_query($sorgu, $db);
+            if (mysql_num_rows($sonuc) == 1)
+            {
+                $bilgi = mysql_fetch_assoc($sonuc);
+                $kisiadi = kisiadi($bilgi["k_id"]);
+                
+                $sorgu2 = "SELECT baslik FROM {$dbOnek}icerik WHERE id='$bilgi[i_id]'";
+                $sonuc2 = mysql_query($sorgu2, $db);
+                $bilgi2 = mysql_fetch_assoc($sonuc2);
+                $konu = $bilgi2["baslik"];
+                
+                $metin = "Yorumlayan: $kisiadi\n\n$bilgi[yazi]\n
+                          \r--Bu e-posta $anasayfa tarafından otomatik oluşturulmuştur.--";
+                
+                mail( $grupEposta, "Re: $konu", $metin, "From: $eposta" );
+            }
+            break;
+    }
+}
 ?>

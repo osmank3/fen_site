@@ -7,6 +7,12 @@ if ($_POST)
             $sorgu = "INSERT INTO {$dbOnek}yorum (k_id, i_id, yazi) VALUES
                       ('$_SESSION[kid]', '$_POST[id]', '$_POST[yazi]')";
             mysql_query($sorgu, $db);
+            
+            $sorgu = "SELECT max(id) FROM {$dbOnek}yorum";
+            $sonuc = mysql_query($sorgu, $db);
+            $bilgi = mysql_fetch_assoc($sonuc);
+            grubaPosta("yorum", $bilgi["max(id)"]);
+
             break;
         case "yazi":
             if (!$_POST["baslik"]) {echo "başlık giriniz";}
@@ -16,6 +22,12 @@ if ($_POST)
                 $sorgu = "INSERT INTO {$dbOnek}icerik (k_id, bicim, baslik, yazi, kategori) VALUES
                           ('$_SESSION[kid]', 'yazi', '$_POST[baslik]', '$_POST[yazi]', '$_POST[kategori]')";
                 mysql_query($sorgu, $db);
+                
+                $sorgu = "SELECT max(id) FROM {$dbOnek}icerik";
+                $sonuc = mysql_query($sorgu, $db);
+                $bilgi = mysql_fetch_assoc($sonuc);
+                grubaPosta("icerik", $bilgi["max(id)"]);
+                
                 echo "<script> alert('Yazı başarıyla eklendi.');</script>";
             }
             break;
@@ -34,10 +46,14 @@ if ($_POST)
                 {
                     move_uploaded_file($_FILES["dosya"]["tmp_name"],
                             "dosya/" . $_FILES["dosya"]["name"]);
-                    echo "dosya yüklendi.";
                     $sorgu = "INSERT INTO {$dbOnek}icerik (k_id, bicim, baslik, adres, yazi, kategori) VALUES
                             ('$_SESSION[kid]', 'dosya', '{$_FILES["dosya"]["name"]}', 'dosya/{$_FILES["dosya"]["name"]}', '$_POST[yazi]', '$_POST[kategori]')";
                     mysql_query($sorgu, $db);
+                
+                    $sorgu = "SELECT max(id) FROM {$dbOnek}icerik";
+                    $sonuc = mysql_query($sorgu, $db);
+                    $bilgi = mysql_fetch_assoc($sonuc);
+                    grubaPosta("icerik", $bilgi["max(id)"]);
                     echo "<script> alert('Dosya başarıyla eklendi.');</script>";
                 }
             }
