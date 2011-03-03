@@ -6,7 +6,7 @@
         </td>
         <td style="text-align: right">
             <?php echo $kullanici; ?>
-            <!--<a href="#" title="Profil">Profil</a>-->
+            <a href="?hesap=goster" title="Profil">Profil</a>
             <a href="?hesap=cikis" title="Çıkış">Çıkış</a>
         </td></tr></table>
     </td>

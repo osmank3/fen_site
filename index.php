@@ -21,7 +21,6 @@ if ($_GET["hesap"] == "aktif")
     if($_GET["kod"])
     {
         $sorgu = "SELECT kullanici FROM {$dbOnek}kullanici";
-        echo $sorgu;
         $sonuc = mysql_query($sorgu,$db);
         while ($satir = mysql_fetch_array($sonuc))
         {

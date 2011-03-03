@@ -52,7 +52,7 @@ function kisiadi($id)
     else { return ""; }
 }
 
-function formgoster($formbicimi, $hata = "")
+function formgoster($formbicimi, $hata = "", $profil = NULL)
 {
     /* veri gönderme için kullanılacak formları göstermek için fonksiyon
      *
@@ -149,6 +149,34 @@ function formgoster($formbicimi, $hata = "")
                   </form>
                   </table>";
             break;
+        case "profil":
+            echo "<table>
+                  <form method='post'>
+                      <tr><td colspan='2'><p align='center'>$hata</p></td></tr>
+                      <tr><td>İsim:</td><td><input type='text' name='isim' value='$profil[isim]' /></td></tr>
+                      <tr><td> Soyisim:</td><td><input type='text' name='soyisim' value='$profil[soyisim]' /></td></tr>
+                      <tr><td> E-posta:</td><td><input type='text' name='email' value='$profil[posta]' /></td></tr>
+                      <tr><td></td><td align='right'>
+                          <input type='hidden' name='formbicimi' value='profil' />
+                          <input type='submit' value='Kaydet' />
+                      </td></tr>
+                  </form>
+                  </table>";
+            break;
+        case "sifre":
+            echo "<table>
+                  <form method='post'>
+                  <tr><td colspan='2'><p align='center'>$hata</p></td></tr>                  
+                  <tr><td> Eski parola:</td><td><input type='password' name='eskiparola' /></td></tr>
+                  <tr><td><br /></td></tr>
+                  <tr><td> Parola:</td><td><input type='password' name='parola' /></td></tr>
+                  <tr><td> Parola(tekrar):</td><td><input type='password' name='parolatekrar' /></td></tr>
+                  <tr><td></td><td align='right'>
+                      <input type='hidden' name='formbicimi' value='sifre' />
+                      <input type='submit' value='Şifre Değiştir' /></td></tr>
+                  </form>
+                  </table>";
+            break;
     }
 }
 
@@ -175,7 +203,7 @@ function tablola($id, $bicim = NULL)
                     <td colspan='2' align='left'>
                         <a href='?icerik=$id'><b>$bilgi[baslik]</b></a> ";
                         if ($bicim == "dosya") echo "<a href='$bilgi[adres]'>İndir</a>";
-        echo   "</td><td colspan='2' align='right'><i>$kisi</i></td>
+        echo   "</td><td colspan='2' align='right'><i><a href='?hesap=goster&id=$bilgi[k_id]'>$kisi</a></i></td>
                 </tr>
                 <tr>
                      <td colspan='3'>$bilgi[yazi]</td>";
@@ -199,7 +227,7 @@ function tablola($id, $bicim = NULL)
                 if ($satir2["goster"] == "False") continue;
                 
                 $kisiyor = kisiadi($satir2["k_id"]);
-                echo "<td colspan='2'><i>$kisiyor</i>:<br />$satir2[yazi]</td>";
+                echo "<td colspan='2'><i><a href='?hesap=goster&id=$satir2[k_id]'>$kisiyor</a></i>:<br />$satir2[yazi]</td>";
                 if ($_SESSION["kid"] == $satir2["k_id"])
                 {
                     echo "<td align='center'><a href='?sil=yorum&sil_id={$satir2['id']}'>sil</a></td>";
@@ -216,6 +244,43 @@ function tablola($id, $bicim = NULL)
                      <input type='hidden' name='id' value='$id' />
                      <input type='submit' value='Gönder' /></form>
                  </td></tr></table></p>";
+    }
+}
+
+function profilTablola($id)
+{
+    /* profilleri tablolamak için fonksiyon
+     *
+     * tablodaki id'si verilmek zorunda. */
+    global $dbOnek;
+    global $db;
+    
+    $sorgu = "SELECT * FROM {$dbOnek}kullanici WHERE id='$id'";
+    $sonuc = mysql_query($sorgu,$db);
+
+    if( mysql_num_rows($sonuc) == 1 )
+    {
+        $bilgi = mysql_fetch_assoc($sonuc);
+        
+        echo   "<p><table width='100%'>
+                <tr>
+                    <td>Kullanıcı Adı:</td><td>$bilgi[kullanici]</td>
+                </tr><tr>
+                    <td>İsim:</td><td>$bilgi[isim]</td>
+                </tr><tr>
+                    <td>Soyisim:</td><td>$bilgi[soyisim]</td>
+                </tr><tr>
+                    <td>E-posta:</td><td>$bilgi[posta]</td>
+                </tr>";
+        if ($_SESSION["kid"] == $bilgi["id"])
+        {
+            echo   "<tr><td><br /></td></tr>
+                    <tr>
+                        <td><a href='?hesap=ayarla&bicim=sifre' title='Şifre Değiştir'>Şifre Değiştir</a></td>
+                        <td><a href='?hesap=ayarla&bicim=profil' title='Profil Düzenle'>Profil Düzenle</a></td>
+                    </tr>";
+        }
+        echo   "</table></p>";
     }
 }
 

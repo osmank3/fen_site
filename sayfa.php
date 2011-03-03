@@ -35,6 +35,15 @@ switch ($_GET["hesap"])
         unset($_SESSION["kid"]);
         echo "<script> window.top.location = './'; </script>";
         break;
+        
+    case "goster":
+        echo "<h3>Profil</h3>";
+        if ($_GET["id"]) profilTablola($_GET["id"]);
+        else profilTablola($_SESSION["kid"]);
+        break;
+    case "ayarla":
+        $bicim = $_GET["bicim"];
+        include "profil.php";
 }
 switch ($_GET["sil"])
 {
