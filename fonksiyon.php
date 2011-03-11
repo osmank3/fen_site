@@ -74,7 +74,7 @@ function formgoster($formbicimi, $hata = "", $profil = NULL)
                   </table>";
             break;
         
-        case "dosya": //dosya yğklemek için form
+        case "dosya": //dosya yüklemek için form
             echo "<table>
                   <form name='dosya' method='post' enctype='multipart/form-data' action=''>
                       <tr><td colspan='2' align='center'> $hata </td></tr>
@@ -149,7 +149,7 @@ function formgoster($formbicimi, $hata = "", $profil = NULL)
                   </form>
                   </table>";
             break;
-        case "profil":
+        case "profil": //profil düzenlemek için
             echo "<table>
                   <form method='post'>
                       <tr><td colspan='2'><p align='center'>$hata</p></td></tr>
@@ -163,7 +163,7 @@ function formgoster($formbicimi, $hata = "", $profil = NULL)
                   </form>
                   </table>";
             break;
-        case "sifre":
+        case "sifre": //Şifre değiştirmek için
             echo "<table>
                   <form method='post'>
                   <tr><td colspan='2'><p align='center'>$hata</p></td></tr>                  
@@ -180,70 +180,81 @@ function formgoster($formbicimi, $hata = "", $profil = NULL)
     }
 }
 
-function tablola($id, $bicim = NULL)
+function tablola($id)
 {
     /* verileri tablolamak için fonksiyon
      *
-     * tablo biçimi("dosya"/"yazi") ve tablodaki id'si verilmek zorunda. */
+     * tablodaki id'si verilmek zorunda. */
     global $dbOnek;
     global $db;
     
-    $sorgu = "SELECT k_id, baslik, adres, yazi, kategori, goster FROM {$dbOnek}icerik WHERE id='$id'";
+    $sorgu = "SELECT k_id, baslik, bicim, adres, yazi, kategori, goster FROM {$dbOnek}icerik WHERE id='$id'";
     $sonuc = mysql_query($sorgu,$db);
 
     if( mysql_num_rows($sonuc) == 1 )
     {
         $bilgi = mysql_fetch_assoc($sonuc);
         if ($bilgi["goster"] == "False") return; //gizlenmiş öğeler için tablo oluşturmaz.
-        
-        $kisi = kisiadi($bilgi["k_id"]);
-        echo   "<p><table width='100%'>
-                <tr><td width='25%'></td colspan='3'><td width='75%'></td></tr>
-                <tr>
-                    <td colspan='2' align='left'>
-                        <a href='?icerik=$id'><b>$bilgi[baslik]</b></a> ";
-                        if ($bicim == "dosya") echo "<a href='$bilgi[adres]'>İndir</a>";
-        echo   "</td><td colspan='2' align='right'><i><a href='?hesap=goster&id=$bilgi[k_id]'>$kisi</a></i></td>
-                </tr>
-                <tr>
-                     <td colspan='3'>$bilgi[yazi]</td>";
-                     if ($_SESSION["kid"] == $bilgi["k_id"])
-                     {
-                         echo "<td align='center'><a href='?sil=dosya&sil_id=$id'>sil</a></td>";
-                     }
-        echo   "</tr>";
-        
+       
         $sorgu2 = "SELECT id, yazi, k_id, goster FROM {$dbOnek}yorum WHERE i_id='$id' ORDER BY id";
         $sonuc2 = mysql_query($sorgu2, $db);
         
-        $satirsay = mysql_num_rows($sonuc2) + 1;
-        $kategoriAdi = kategoriUzun($bilgi[kategori]);
-        echo   "<tr><td rowspan='$satirsay' valign='top'><a href='?kategori=$bilgi[kategori]'>$kategoriAdi</a></td>";
+        $kisi = kisiadi($bilgi["k_id"]);
         
-        if ($satirsay > 1)
-        {
-            while ($satir2 = mysql_fetch_array($sonuc2))
-            {
-                if ($satir2["goster"] == "False") continue;
-                
-                $kisiyor = kisiadi($satir2["k_id"]);
-                echo "<td colspan='2'><i><a href='?hesap=goster&id=$satir2[k_id]'>$kisiyor</a></i>:<br />$satir2[yazi]</td>";
-                if ($_SESSION["kid"] == $satir2["k_id"])
-                {
-                    echo "<td align='center'><a href='?sil=yorum&sil_id={$satir2['id']}'>sil</a></td>";
-                }
-                echo "</tr>";
-            }
-         }
-         echo   "<td colspan='2'>
-                     <form name='yorum' method='post' action=''>
-                     Yorum yap:<input type='text' name='yazi' size='55' />
-                 </td>
-                 <td>
-                     <input type='hidden' name='formbicimi' value='yorum' />
-                     <input type='hidden' name='id' value='$id' />
-                     <input type='submit' value='Gönder' /></form>
-                 </td></tr></table></p>";
+        $kategoriAdi = kategoriUzun($bilgi[kategori]);
+        
+        echo   "<div id='icerik'>
+                    <div id='iust'>
+                        <div id='iyazan'>
+                            <a href='?hesap=goster&id=$bilgi[k_id]'>$kisi</a>
+                        </div>
+                        
+                        <div id='ibaslik'>
+                            <a href='?icerik=$id'><b>$bilgi[baslik]</b> </a>";
+                            if ($bilgi["bicim"] == "dosya") echo "<a href='$bilgi[adres]'>İndir</a>";
+        echo   "        </div>
+                    </div>
+                    
+                    <div id='iorta'>
+                        <div id='iislem'>";
+                            if ($_SESSION["kid"] == $bilgi["k_id"])  echo "<a href='?sil=dosya&sil_id=$id'>sil</a>";
+        echo   "        </div>
+                        <div id='iyazi'>
+                            $bilgi[yazi]
+                        </div>
+                        
+                    </div>
+                    
+                    <div id='ialt'>
+                        <div id='ikatalog'>
+                            <a href='?kategori=$bilgi[kategori]'>$kategoriAdi</a>
+                        </div>
+                        
+                        <div id='iyorum'>";
+                            while ($satir2 = mysql_fetch_array($sonuc2))
+                            {
+                                if ($satir2["goster"] == "False") continue;
+                                
+                                $kisiyor = kisiadi($satir2["k_id"]);
+                                
+                                echo   "<div id='yorum'>";
+                                            if ($_SESSION["kid"] == $satir2["k_id"]) echo "<div id='yislem'><a href='?sil=yorum&sil_id={$satir2['id']}'>sil</a></div>";
+                                echo   "    <div id='yyazan'>$kisiyor:</div>
+                                            <div id='yyazi'>$satir2[yazi]</div>
+                                            <hr />
+                                        </div>";
+                            }
+                            echo   "<div id='yorum'>
+                                        <form name='yorum' method='post' action=''>
+                                            Yorum yap:<input type='text' name='yazi' size='55' />
+                                            <input type='hidden' name='formbicimi' value='yorum' />
+                                            <input type='hidden' name='id' value='$id' />
+                                            <input type='submit' value='Gönder' />
+                                        </form>
+                                    </div>";
+        echo   "        </div>
+                    </div>
+                </div>";
     }
 }
 
@@ -292,6 +303,9 @@ function grubaPosta($tablo, $id)
     global $anasayfa;
     global $eposta;
     global $grupEposta;
+    global $grupEpostaDurum;
+    
+    if (!$grupEpostaDurum) return;
     
     switch($tablo)
     {

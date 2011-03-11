@@ -1,11 +1,101 @@
-body {
-	background-color: #E5E5E5;
+#sayfa {
+    width:850px;
+    margin:10px auto;
 }
 
-table#main {
-    margin-left:auto;
-    margin-right:auto;
-    margin-top:20px;
-    width:815px;
-	background-color: #FFFFFF;
+#sust {
+    width:830px;
+    padding:10px;
+}
+
+#sustsol {
+    float:left;
+}
+
+#sustsag {
+    float:right;
+}
+
+#sustresim {
+    width:850px;
+}
+
+#sanahat {
+    width:150px;
+    padding:10px;
+    float:left;
+}
+
+#sicerik {
+    width:660px;
+    padding:10px;
+	float:right;
+}
+
+#salt {
+    width:830px;
+    padding:10px;
+    clear:both;
+    text-align:center;
+}
+
+#icerik {
+    width:660px;
+    margin-bottom:20px;
+    clear:both;
+    float:right;
+    /*border:1px solid #AAA;
+    border falan girilecek*/
+}
+
+#iust {
+    clear:both;
+}
+
+#ibaslik {
+    float:left;
+}
+
+#iyazan {
+    font:italic;
+    float:right;
+}
+
+#iorta {
+    clear:both;
+}
+
+#iyazi {
+}
+
+#iislem {
+    float:right;
+}
+
+#ialt {
+    clear:both;
+}
+
+#ikategori {
+    float:left;
+}
+
+#iyorum {
+    float:right;
+    width:580px;
+}
+
+#yorum {
+    /*border falan girilecek*/
+}
+
+#yyapan {
+    font:italic;
+}
+
+#yyazi {
+}
+
+#yislem {
+    float:right
 }
