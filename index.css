@@ -35,7 +35,17 @@ a
     
     .sustresim
     {
-        width:850px;
+        width:100%;
+    }
+    
+    .sgiris
+    {
+        padding:10px;
+        margin:10px;
+        clear:both;
+        text-align:center;
+        background-color: #699EBD;
+        border: 1px solid #699EBD;
     }
     
     .sanahat

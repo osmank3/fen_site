@@ -73,18 +73,22 @@ if ($_POST)
             break;
     }
 }
-echo "<table style='margin:7em auto;'>
-        <tr><td colspan='3' align='center'><h1><a href='$anasayfa'>Fen Bilgisi 3B</a></h1></td></tr>
-        <tr>
-            <td valign='top' align='center'><h4>Giriş Yap</h4>";
-if ($_POST["formbicimi"] == "giris") formgoster("giris", $hata);
-else formgoster("giris");
-echo "      </td>
-            <td width='50px'><br /></td>
-            <td valing='top' align='center'><h4>Kayıt Ol</h4>";
-if ($_POST["formbicimi"] == "kaydol") formgoster("kaydol", $hata);
-else formgoster("kaydol");
-echo "      </td>
-        </tr>
-    </table>";
+echo   "<div class='sayfa yuvar'>
+            <div class='sustresim'>
+                <a href='$anasayfa'><img src='fen.png' width='100%' height='150px' alt='' /></a>
+            </div>
+            
+            <div class='sgiris yuvar'>";
+                if ($_POST["formbicimi"] == "giris") formgoster("giris", $hata);
+                else formgoster("giris");
+echo   "    </div>
+            
+            <div class='sgiris yuvar'>";
+                if ($_POST["formbicimi"] == "kaydol") formgoster("kaydol", $hata);
+                else formgoster("kaydol");
+echo   "    </div>
+            <div class='salt'>
+                Bu sitenin tüm içeriği CC by-nc-sa ile lisanslanmıştır. <b>Site test aşamasındadır.</b>
+            </div>
+        </div>";
 ?> 

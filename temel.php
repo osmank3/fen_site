@@ -8,8 +8,8 @@
     </div>
 </div>
 
-<div class="ustresiml">
-    <img src="fen.png" width="100%" height="150px" alt="" />
+<div class="sustresim">
+    <?php echo "<a href='$anasayfa' title='Ana Sayfa'>";?><img src="fen.png" width="100%" height="150px" alt="" /></a>
 </div>
 
 <div class="sanahat yuvar">

@@ -66,18 +66,16 @@ function formgoster($formbicimi, $hata = "", $profil = NULL)
     switch($formbicimi)
     {
         case "giris": //giriş bölümü için form
-            echo "<table style='width:270px; margin:7em auto; background-color: #FFFFFF;'>
-                  <form method='post'>
-                      <tr><td colspan='2'><p align='center'> $hata </p></td></tr>
-                      <tr><td> Kullanıcı Adı:</td><td><input type='text' name='giriskullanici' ";
-            if ($_POST["giriskullanici"]) echo "value='$_POST[giriskullanici]'";
-            echo "        /></td></tr>
-                      <tr><td> Parola:</td><td><input type='password' name='girisparola' /></td></tr>
-                      <tr><td></td><td align='right'>
-                          <input type='hidden' name='formbicimi' value='giris' />
-                          <input type='submit' value='Giriş' /></td></tr>
-                  </form>
-                  </table>";
+            echo   "<h4>Giriş</h4>
+                    <p>$hata</p>
+                    <form method='post'>
+                        Kullanıcı Adı:<input type='text' name='giriskullanici' ";
+                            if ($_POST["giriskullanici"]) echo "value='$_POST[giriskullanici]'";
+            echo   "        />
+                        Parola:<input type='password' name='girisparola' />
+                        <input type='hidden' name='formbicimi' value='giris' />
+                        <input type='submit' value='Giriş' />
+                    </form>";
             break;
         
         case "dosya": //dosya yüklemek için form
@@ -131,29 +129,43 @@ function formgoster($formbicimi, $hata = "", $profil = NULL)
             break;
         
         case "kaydol": //kaydolmak için form
-            echo "<table style='width:270px; margin:7em auto; background-color: #FFFFFF;'>
-                  <tr><td colspan='2'><p align='center'>$hata</p></td></tr>
-                  <form method='post'>
-                  <tr><td> İsim:</td><td><input type='text' name='isim' ";
-            if ($_POST["isim"]) echo "value='$_POST[isim]'";
-            echo "/></td></tr>
-                  <tr><td> Soyisim:</td><td><input type='text' name='soyisim' ";
-            if ($_POST["soyisim"]) echo "value='$_POST[soyisim]'";
-            echo "/></td></tr>
-                  <tr><td> E-posta:</td><td><input type='text' name='email' ";
-            if ($_POST["email"]) echo "value='$_POST[email]'";
-            echo "/></td></tr>
-                  <tr><td><br /></td></tr>
-                  <tr><td> Kullanıcı Adı:</td><td><input type='text' name='kullanici' ";
-            if ($_POST["kullanici"]) echo "value='$_POST[kullanici]'";
-            echo "/></td></tr>
-                  <tr><td> Parola:</td><td><input type='password' name='parola' /></td></tr>
-                  <tr><td> Parola(tekrar):</td><td><input type='password' name='parolatekrar' /></td></tr>
-                  <tr><td></td><td align='right'>
-                      <input type='hidden' name='formbicimi' value='kaydol' />
-                      <input type='submit' value='Kaydol' /></td></tr>
-                  </form>
-                  </table>";
+            echo   "<h4>Kaldol</h4>
+                    <p>$hata</p>
+                    <table align='center'>
+                    <form method='post'>
+                        <tr>
+                            <td>İsim:</td>
+                            <td><input type='text' name='isim' ";
+                                if ($_POST["isim"]) echo "value='$_POST[isim]'";
+            echo   "            /></td>
+                            <td>Kullanıcı Adı:</td>
+                            <td><input type='text' name='kullanici' ";
+                                if ($_POST["kullanici"]) echo "value='$_POST[kullanici]'";
+            echo   "            /></td>
+                        </tr>
+                        <tr>
+                            <td>Soyisim:</td>
+                            <td><input type='text' name='soyisim' ";
+                                if ($_POST["soyisim"]) echo "value='$_POST[soyisim]'";
+            echo   "            /></td>
+                            <td>Parola:</td>
+                            <td><input type='password' name='parola' /></td>
+                        </tr>
+                        <tr>
+                            <td>E-posta:</td>
+                            <td><input type='text' name='email' ";
+                                if ($_POST["email"]) echo "value='$_POST[email]'";
+            echo   "            /></td>
+                            <td>Parola(tekrar):</td>
+                            <td><input type='password' name='parolatekrar' /></td>
+                        </tr>
+                        <tr>
+                            <td colspan='4' align='right'>
+                                <input type='hidden' name='formbicimi' value='kaydol' />
+                                <input type='submit' value='Kaydol' /></td>
+                        </tr>
+                    </form>
+                    </table>";
             break;
         case "profil": //profil düzenlemek için
             echo "<table>
