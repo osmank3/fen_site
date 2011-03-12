@@ -1,18 +1,18 @@
-<div id="sayfa">
-<div id="sust">
-    <div id="sustsol"><?php echo "<a href='$anasayfa' title='Ana Sayfa'>";?>Ana Sayfa</a></div>
-    <div id="sustsag">
+<div class="sayfa yuvar">
+<div class="sust">
+    <div class="sustsol"><?php echo "<a href='$anasayfa' title='Ana Sayfa'>";?>Ana Sayfa</a></div>
+    <div class="sustsag">
         <?php echo $kullanici; ?>
         <a href="?hesap=goster" title="Profil">Profil</a>
         <a href="?hesap=cikis" title="Çıkış">Çıkış</a>
     </div>
 </div>
 
-<div id="ustresiml">
+<div class="ustresiml">
     <img src="fen.png" width="100%" height="150px" alt="" />
 </div>
 
-<div id="sanahat">
+<div class="sanahat yuvar">
     <?php echo "<a href='$anasayfa' title='Ana Sayfa'>";?>Ana Sayfa</a><br />
     <a href="?sayfa=yazilar" title="Sadece Yazılar">Sadece Yazılar</a><br />
     <a href="?sayfa=dosyalar" title="Sadece Dosyalar">Sadece Dosyalar</a><br />
@@ -32,11 +32,11 @@
 </div>
 
 
-<div id="sicerik">
+<div class="sicerik yuvar">
     <?php include "sayfa.php" ?>
 </div>
 
-<div id="salt">
+<div class="salt">
     Bu sitenin tüm içeriği CC by-nc-sa ile lisanslanmıştır. <b>Site test aşamasındadır.</b>
 </div>
 </div>

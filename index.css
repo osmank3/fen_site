@@ -1,101 +1,142 @@
-#sayfa {
-    width:850px;
+body
+{
+    background-color: #B4D0E1;
+}
+
+a
+{
+    color:#0C4262;
+    text-decoration:none;
+}
+
+.sayfa
+{
+    width:860px;
     margin:10px auto;
+    background-color: #578FB1;
+    border: 1px solid #578FB1;
 }
 
-#sust {
-    width:830px;
-    padding:10px;
+    .sust
+    {
+        width:830px;
+        padding:10px;
+    }
+    
+        .sustsol
+        {
+            float:left;
+        }
+
+        .sustsag
+        {
+            float:right;
+        }
+    
+    .sustresim
+    {
+        width:850px;
+    }
+    
+    .sanahat
+    {
+        width:150px;
+        padding:10px;
+        margin-top:5px;
+        margin-left:5px;
+        float:left;
+        background-color: #699EBD;
+        border: 1px solid #699EBD;
+    }
+    
+    .sicerik
+    {
+        width:650px;
+        padding:10px;
+        margin-top:5px;
+        margin-right:5px;
+    	float:right;
+        background-color: #699EBD;
+        border: 1px solid #699EBD;
+    }
+    
+    .salt
+    {
+        width:830px;
+        padding:10px;
+        clear:both;
+        text-align:center;
+    }
+
+.yazi
+{
 }
 
-#sustsol {
-    float:left;
-}
-
-#sustsag {
-    float:right;
-}
-
-#sustresim {
-    width:850px;
-}
-
-#sanahat {
-    width:150px;
-    padding:10px;
-    float:left;
-}
-
-#sicerik {
-    width:660px;
-    padding:10px;
-	float:right;
-}
-
-#salt {
-    width:830px;
-    padding:10px;
-    clear:both;
-    text-align:center;
-}
-
-#icerik {
-    width:660px;
+.icerik
+{
+    width:640px;
     margin-bottom:20px;
     clear:both;
     float:right;
-    /*border:1px solid #AAA;
-    border falan girilecek*/
+    padding: 5px;
+    background-color: #B4D0E1;
+    border: 1px solid #B4D0E1;
 }
 
-#iust {
-    clear:both;
+    .ibolum
+    {
+        clear:both;
+    }
+    
+    .ibaslik
+    {
+        float:left;
+    }
+    
+    .iyazan
+    {
+        font-style:italic;
+        float:right;
+    }
+    
+    .iislem
+    {
+        float:right;
+    }
+    
+    .ikategori
+    {
+        float:left;
+    }
+    
+    .iyorum
+    {
+        float:right;
+        width:580px;
+    }
+    
+.yorum
+{
+    padding: 5px;
+    margin-bottom: 5px;
+    background-color: #92B8CE;
+    border: 1px solid #92B8CE;
 }
+    
+    .yyazan
+    {
+        font-style:italic;
+    }
+    
+    .yislem
+    {
+        float:right
+    }
 
-#ibaslik {
-    float:left;
-}
-
-#iyazan {
-    font:italic;
-    float:right;
-}
-
-#iorta {
-    clear:both;
-}
-
-#iyazi {
-}
-
-#iislem {
-    float:right;
-}
-
-#ialt {
-    clear:both;
-}
-
-#ikategori {
-    float:left;
-}
-
-#iyorum {
-    float:right;
-    width:580px;
-}
-
-#yorum {
-    /*border falan girilecek*/
-}
-
-#yyapan {
-    font:italic;
-}
-
-#yyazi {
-}
-
-#yislem {
-    float:right
+.yuvar
+{
+    border-radius: 10px;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    behavior:url(border-radius.htc);
 }

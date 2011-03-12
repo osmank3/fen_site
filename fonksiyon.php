@@ -19,6 +19,12 @@ Bağlantıya tıklanamıyorsa tarayıcınızın adres çubuğuna yapıştırın�
     return $metin;
 }
 
+function altsatir($yazi)
+{
+    $yazi = str_replace("\n","<br />",$yazi);
+    return $yazi;
+}
+
 function kategoriUzun($kategori)
 {
     $kategoriler = array();
@@ -200,51 +206,51 @@ function tablola($id)
         $sonuc2 = mysql_query($sorgu2, $db);
         
         $kisi = kisiadi($bilgi["k_id"]);
+        $yazi = altsatir($bilgi["yazi"]);
         
         $kategoriAdi = kategoriUzun($bilgi[kategori]);
         
-        echo   "<div id='icerik'>
-                    <div id='iust'>
-                        <div id='iyazan'>
+        echo   "<div class='icerik yuvar'>
+                    <div class='ibolum'>
+                        <div class='iyazan'>
                             <a href='?hesap=goster&id=$bilgi[k_id]'>$kisi</a>
                         </div>
                         
-                        <div id='ibaslik'>
-                            <a href='?icerik=$id'><b>$bilgi[baslik]</b> </a>";
+                        <div class='ibaslik'>
+                            <a href='?icerik=$id'><b>$bilgi[baslik]</b></a> ";
                             if ($bilgi["bicim"] == "dosya") echo "<a href='$bilgi[adres]'>İndir</a>";
         echo   "        </div>
                     </div>
                     
-                    <div id='iorta'>
-                        <div id='iislem'>";
-                            if ($_SESSION["kid"] == $bilgi["k_id"])  echo "<a href='?sil=dosya&sil_id=$id'>sil</a>";
+                    <div class='ibolum'>
+                        <div class='iislem'>";
+                            if ($_SESSION["kid"] == $bilgi["k_id"])  echo "<a href='?sil=dosya&sil_id=$id' title='Sil'>Sil</a>";
         echo   "        </div>
-                        <div id='iyazi'>
-                            $bilgi[yazi]
+                        <div class='yazi'>
+                            $yazi
                         </div>
                         
                     </div>
                     
-                    <div id='ialt'>
-                        <div id='ikatalog'>
+                    <div class='ibolum'>
+                        <div class='ikatalog'>
                             <a href='?kategori=$bilgi[kategori]'>$kategoriAdi</a>
                         </div>
                         
-                        <div id='iyorum'>";
+                        <div class='iyorum'>";
                             while ($satir2 = mysql_fetch_array($sonuc2))
                             {
                                 if ($satir2["goster"] == "False") continue;
                                 
                                 $kisiyor = kisiadi($satir2["k_id"]);
                                 
-                                echo   "<div id='yorum'>";
-                                            if ($_SESSION["kid"] == $satir2["k_id"]) echo "<div id='yislem'><a href='?sil=yorum&sil_id={$satir2['id']}'>sil</a></div>";
-                                echo   "    <div id='yyazan'>$kisiyor:</div>
-                                            <div id='yyazi'>$satir2[yazi]</div>
-                                            <hr />
+                                echo   "<div class='yorum yuvar'>";
+                                            if ($_SESSION["kid"] == $satir2["k_id"]) echo "<div class='yislem'><a href='?sil=yorum&sil_id={$satir2['id']}' title='Sil'>Sil</a></div>";
+                                echo   "    <div class='yyazan'>$kisiyor:</div>
+                                            <div class='yazi'>$satir2[yazi]</div>
                                         </div>";
                             }
-                            echo   "<div id='yorum'>
+                            echo   "<div class='yorum yuvar'>
                                         <form name='yorum' method='post' action=''>
                                             Yorum yap:<input type='text' name='yazi' size='55' />
                                             <input type='hidden' name='formbicimi' value='yorum' />
