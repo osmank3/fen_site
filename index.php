@@ -16,27 +16,6 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 <link href='index.css' rel='stylesheet' type='text/css'>
 </head>
 <body>";
-if ($_GET["hesap"] == "aktif")
-{
-    if($_GET["kod"])
-    {
-        $sorgu = "SELECT kullanici FROM {$dbOnek}kullanici";
-        $sonuc = mysql_query($sorgu,$db);
-        while ($satir = mysql_fetch_array($sonuc))
-        {
-            if($_GET["kod"] == md5($satir["kullanici"], $raw_output = null))
-            {
-                $sorgu = "UPDATE {$dbOnek}kullanici SET aktif='True'
-                    WHERE kullanici = '$satir[kullanici]'";
-                mysql_query($sorgu,$db);
-                echo "<script> 
-                          alert('Hesabınız aktifleştirildi.');
-                          window.top.location = './';
-                      </script>";
-            }
-        }
-    }
-}
 
 if ($girilmis)
 {

@@ -7,7 +7,8 @@ function girisyap($id, $kullanici)
     echo "<script> window.top.location = './'; </script>";
 }
 
-function aktifPosta($kod) {
+function aktifPosta($kod)
+{
     global $anasayfa;
     
     $metin = "Fen Bilgisi sitesine üyeliğinizin gerçekleşmesi için aşağıdaki bağlantıya tıklayın
@@ -16,6 +17,19 @@ function aktifPosta($kod) {
 
 Bağlantıya tıklanamıyorsa tarayıcınızın adres çubuğuna yapıştırınız." ;
 
+    return $metin;
+}
+
+function kayipPosta($kod)
+{
+    global $anasayfa;
+    
+    $metin = "Fen Bilgisi sitesinde şifrenizi değiştirebilmeniz için oluşturulan bağlantı aşağıdadır
+
+{$anasayfa}?hesap=kayip&kod=$kod
+
+Bağlantıya tıklanamıyorsa tarayıcınızın adres çubuğuna yapıştırınız.";
+    
     return $metin;
 }
 
@@ -69,12 +83,12 @@ function formgoster($formbicimi, $hata = "", $profil = NULL)
             echo   "<h4>Giriş</h4>
                     <p>$hata</p>
                     <form method='post'>
-                        Kullanıcı Adı:<input type='text' name='giriskullanici' ";
+                        Kullanıcı Adı:<input type='text' name='giriskullanici' tabindex='1' ";
                             if ($_POST["giriskullanici"]) echo "value='$_POST[giriskullanici]'";
             echo   "        />
-                        Parola:<input type='password' name='girisparola' />
+                        Parola:<input type='password' name='girisparola' tabindex='2' />
                         <input type='hidden' name='formbicimi' value='giris' />
-                        <input type='submit' value='Giriş' />
+                        <input type='submit' value='Giriş' tabindex='3' />
                     </form>";
             break;
         
@@ -135,38 +149,51 @@ function formgoster($formbicimi, $hata = "", $profil = NULL)
                     <form method='post'>
                         <tr>
                             <td>İsim:</td>
-                            <td><input type='text' name='isim' ";
-                                if ($_POST["isim"]) echo "value='$_POST[isim]'";
+                            <td><input type='text' name='isim' tabindex='4' ";
+                                if ($_POST["isim"]) echo "value='$_POST[isim]' ";
             echo   "            /></td>
                             <td>Kullanıcı Adı:</td>
-                            <td><input type='text' name='kullanici' ";
-                                if ($_POST["kullanici"]) echo "value='$_POST[kullanici]'";
+                            <td><input type='text' name='kullanici' tabindex='7' ";
+                                if ($_POST["kullanici"]) echo "value='$_POST[kullanici]' ";
             echo   "            /></td>
                         </tr>
                         <tr>
                             <td>Soyisim:</td>
-                            <td><input type='text' name='soyisim' ";
-                                if ($_POST["soyisim"]) echo "value='$_POST[soyisim]'";
+                            <td><input type='text' name='soyisim' tabindex='5' ";
+                                if ($_POST["soyisim"]) echo "value='$_POST[soyisim]' ";
             echo   "            /></td>
                             <td>Parola:</td>
-                            <td><input type='password' name='parola' /></td>
+                            <td><input type='password' name='parola' tabindex='8' /></td>
                         </tr>
                         <tr>
                             <td>E-posta:</td>
-                            <td><input type='text' name='email' ";
-                                if ($_POST["email"]) echo "value='$_POST[email]'";
+                            <td><input type='text' name='email' tabindex='6' ";
+                                if ($_POST["email"]) echo "value='$_POST[email]' ";
             echo   "            /></td>
                             <td>Parola(tekrar):</td>
-                            <td><input type='password' name='parolatekrar' /></td>
+                            <td><input type='password' name='parolatekrar' tabindex='9' /></td>
                         </tr>
                         <tr>
                             <td colspan='4' align='right'>
                                 <input type='hidden' name='formbicimi' value='kaydol' />
-                                <input type='submit' value='Kaydol' /></td>
+                                <input type='submit' value='Kaydol' tabindex='10' /></td>
                         </tr>
                     </form>
                     </table>";
             break;
+            
+        case "kayip": //kayıp şifre talebi
+            echo   "<h4>Kayıp Şifre</h4>
+                    <p>$hata</p>
+                    <form method='post'>
+                        Kullanıcı Adı:<input type='text' name='kayipkullanici' tabindex='11' ";
+                            if ($_POST["kayipkullanici"]) echo "value='$_POST[kayipkullanici]'";
+            echo   "        />
+                        <input type='hidden' name='formbicimi' value='kayip' />
+                        <input type='submit' value='Parola gönder' tabindex='12' />
+                    </form>";
+            break;
+            
         case "profil": //profil düzenlemek için
             echo "<table>
                   <form method='post'>
@@ -181,17 +208,21 @@ function formgoster($formbicimi, $hata = "", $profil = NULL)
                   </form>
                   </table>";
             break;
+            
         case "sifre": //Şifre değiştirmek için
             echo "<table>
                   <form method='post'>
-                  <tr><td colspan='2'><p align='center'>$hata</p></td></tr>                  
-                  <tr><td> Eski parola:</td><td><input type='password' name='eskiparola' /></td></tr>
+                  <tr><td colspan='2'><p align='center'>$hata</p></td></tr>
+                  <tr><td> Eski parola:</td><td><input type='password' name='eskiparola' ";
+                  if ($profil) {echo "disabled ";}
+            echo "/></td></tr>
                   <tr><td><br /></td></tr>
                   <tr><td> Parola:</td><td><input type='password' name='parola' /></td></tr>
                   <tr><td> Parola(tekrar):</td><td><input type='password' name='parolatekrar' /></td></tr>
-                  <tr><td></td><td align='right'>
-                      <input type='hidden' name='formbicimi' value='sifre' />
-                      <input type='submit' value='Şifre Değiştir' /></td></tr>
+                  <tr><td></td><td align='right'>";
+                      if ($profil) { echo "<input type='hidden' name='formbicimi' value='sifre0' />";}
+                      else { echo "<input type='hidden' name='formbicimi' value='sifre' />";}
+            echo "    <input type='submit' value='Şifre Değiştir' /></td></tr>
                   </form>
                   </table>";
             break;
