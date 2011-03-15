@@ -182,8 +182,8 @@ function formgoster($formbicimi, $hata = "", $profil = NULL)
                     </table>";
             break;
             
-        case "kayip": //kayıp şifre talebi
-            echo   "<h4>Kayıp Şifre</h4>
+        case "kayip": //kayıp parola talebi
+            echo   "<h4>Kayıp Parola</h4>
                     <p>$hata</p>
                     <form method='post'>
                         Kullanıcı Adı:<input type='text' name='kayipkullanici' tabindex='11' ";
@@ -289,7 +289,7 @@ function tablola($id)
                                 
                                 echo   "<div class='yorum yuvar'>";
                                             if ($_SESSION["kid"] == $satir2["k_id"]) echo "<div class='yislem'><a href='?sil=yorum&sil_id={$satir2['id']}' title='Sil'>Sil</a></div>";
-                                echo   "    <div class='yyazan'>$kisiyor:</div>
+                                echo   "    <div class='yyazan'><a href='?hesap=goster&id=$satir2[k_id]'>$kisiyor</a>:</div>
                                             <div class='yazi'>$satir2[yazi]</div>
                                         </div>";
                             }
