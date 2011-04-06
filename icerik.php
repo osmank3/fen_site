@@ -44,10 +44,11 @@ if ($_POST)
                 }
                 else
                 {
-                    move_uploaded_file($_FILES["dosya"]["tmp_name"],
-                            "dosya/" . $_FILES["dosya"]["name"]);
+                    $dosyaAdresi = "dosya/" . dosyaAdiDuzelt($_FILES["dosya"]["name"]);
+                    
+                    move_uploaded_file($_FILES["dosya"]["tmp_name"], $dosyaAdresi);
                     $sorgu = "INSERT INTO {$dbOnek}icerik (k_id, bicim, baslik, adres, yazi, kategori) VALUES
-                            ('$_SESSION[kid]', 'dosya', '{$_FILES["dosya"]["name"]}', 'dosya/{$_FILES["dosya"]["name"]}', '$_POST[yazi]', '$_POST[kategori]')";
+                            ('$_SESSION[kid]', 'dosya', '{$_FILES["dosya"]["name"]}', '$dosyaAdresi', '$_POST[yazi]', '$_POST[kategori]')";
                     mysql_query($sorgu, $db);
                 
                     $sorgu = "SELECT max(id) FROM {$dbOnek}icerik";

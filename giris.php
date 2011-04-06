@@ -98,9 +98,9 @@ if ($_POST)
                     mysql_query($sorgu,$db);
                     
                     $posta_metin = aktifPosta($aktifKod);
-                            
+                    
                     $mail = mail( $_POST["email"], "Subject: Fen bilgisi aktivasyon.",
-                                  $posta_metin, "From: $eposta" );
+                                  $posta_metin, $epostaBaslik );
                     if ($mail)
                     {
                         $hata = "Fen Bilgisi sitesine üyeliğinizin tamamlanması için e-posta adresinize gönderilen aktivasyon bağlantısına tıklamanız gerekmektedir.";
@@ -132,7 +132,7 @@ if ($_POST)
                     $posta_metin = kayipPosta($kayipKod);
                     
                     $mail = mail( $bilgi["posta"], "Subject: Fen bilgisi şifre sıfılama.",
-                                  $posta_metin, "From: $eposta" );
+                                  $posta_metin, $epostaBaslik );
                     if ($mail)
                     {
                         $hata = "E-posta adresinize şifre sıfırlama bağlantısı gönderilmiştir.";

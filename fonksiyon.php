@@ -1,4 +1,6 @@
 <?php
+$epostaBaslik = "MIME-Version: 1.0\r\nContent-type: text/html; charset=utf-8\r\nFrom: $eposta";
+
 function girisyap($id, $kullanici)
 {
     $_SESSION["giris"] = true;
@@ -11,11 +13,13 @@ function aktifPosta($kod)
 {
     global $anasayfa;
     
-    $metin = "Fen Bilgisi sitesine üyeliğinizin gerçekleşmesi için aşağıdaki bağlantıya tıklayın
-
-{$anasayfa}?hesap=aktif&kod=$kod
-
-Bağlantıya tıklanamıyorsa tarayıcınızın adres çubuğuna yapıştırınız." ;
+    $metin =   "Fen Bilgisi sitesine üyeliğinizin gerçekleşmesi için aşağıdaki bağlantıya tıklayın
+                \r<br />
+                \r<br />
+                \r<a href='{$anasayfa}?hesap=aktif&kod=$kod'>{$anasayfa}?hesap=aktif&kod=$kod</a>
+                \r<br />
+                \r<br />
+                \rBağlantıya tıklanamıyorsa tarayıcınızın adres çubuğuna yapıştırınız." ;
 
     return $metin;
 }
@@ -24,11 +28,13 @@ function kayipPosta($kod)
 {
     global $anasayfa;
     
-    $metin = "Fen Bilgisi sitesinde şifrenizi değiştirebilmeniz için oluşturulan bağlantı aşağıdadır
-
-{$anasayfa}?hesap=kayip&kod=$kod
-
-Bağlantıya tıklanamıyorsa tarayıcınızın adres çubuğuna yapıştırınız.";
+    $metin =   "Fen Bilgisi sitesinde şifrenizi değiştirebilmeniz için oluşturulan bağlantı aşağıdadır
+                \r<br />
+                \r<br />
+                \r<a href='{$anasayfa}?hesap=kayip&kod=$kod'>{$anasayfa}?hesap=kayip&kod=$kod</a>
+                \r<br />
+                \r<br />
+                \rBağlantıya tıklanamıyorsa tarayıcınızın adres çubuğuna yapıştırınız.";
     
     return $metin;
 }
@@ -36,6 +42,15 @@ Bağlantıya tıklanamıyorsa tarayıcınızın adres çubuğuna yapıştırın�
 function altsatir($yazi)
 {
     $yazi = str_replace("\n","<br />",$yazi);
+    return $yazi;
+}
+
+function dosyaAdiDuzelt($yazi)
+{
+    $orj = array("\\", "/", ":", ";", "~", "|", "(", ")", "\"", "#", "*", "$", "@", "%", "[", "]", "{", "}", "<", ">", "`", "'", ",", " ", "Â", "â", "ç", "Ç", "ğ", "Ğ", "ı", "İ", "î", "Î", "ö", "Ö", "ş", "Ş", "ü", "Ü");
+    $yeni = array("_", "_", "_", "_", "_", "_", "",  "",  "_",  "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "",  "_", "_", "A", "a", "c", "C", "g", "G", "i", "I", "i", "I", "o", "O", "s", "S", "u", "U");
+    $yazi = str_replace($orj, $yeni, $yazi);
+    
     return $yazi;
 }
 
@@ -250,8 +265,9 @@ function tablola($id)
         
         $kisi = kisiadi($bilgi["k_id"]);
         $yazi = altsatir($bilgi["yazi"]);
+        $adres = $bilgi[adres];
         
-        $kategoriAdi = kategoriUzun($bilgi[kategori]);
+        $kategoriAdi = kategoriUzun($bilgi["kategori"]);
         
         echo   "<div class='icerik yuvar'>
                     <div class='ibolum'>
@@ -261,7 +277,7 @@ function tablola($id)
                         
                         <div class='ibaslik'>
                             <a href='?icerik=$id'><b>$bilgi[baslik]</b></a> ";
-                            if ($bilgi["bicim"] == "dosya") echo "<a href='$bilgi[adres]'>İndir</a>";
+                            if ($bilgi["bicim"] == "dosya") echo "<a href='$adres'>İndir</a>";
         echo   "        </div>
                     </div>
                     
@@ -351,6 +367,7 @@ function grubaPosta($tablo, $id)
     global $dbOnek;
     global $anasayfa;
     global $eposta;
+    global $epostaBaslik;
     global $grupEposta;
     global $grupEpostaDurum;
     
@@ -369,8 +386,16 @@ function grubaPosta($tablo, $id)
                 $konu = $bilgi["baslik"];
                 if ($bilgi["bicim"] == "yazi")
                 {
-                    $metin = "Yazan: $kisiadi\n\n$bilgi[yazi]\n\n$kategori\n\n
-                              \r--Bu e-posta otomatik oluşturulmuştur.--";
+                    $metin =   "Yazan: $kisiadi
+                                \r<br />
+                                \r<br />
+                                \r$bilgi[yazi]
+                                \r<br />
+                                \r<br />
+                                \r$kategori
+                                \r<br />
+                                \r<br />
+                                \r--Bu e-posta <a href='$anasayfa'>$anasayfa</a> tarafından otomatik oluşturulmuştur.--";
                 }
                 elseif ($bilgi["bicim"] == "dosya")
                 {
@@ -382,10 +407,22 @@ function grubaPosta($tablo, $id)
                     {
                         $adres = "{$anasayfa}{$bilgi["adres"]}";
                     }
-                    $metin = "Yükleyen: $kisiadi\n\n$bilgi[yazi]\n\nİndir: $adres\n\n$kategori\n
-                              \r--Bu e-posta $anasayfa tarafından otomatik oluşturulmuştur.--";
+                    $metin =   "Yükleyen: $kisiadi
+                                \r<br />
+                                \r<br />
+                                \r$bilgi[yazi]
+                                \r<br />
+                                \r<br />
+                                \rİndir: <a href='$adres'>$adres</a>
+                                \r<br />
+                                \r<br />
+                                \r$kategori
+                                \r<br />
+                                \r<br />
+                                \r--Bu e-posta <a href='$anasayfa'>$anasayfa</a> tarafından otomatik oluşturulmuştur.--";
                 }
-                mail( $grupEposta, $konu, $metin, "From: $eposta" );
+                
+                mail( $grupEposta, $konu, $metin, $epostaBaslik );
             }
             break;
             
@@ -402,10 +439,15 @@ function grubaPosta($tablo, $id)
                 $bilgi2 = mysql_fetch_assoc($sonuc2);
                 $konu = $bilgi2["baslik"];
                 
-                $metin = "Yorumlayan: $kisiadi\n\n$bilgi[yazi]\n
-                          \r--Bu e-posta $anasayfa tarafından otomatik oluşturulmuştur.--";
+                $metin =   "Yorumlayan: $kisiadi
+                            \r<br />
+                            \r<br />
+                            \r$bilgi[yazi]
+                            \r<br />
+                            \r<br />
+                            \r--Bu e-posta <a href='$anasayfa'>$anasayfa</a> tarafından otomatik oluşturulmuştur.--";
                 
-                mail( $grupEposta, "Re: $konu", $metin, "From: $eposta" );
+                mail( $grupEposta, "Re: $konu", $metin, $epostaBaslik );
             }
             break;
     }
