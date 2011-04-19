@@ -39,7 +39,11 @@ $(document).ready(function()
 </head>
 <body>";
 
-if ($girilmis)
+if ($bakimda)
+{
+    echo "<h2 style='text-align:center;margin-top:240px;'>Site Bakıma Alınmıştır... Kısa sürede kullanıma açılır</h2>";
+}
+elseif ($girilmis)
 {
     include "temel.php";
 }
