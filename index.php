@@ -14,6 +14,28 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 <meta http-equiv='content-type' content='application/xhtml+xml; charset=UTF-8'>
 <meta http-equiv='content-style-type' content='text/css'>
 <link href='index.css' rel='stylesheet' type='text/css'>
+<script type='text/javascript' src='jquery-1.3.2.min.js'></script>
+<script>
+$(document).ready(function()
+    {
+        $('#yenidosya').click(function ()
+            {
+                var sinir = parseInt($('#sinir').val());
+                if (sinir <= 4)
+                {
+                    sinir += 1
+                    $('#dosyalar').append(\"<div><input class='yuvar r5' style='width:75%' type='file' name='dosya[]' id='dosya' /></div>\");
+                    $('#sinir').val(sinir);
+                    if (parseInt($('#sinir').val()) == 5)
+                    {
+                        $('#yenidosya').remove();
+                    }
+                }
+            }
+        );
+    }
+);
+</script>
 </head>
 <body>";
 

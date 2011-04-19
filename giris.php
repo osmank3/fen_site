@@ -34,7 +34,6 @@ if($_GET["kod"])
                 girisyap($satir["id"], $satir["kullanici"]);
                 
                 echo   "<script> 
-                            alert('Yeni parolanızı giriniz.');
                             window.top.location = './?hesap=ayarla&bicim=sifre0';
                         </script>";
                 break;
@@ -99,7 +98,7 @@ if ($_POST)
                     
                     $posta_metin = aktifPosta($aktifKod);
                     
-                    $mail = mail( $_POST["email"], "Subject: Fen bilgisi aktivasyon.",
+                    $mail = mail( $_POST["email"], "Fen bilgisi aktivasyon.",
                                   $posta_metin, $epostaBaslik );
                     if ($mail)
                     {
@@ -131,7 +130,7 @@ if ($_POST)
                     
                     $posta_metin = kayipPosta($kayipKod);
                     
-                    $mail = mail( $bilgi["posta"], "Subject: Fen bilgisi şifre sıfılama.",
+                    $mail = mail( $bilgi["posta"], "Fen bilgisi şifre sıfılama.",
                                   $posta_metin, $epostaBaslik );
                     if ($mail)
                     {

@@ -23,16 +23,6 @@ a
         padding:10px;
     }
     
-        .sustsol
-        {
-            float:left;
-        }
-
-        .sustsag
-        {
-            float:right;
-        }
-    
     .sustresim
     {
         width:100%;
@@ -80,6 +70,7 @@ a
 
 .yazi
 {
+    padding: 5px 10px 5px 5px;
 }
 
 .icerik
@@ -89,8 +80,6 @@ a
     clear:both;
     float:right;
     padding: 5px;
-    background-color: #B4D0E1;
-    border: 1px solid #B4D0E1;
 }
 
     .ibolum
@@ -98,25 +87,10 @@ a
         clear:both;
     }
     
-    .ibaslik
-    {
-        float:left;
-    }
-    
     .iyazan
     {
         font-style:italic;
         float:right;
-    }
-    
-    .iislem
-    {
-        float:right;
-    }
-    
-    .ikategori
-    {
-        float:left;
     }
     
     .iyorum
@@ -129,18 +103,11 @@ a
 {
     padding: 5px;
     margin-bottom: 5px;
-    background-color: #92B8CE;
-    border: 1px solid #92B8CE;
 }
     
     .yyazan
     {
         font-style:italic;
-    }
-    
-    .yislem
-    {
-        float:right
     }
 
 .yuvar
@@ -149,4 +116,54 @@ a
     -moz-border-radius:10px;
     -webkit-border-radius:10px;
     behavior:url(border-radius.htc);
+}
+
+.sol
+{
+    float:left;
+}
+
+.sag
+{
+    float:right;
+}
+
+.r1 /*Arka plan rengi*/
+{
+    background-color: #B4D0E1;
+    border: 1px solid #B4D0E1;
+}
+
+.r2 /*Sayfa arka rengi*/
+{
+    background-color: #578FB1;
+    border: 1px solid #578FB1;
+}
+
+.r3 /*Sayfa öğe rengi*/
+{
+    background-color: #699EBD;
+    border: 1px solid #699EBD;
+}
+
+.r4 /*Öğe çucuğu rengi*/
+{
+    background-color: #B4D0E1;
+    border: 1px solid #B4D0E1;
+}
+
+.r5 /*Öğe torunu rengi*/
+{
+    background-color: #92B8CE;
+    border: 1px solid #92B8CE;
+}
+
+.rbk /*Beyaz kenarlık*/
+{
+    border: 1px solid #FFFFFF;
+}
+
+.rba /*Beyaz arkaplan*/
+{
+    background-color: #FFFFFF;
 }

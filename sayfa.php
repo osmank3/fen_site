@@ -1,32 +1,4 @@
 <?php 
-switch($_GET["sayfa"])
-{
-    case "yazilar":
-        $bicim = "yazi";
-        include "icerik.php";
-        break;
-    case "dosyalar":
-        $bicim = "dosya";
-        include "icerik.php";
-        break;
-    case "yeniyazi":
-        $bicim = "yeniyazi";
-        include "icerik.php";
-        break;
-    case "yenidosya":
-        $bicim = "yenidosya";
-        include "icerik.php";
-        break;
-}
-if($_GET["kategori"])
-{
-    $kategori = $_GET["kategori"];
-    include "kategori.php";
-}
-if($_GET["icerik"])
-{
-    tablola($_GET["icerik"]);
-}
 switch ($_GET["hesap"])
 {
     case "cikis":
@@ -47,16 +19,10 @@ switch ($_GET["hesap"])
 }
 switch ($_GET["sil"])
 {
-    case "dosya":
+    case "icerik":
         $sorgu = "UPDATE {$dbOnek}icerik SET goster='False' WHERE id=$_GET[sil_id]";
         mysql_query($sorgu, $db);
         unset($_POST);
-        echo "<script> document.location.href = '$_SERVER[HTTP_REFERER]' </script>";
-        break;
-    case "yazi":
-        unset($_POST);
-        $sorgu = "UPDATE {$dbOnek}icerik SET goster='False' WHERE id=$_GET[sil_id]";
-        mysql_query($sorgu, $db);
         echo "<script> document.location.href = '$_SERVER[HTTP_REFERER]' </script>";
         break;
     case "yorum":
@@ -66,7 +32,11 @@ switch ($_GET["sil"])
         echo "<script> document.location.href = '$_SERVER[HTTP_REFERER]' </script>";
         break;
 }
-if (!$_GET)
+if ($_GET)
+{
+    include "icerik.php";
+}
+else
 {
     echo "<h3>Ana Sayfa</h3>";
     include "icerik.php";

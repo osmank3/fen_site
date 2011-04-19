@@ -107,54 +107,37 @@ function formgoster($formbicimi, $hata = "", $profil = NULL)
                     </form>";
             break;
         
-        case "dosya": //dosya yüklemek için form
-            echo "<table>
-                  <form name='dosya' method='post' enctype='multipart/form-data' action=''>
-                      <tr><td colspan='2' align='center'> $hata </td></tr>
-                      <tr><td align='center'><b>Özet: </b><input type='text' name='yazi' /></td><td align='center'>
-                          <input type='hidden' name='MAX_FILE_SIZE' value='30000000' />
-                          <input type='file' name='dosya' id='dosya' /></td></tr>
-                      <tr><td align='center'><b>Kategori: </b><select name='kategori'>
-                          <option value='diger'>Kategori Seçin</option>
-                          <option value='bilimindogasi'>Bilimin Doğası</option>
-                          <option value='cevre'>Çevre Bilimi</option>
-                          <option value='fenlab'>Fen Laboratuvarı</option>
-                          <option value='genetik'>Genetik</option>
-                          <option value='olcme'>Ölçme Değerlendirme</option>
-                          <option value='ozelogretim'>Özel Öğretim</option>
-                          <option value='toplum'>Topluma Hizmet</option>
-                          <option value='yer'>Yer Bilimi</option>
-                          <option value='diger'>Diğer</option>
-                      </select></td><td align='center'>
-                          <input type='hidden' name='formbicimi' value='dosya' />
-                          <input type='submit' value='Dosyayı Gönder' /></td></tr>
-                  </form>
-                  </table>";
-            break;
-        
-        case "yazi": //yazı göndermek için form
-            echo "<table>
-                  <form method='post' action=''>
-                  <tr><td colspan='3' align='center'>$hata</td></tr>
-                  <tr><td>Başlık: </td><td colspan='2'><input size='55' type='text' name='baslik'/></td></tr>
-                  <tr><td colspan='3'><textarea id='comment' name='yazi' cols='62' rows='4' aria-required='true'></textarea></td></tr>
-                  <tr><td>Kategori: </td><td><select name='kategori'>
-                      <option value='diger'>Kategori Seçin</option>
-                      <option value='bilimindogasi'>Bilimin Doğası</option>
-                      <option value='cevre'>Çevre Bilimi</option>
-                      <option value='fenlab'>Fen Laboratuvarı</option>
-                      <option value='genetik'>Genetik</option>
-                      <option value='olcme'>Ölçme Değerlendirme</option>
-                      <option value='ozelogretim'>Özel Öğretim</option>
-                      <option value='toplum'>Topluma Hizmet</option>
-                      <option value='yer'>Yer Bilimi</option>
-                      <option value='diger'>Diğer</option>
-                  </select></td>
-                  <td align='right'>
-                      <input type='hidden' name='formbicimi' value='yazi' />
-                      <input type='submit' value='Yazı Gönder' /></td></tr>
-                  </form>
-                  </table>";
+        case "icerik":
+            echo   "<div class='icerik yuvar r4'>
+                    <form method='post' action='' enctype='multipart/form-data'>
+                        <div class='ibolum'>Başlık <input class='yuvar sag' style='width:90%' size='55' type='text' name='baslik'/></div>
+                        <input type='hidden' name='MAX_FILE_SIZE' value='20000000' />
+                        <input type='hidden' id='sinir' value='1' />
+                        <div class='ibolum' id='dosyalar'>
+                            <input class='yuvar r5' style='width:75%' type='file' name='dosya[]' id='dosya' />
+                            <button class='yuvar r5' type='button' id='yenidosya'>Başka Dosyalar Ekle</button>
+                        </div>
+                        <div class='ibolum'><textarea class='yuvar rbk' style='width:99%;height:7em;' name='yazi' aria-required='true'></textarea></div>
+                        <div class='ibolum'>
+                            Kategori:
+                            <select name='kategori' class='yuvar r5'>
+                                <option value='diger'>Kategori Seçin</option>
+                                <option value='bilimindogasi'>Bilimin Doğası</option>
+                                <option value='cevre'>Çevre Bilimi</option>
+                                <option value='fenlab'>Fen Laboratuvarı</option>
+                                <option value='genetik'>Genetik</option>
+                                <option value='olcme'>Ölçme Değerlendirme</option>
+                                <option value='ozelogretim'>Özel Öğretim</option>
+                                <option value='toplum'>Topluma Hizmet</option>
+                                <option value='yer'>Yer Bilimi</option>
+                                <option value='diger'>Diğer</option>
+                            </select>
+                            <input type='hidden' name='formbicimi' value='icerik' />
+                            <input class='yuvar sag r5' type='submit' value='Gönder' />
+                        </div>
+                    </form>
+                    </div>
+                    ";
             break;
         
         case "kaydol": //kaydolmak için form
@@ -252,7 +235,7 @@ function tablola($id)
     global $dbOnek;
     global $db;
     
-    $sorgu = "SELECT k_id, baslik, bicim, adres, yazi, kategori, goster FROM {$dbOnek}icerik WHERE id='$id'";
+    $sorgu = "SELECT * FROM {$dbOnek}icerik WHERE id='$id'";
     $sonuc = mysql_query($sorgu,$db);
 
     if( mysql_num_rows($sonuc) == 1 )
@@ -260,42 +243,45 @@ function tablola($id)
         $bilgi = mysql_fetch_assoc($sonuc);
         if ($bilgi["goster"] == "False") return; //gizlenmiş öğeler için tablo oluşturmaz.
        
-        $sorgu2 = "SELECT id, yazi, k_id, goster FROM {$dbOnek}yorum WHERE i_id='$id' ORDER BY id";
+        $sorgu2 = "SELECT id, yazi, k_id, tarih, goster FROM {$dbOnek}yorum WHERE i_id='$id' ORDER BY id";
         $sonuc2 = mysql_query($sorgu2, $db);
         
         $kisi = kisiadi($bilgi["k_id"]);
         $yazi = altsatir($bilgi["yazi"]);
-        $adres = $bilgi[adres];
+        $adresler = explode(",", $bilgi["adres"]);
         
         $kategoriAdi = kategoriUzun($bilgi["kategori"]);
         
-        echo   "<div class='icerik yuvar'>
+        echo   "<div class='icerik yuvar r4'>
                     <div class='ibolum'>
-                        <div class='iyazan'>
-                            <a href='?hesap=goster&id=$bilgi[k_id]'>$kisi</a>
+                        <div class='sol'>
+                            <a href='?icerik=$id'><strong>$bilgi[baslik]</strong></a>
                         </div>
-                        
-                        <div class='ibaslik'>
-                            <a href='?icerik=$id'><b>$bilgi[baslik]</b></a> ";
-                            if ($bilgi["bicim"] == "dosya") echo "<a href='$adres'>İndir</a>";
+                        <div class='sag'>";
+                            if ($_SESSION["kid"] == $bilgi["k_id"])  echo "<a href='?sil=icerik&sil_id=$id' title='Sil'>Sil</a>";
         echo   "        </div>
                     </div>
                     
                     <div class='ibolum'>
-                        <div class='iislem'>";
-                            if ($_SESSION["kid"] == $bilgi["k_id"])  echo "<a href='?sil=dosya&sil_id=$id' title='Sil'>Sil</a>";
-        echo   "        </div>
+                        <span style='font-size:0.7em'>$bilgi[tarih] </span> 
+                        <a style='font-style:italic;' href='?hesap=goster&id=$bilgi[k_id]'>$kisi</a>
+                        <a class='sag' href='?kategori=$bilgi[kategori]'>$kategoriAdi</a>
+                    </div>";
+        foreach ($adresler as $adres)
+        {
+            $dosyaAdi = explode("/", $adres);
+            if ($adres == "") continue;
+            echo   "<div class='ibolum'>
+                        * <a href='$adres'>$dosyaAdi[1] indir</a>
+                    </div>";
+        }
+        echo   "    <div class='ibolum'>
                         <div class='yazi'>
                             $yazi
                         </div>
-                        
                     </div>
                     
                     <div class='ibolum'>
-                        <div class='ikatalog'>
-                            <a href='?kategori=$bilgi[kategori]'>$kategoriAdi</a>
-                        </div>
-                        
                         <div class='iyorum'>";
                             while ($satir2 = mysql_fetch_array($sonuc2))
                             {
@@ -303,18 +289,20 @@ function tablola($id)
                                 
                                 $kisiyor = kisiadi($satir2["k_id"]);
                                 
-                                echo   "<div class='yorum yuvar'>";
-                                            if ($_SESSION["kid"] == $satir2["k_id"]) echo "<div class='yislem'><a href='?sil=yorum&sil_id={$satir2['id']}' title='Sil'>Sil</a></div>";
-                                echo   "    <div class='yyazan'><a href='?hesap=goster&id=$satir2[k_id]'>$kisiyor</a>:</div>
+                                echo   "<div class='yorum yuvar r5'>
+                                            <div class='sag' style='font-size:0.7em'>$satir2[tarih]</div>
+                                            <div class='yyazan'><a href='?hesap=goster&id=$satir2[k_id]'>$kisiyor</a>:</div>";
+                                            if ($_SESSION["kid"] == $satir2["k_id"]) echo "<div class='sag'><a href='?sil=yorum&sil_id={$satir2['id']}' title='Sil'>Sil</a></div>";
+                                echo   "    
                                             <div class='yazi'>$satir2[yazi]</div>
                                         </div>";
                             }
-                            echo   "<div class='yorum yuvar'>
+                            echo   "<div class='yorum yuvar r5'>
                                         <form name='yorum' method='post' action=''>
-                                            Yorum yap:<input type='text' name='yazi' size='55' />
+                                            Yorum yap:<input class='yuvar' style='width:72%' type='text' name='yazi' size='55' />
                                             <input type='hidden' name='formbicimi' value='yorum' />
                                             <input type='hidden' name='id' value='$id' />
-                                            <input type='submit' value='Gönder' />
+                                            <input class='yuvar r4 sag' type='submit' value='Gönder' />
                                         </form>
                                     </div>";
         echo   "        </div>
@@ -384,43 +372,26 @@ function grubaPosta($tablo, $id)
                 $kisiadi = kisiadi($bilgi["k_id"]);
                 $kategori = kategoriUzun($bilgi["kategori"]);
                 $konu = $bilgi["baslik"];
-                if ($bilgi["bicim"] == "yazi")
+                $adresler = explode(",", $bilgi["adres"]);
+                
+                $metin =   "Yazan: $kisiadi
+                            \r<br />
+                            \r<br />
+                            \r$bilgi[yazi]
+                            \r<br />
+                            \r<br />\n";
+                foreach ($adresler as $adres)
                 {
-                    $metin =   "Yazan: $kisiadi
-                                \r<br />
-                                \r<br />
-                                \r$bilgi[yazi]
-                                \r<br />
-                                \r<br />
-                                \r$kategori
-                                \r<br />
-                                \r<br />
-                                \r--Bu e-posta <a href='$anasayfa'>$anasayfa</a> tarafından otomatik oluşturulmuştur.--";
+                    if ($adres == "") continue;
+                    $metin = $metin .  "Dosya: <a href='{$anasayfa}{$adres}'>{$anasayfa}{$adres}</a>
+                                        \r<br />\n";
                 }
-                elseif ($bilgi["bicim"] == "dosya")
-                {
-                    if (substr($bilgi["adres"], 0, 4) == "http")
-                    {
-                        $adres = $bilgi["adres"];
-                    }
-                    else
-                    {
-                        $adres = "{$anasayfa}{$bilgi["adres"]}";
-                    }
-                    $metin =   "Yükleyen: $kisiadi
-                                \r<br />
-                                \r<br />
-                                \r$bilgi[yazi]
-                                \r<br />
-                                \r<br />
-                                \rİndir: <a href='$adres'>$adres</a>
-                                \r<br />
-                                \r<br />
-                                \r$kategori
-                                \r<br />
-                                \r<br />
-                                \r--Bu e-posta <a href='$anasayfa'>$anasayfa</a> tarafından otomatik oluşturulmuştur.--";
-                }
+                $metin = $metin .  "<br />
+                                    \r$kategori
+                                    \r<br />
+                                    \r<br />
+                                    \r--Bu e-posta <a href='$anasayfa'>$anasayfa</a> tarafından otomatik oluşturulmuştur.--";
+                
                 
                 mail( $grupEposta, $konu, $metin, $epostaBaslik );
             }
