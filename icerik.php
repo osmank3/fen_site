@@ -53,15 +53,14 @@ if ($_POST)
 if($_GET["kategori"])
 {
     $kategori = $_GET["kategori"];
-    $sorgu = "SELECT id FROM {$dbOnek}icerik WHERE kategori='$kategori' ORDER BY id DESC";
+    $sorgu = "SELECT id FROM {$dbOnek}icerik WHERE kategori='$kategori' and goster='True' ORDER BY id DESC";
     $sonuc = mysql_query($sorgu, $db);
     
     $kategoriAdi = kategoriUzun($kategori);
     echo "<h3>$kategoriAdi</h3>";
-    while($satir = mysql_fetch_array($sonuc))
-    {
-        tablola($satir["id"]);
-    }
+    
+    if ($_GET["sayfano"]) sayfala($sonuc, $_GET["sayfano"]);
+    else sayfala($sonuc);
 }
 elseif($_GET["icerik"])
 {
@@ -75,13 +74,16 @@ else
             formgoster("icerik");
             break;
         default:
-            $sorgu = "SELECT id FROM {$dbOnek}icerik ORDER BY id DESC";
+            $sorgu = "SELECT id FROM {$dbOnek}icerik WHERE goster='True' ORDER BY id DESC";
             $sonuc = mysql_query($sorgu, $db);
             
-            while($satir = mysql_fetch_array($sonuc))
+            if ($_GET["sayfano"] and count($_GET) == 1)
             {
-                tablola($satir["id"]);
+                echo   "<h3>Ana Sayfa</h3>";
+                sayfala($sonuc, $_GET["sayfano"]);
             }
+            elseif ($_GET["sayfano"]) sayfala($sonuc, $_GET["sayfano"]);
+            else sayfala($sonuc);
             break;
     }
 }

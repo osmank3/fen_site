@@ -319,6 +319,66 @@ function tablola($id)
     }
 }
 
+function sayfala($sonuc, $sayfa=1)
+{
+    $icerikSayisi = mysql_num_rows($sonuc);
+    if ($icerikSayisi <= 10)
+    {
+        while($satir = mysql_fetch_array($sonuc))
+        {
+            tablola($satir["id"]);
+        }
+    }
+    else
+    {
+        $sayfaSayisi = intval($icerikSayisi / 10);
+        if ($icerikSayisi%10 != 0) $sayfaSayisi += 1;
+        
+        $siradakiNo = ($sayfa - 1) * 10;
+        $donguSira = 1;
+        
+        while($satir = mysql_fetch_array($sonuc))
+        {
+            if ($donguSira > $siradakiNo and $donguSira <= ($siradakiNo + 10))
+            {
+                tablola($satir["id"]);
+            }
+            $donguSira += 1;
+        }
+        
+        if ($_GET["kategori"]) $adres = "?kategori=$_GET[kategori]&sayfano=";
+        else $adres = "?sayfano=";
+        
+        echo   "<div class='icerik yuvar r4'>
+                    <center>";
+        
+        if ($sayfa == 1) echo "<< < ";
+        else
+        {
+            echo "<a href='{$adres}1'><<</a> <a href='{$adres}";
+            echo $sayfa - 1;
+            echo "'><</a> ";
+        }
+        
+        for ($i=1; $i<=$sayfaSayisi ; $i++)
+        {
+            if ($i == $sayfa) echo "<strong>$i</strong> ";
+            else echo "<a href='{$adres}{$i}'>$i</a> ";
+        }
+        
+        if ($sayfa == $sayfaSayisi) echo "> >>";
+        else
+        {
+            echo "<a href='{$adres}";
+            echo $sayfa + 1;
+            echo "'>></a> <a href='{$adres}{$sayfaSayisi}'>>></a>";
+        }
+        
+        echo   "    </center>
+                </div>";
+    }
+}
+
 function profilTablola($id)
 {
     /* profilleri tablolamak için fonksiyon
