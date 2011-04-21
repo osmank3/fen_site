@@ -208,22 +208,30 @@ function formgoster($formbicimi, $hata = "", $profil = NULL)
             break;
             
         case "sifre": //Şifre değiştirmek için
-            echo "<table>
-                  <form method='post'>
-                  <tr><td colspan='2'><p align='center'>$hata</p></td></tr>
-                  <tr><td> Eski parola:</td><td><input type='password' name='eskiparola' ";
-                  if ($profil) {echo "disabled ";}
-            echo "/></td></tr>
-                  <tr><td><br /></td></tr>
-                  <tr><td> Parola:</td><td><input type='password' name='parola' /></td></tr>
-                  <tr><td> Parola(tekrar):</td><td><input type='password' name='parolatekrar' /></td></tr>
-                  <tr><td></td><td align='right'>";
-                      if ($profil) { echo "<input type='hidden' name='formbicimi' value='sifre0' />";}
-                      else { echo "<input type='hidden' name='formbicimi' value='sifre' />";}
-            echo "    <input type='submit' value='Şifre Değiştir' /></td></tr>
-                  </form>
-                  </table>";
+            echo   "<table>
+                    <form method='post'>
+                    <tr><td colspan='2'><p align='center'>$hata</p></td></tr>
+                    <tr><td> Eski parola:</td><td><input type='password' name='eskiparola' /></td></tr>
+                    <tr><td><br /></td></tr>
+                    <tr><td> Parola:</td><td><input type='password' name='parola' /></td></tr>
+                    <tr><td> Parola(tekrar):</td><td><input type='password' name='parolatekrar' /></td></tr>
+                    <tr><td></td><td align='right'>
+                        <input type='hidden' name='formbicimi' value='sifre' />
+                        <input type='submit' value='Şifre Değiştir' />
+                    </td></tr>
+                    </form>
+                    </table>";
             break;
+        case "kayipsifre":
+            echo   "<h4>Yeni Parolanızı Girin</h4>
+                    <p>$hata</p>
+                    <form method='post'>
+                        Yeni Parola:<input type='password' name='parola' tabindex='1' />
+                        Parola Tekrarı:<input type='password' name='parolatekrar' tabindex='2' />
+                        <input type='hidden' name='kullaniciId' value='{$profil["id"]}' />
+                        <input type='hidden' name='formbicimi' value='kayipsifre' />
+                        <input type='submit' value='Onayla' tabindex='3' />
+                    </form>";
     }
 }
 
