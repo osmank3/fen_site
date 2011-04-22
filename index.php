@@ -20,13 +20,13 @@ $(document).ready(function()
     {
         $('#yenidosya').click(function ()
             {
-                var sinir = parseInt($('#sinir').val());
-                if (sinir <= 4)
+                var dosyaSayisi = parseInt($('#dosyaSayisi').val());
+                if (dosyaSayisi <= 4)
                 {
-                    sinir += 1
+                    dosyaSayisi += 1
                     $('#dosyalar').append(\"<div><input class='yuvar r5' style='width:75%' type='file' name='dosya[]' id='dosya' /></div>\");
-                    $('#sinir').val(sinir);
-                    if (parseInt($('#sinir').val()) == 5)
+                    $('#dosyaSayisi').val(dosyaSayisi);
+                    if (parseInt($('#dosyaSayisi').val()) == 5)
                     {
                         $('#yenidosya').remove();
                     }
@@ -46,7 +46,7 @@ $(document).ready(function()
 
 if ($bakimda)
 {
-    echo "<h2 style='text-align:center;margin-top:240px;'>Site Bakıma Alınmıştır... Kısa sürede kullanıma açılır</h2>";
+    echo "<h2 style='text-align:center;margin-top:240px;'>Site Bakıma Alınmıştır...<br />Kısa sürede kullanıma açılır</h2>";
 }
 elseif ($girilmis)
 {

@@ -4,9 +4,9 @@ if ($_POST)
     switch($_POST["formbicimi"])
     {
         case "profil":
-            if (!$_POST["isim"]) { $hata = "isim girin"; }
-            elseif(!$_POST["soyisim"]) { $hata = "soyisim girin"; }
-            elseif(!$_POST["email"]) { $hata = "email girin"; }
+            if (!$_POST["isim"]) { $hata = "İsim girin!"; }
+            elseif(!$_POST["soyisim"]) { $hata = "Soyisim girin!"; }
+            elseif(!$_POST["email"]) { $hata = "E-posta adresi girin!"; }
             else
             {
                 $sorgu = "UPDATE {$dbOnek}kullanici SET isim = '$_POST[isim]', soyisim = '$_POST[soyisim]',
@@ -20,10 +20,10 @@ if ($_POST)
             break;
             
         case "sifre":
-            if(!$_POST["eskiparola"]) { $hata = "eski parolanızı girin"; }
-            elseif(!$_POST["parola"]) { $hata = "yeni parolanızı girin"; }
-            elseif(!$_POST["parolatekrar"]) { $hata = "yeni parola tekrarını girin"; }
-            elseif($_POST["parola"] != $_POST["parolatekrar"]) { $hata = "yeni parolalar uyuşmuyor"; }
+            if(!$_POST["eskiparola"]) { $hata = "Eski parola girin!"; }
+            elseif(!$_POST["parola"]) { $hata = "Yeni parola girin!"; }
+            elseif(!$_POST["parolatekrar"]) { $hata = "Yeni parola tekrarını girin!"; }
+            elseif($_POST["parola"] != $_POST["parolatekrar"]) { $hata = "Yeni parolalar uyuşmuyor!"; }
             else
             {
                 $sorgu = "SELECT parola FROM {$dbOnek}kullanici WHERE id = '$_SESSION[kid]'";
@@ -42,25 +42,10 @@ if ($_POST)
                                     window.top.location = './?hesap=goster';
                                 </script>";
                     }
-                    else { $hata = "eski parolanızı yanlış girdiniz"; }
+                    else { $hata = "Eski parolanızı yanlış girdiniz!"; }
                 }
             }
             break;
-            
-        case "sifre0":
-            if(!$_POST["parola"]) { $hata = "yeni parolanızı girin"; }
-            elseif(!$_POST["parolatekrar"]) { $hata = "yeni parola tekrarını girin"; }
-            elseif($_POST["parola"] != $_POST["parolatekrar"]) { $hata = "yeni parolalar uyuşmuyor"; }
-            else
-            {
-                $yeniParola = md5($_POST["parola"]);
-                $sorgu = "UPDATE {$dbOnek}kullanici SET parola = '$yeniParola' WHERE id = '$_SESSION[kid]'";
-                mysql_query($sorgu,$db);
-                echo   "<script>
-                            alert('Parolanız değiştirildi.');
-                            window.top.location = './?hesap=goster';
-                        </script>";
-            }
     }
 }
 switch ($bicim)
@@ -81,16 +66,5 @@ switch ($bicim)
         if (!$hata) $hata = "";
         formgoster("sifre",$hata);
         break;
-    
-    case "sifre0":
-        $sorgu = "SELECT * FROM {$dbOnek}kullanici WHERE id='$_SESSION[kid]'";
-        $sonuc = mysql_query($sorgu,$db);
-        
-        if( mysql_num_rows($sonuc) == 1 )
-        {
-            if (!$hata) $hata = "";
-            $profil = mysql_fetch_assoc($sonuc);
-            formgoster("sifre",$hata,$profil);
-        }
 }
 ?>

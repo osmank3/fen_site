@@ -5,9 +5,9 @@ if ($_POST)
     {
         case "giris":
             if (!$_POST["giriskullanici"])
-                { $hata = "kullanıcı adı girin"; }
+                { $hata = "Kullanıcı adı girin!"; }
             elseif(!$_POST["girisparola"])
-                { $hata = "parolanızı girin"; }
+                { $hata = "Parola girin!"; }
             else
             {
                 $sorgu = "SELECT id, parola, aktif FROM {$dbOnek}kullanici WHERE kullanici = '$_POST[giriskullanici]'";
@@ -21,24 +21,24 @@ if ($_POST)
                         if ($bilgi["aktif"] == "True")
                         { girisyap($bilgi["id"], $_POST["giriskullanici"]); }
                         else
-                        { $hata = "kullanıcı henüz aktifleştirilmemiş"; }
+                        { $hata = "Kullanıcı henüz aktifleştirilmemiş!"; }
                     }
                     else
-                    { $hata = "kullanıcı adı veya şifre hatalı"; }
+                    { $hata = "Kullanıcı adı veya şifre hatalı!"; }
                 }
                 else
-                { $hata = "kullanıcı kayıtlı değil"; }
+                { $hata = "Kullanıcı kayıtlı değil!"; }
             }
             break;
         
         case "kaydol":
-            if (!$_POST["isim"]) { $hata = "isim girin"; }
-            elseif(!$_POST["soyisim"]) { $hata = "soyisim girin"; }
-            elseif(!$_POST["email"]) { $hata = "email girin"; }
-            elseif(!$_POST["kullanici"]) { $hata = "kullanıcı adı girin"; }
-            elseif(!$_POST["parola"]) { $hata = "parolanızı girin"; }
-            elseif(!$_POST["parolatekrar"]) { $hata = "parola tekrarını girin"; }
-            elseif($_POST["parola"] != $_POST["parolatekrar"]) { $hata = "parolalar uyuşmuyor"; }
+            if (!$_POST["isim"]) { $hata = "İsim girin!"; }
+            elseif(!$_POST["soyisim"]) { $hata = "Soyisim girin!"; }
+            elseif(!$_POST["email"]) { $hata = "E-posta adresi girin!"; }
+            elseif(!$_POST["kullanici"]) { $hata = "Kullanıcı adı girin!"; }
+            elseif(!$_POST["parola"]) { $hata = "Parola girin!"; }
+            elseif(!$_POST["parolatekrar"]) { $hata = "Parola tekrarını girin"; }
+            elseif($_POST["parola"] != $_POST["parolatekrar"]) { $hata = "Parolalar uyuşmuyor"; }
             else
             {
                 $sorgu = "SELECT * FROM {$dbOnek}kullanici WHERE kullanici = '$_POST[kullanici]'";
@@ -55,18 +55,18 @@ if ($_POST)
                     
                     $posta_metin = aktifPosta($aktifKod);
                     
-                    $mail = mail( $_POST["email"], "Fen bilgisi aktivasyon.",
+                    $mail = mail( $_POST["email"], "$siteAdi aktivasyon",
                                   $posta_metin, $epostaBaslik );
                     if ($mail)
                     {
-                        $hata = "Fen Bilgisi sitesine üyeliğinizin tamamlanması için e-posta adresinize gönderilen aktivasyon bağlantısına tıklamanız gerekmektedir.";
+                        $hata = "$siteAdi sitesine üyeliğinizin tamamlanması için e-posta adresinize gönderilen aktivasyon bağlantısına tıklamanız gerekmektedir.";
                     }
-                    else { $hata = "e-posta gönderilemiyor!"; }
+                    else { $hata = "E-posta gönderilemiyor!"; }
                 }
                 else
                 {
                     unset($_POST["kullanici"]);
-                    $hata = "kullanıcı zaten kayıtlı farklı bir kullanıcı adı deneyin.";
+                    $hata = "Kullanıcı adı zaten kayıtlı farklı bir kullanıcı adı deneyin.";
                 }
         
             }
@@ -74,7 +74,7 @@ if ($_POST)
             
         case "kayip":
             if (!$_POST["kayipkullanici"])
-                { $hata = "kullanıcı adı girin"; }
+                { $hata = "Kullanıcı adı girin!"; }
             else
             {
                 $sorgu = "SELECT * FROM {$dbOnek}kullanici WHERE kullanici = '$_POST[kayipkullanici]'";
@@ -87,21 +87,22 @@ if ($_POST)
                     
                     $posta_metin = kayipPosta($kayipKod);
                     
-                    $mail = mail( $bilgi["posta"], "Fen bilgisi şifre sıfılama.",
+                    $mail = mail( $bilgi["posta"], "$siteAdi şifre sıfılama",
                                   $posta_metin, $epostaBaslik );
                     if ($mail)
                     {
                         $hata = "E-posta adresinize şifre sıfırlama bağlantısı gönderilmiştir.";
                     }
-                    else { $hata = "e-posta gönderilemiyor!"; }
+                    else { $hata = "E-posta gönderilemiyor!"; }
                 }
-                else { $hata = "Kullanıcı adı kayıtlı değil"; }
+                else { $hata = "Kullanıcı adı kayıtlı değil!"; }
             }
             break;
+            
         case "kayipsifre":
-            if(!$_POST["parola"]) { $hata = "parolanızı girin"; }
-            elseif(!$_POST["parolatekrar"]) { $hata = "parola tekrarını girin"; }
-            elseif($_POST["parola"] != $_POST["parolatekrar"]) { $hata = "parolalar uyuşmuyor"; }
+            if(!$_POST["parola"]) { $hata = "Yeni parola girin!"; }
+            elseif(!$_POST["parolatekrar"]) { $hata = "Parola tekrarını girin!"; }
+            elseif($_POST["parola"] != $_POST["parolatekrar"]) { $hata = "Parolalar uyuşmuyor!"; }
             else
             {
                 $yeniParola = md5($_POST["parola"]);
@@ -168,7 +169,7 @@ if($_GET["kod"])
                 break;
             }
         }
-        if ($durum) echo "<h2>Nereye gidiyon sen? Doğru yerde olduğunu düşünüyorsan bağlantıyı kontrol et.</h2>";
+        if ($durum) echo "<h2>Kontrol kodu hatalı. Bağlantıyı kontrol edin.</h2>";
     }
 }
 else
@@ -190,7 +191,7 @@ else
 }
 
 echo   "    <div class='salt'>
-                Bu sitenin tüm içeriği CC by-nc-sa ile lisanslanmıştır. <b>Site test aşamasındadır.</b>
+                Bu sitenin tüm içeriği CC by-nc-sa ile lisanslanmıştır. <strong>Site test aşamasındadır.</strong>
             </div>
         </div>";
 ?> 

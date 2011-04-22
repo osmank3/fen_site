@@ -16,8 +16,8 @@ if ($_POST)
             break;
             
         case "icerik":
-            if (!$_POST["baslik"]) {echo "başlık giriniz";}
-            elseif(!$_POST["yazi"]) {echo "yazı giriniz";}
+            if (!$_POST["baslik"]) {echo "Başlık girin!";}
+            elseif(!$_POST["yazi"]) {echo "Yazı girin!";}
             else
             {
                 $dosyalar = "";
@@ -25,13 +25,13 @@ if ($_POST)
                 {
                     if ($hata == 0)
                     {
-                        $dosyaAdresi = "dosya/" . dosyaAdiDuzelt($_FILES["dosya"]["name"][$sira]);
+                        $dosyaAdresi = "$yuklemeYeri/" . dosyaAdiDuzelt($_FILES["dosya"]["name"][$sira]);
                         while (file_exists($dosyaAdresi))
                         {
-                            $dosyaAdresi = "dosya/" . rand(100, 1000) . "_" . dosyaAdiDuzelt($_FILES["dosya"]["name"][$sira]);
+                            $dosyaAdresi = "$yuklemeYeri/" . rand(100, 1000) . "_" . dosyaAdiDuzelt($_FILES["dosya"]["name"][$sira]);
                         }
                         
-                        move_uploaded_file($_FILES["dosya"]["tmp_name"][$sira], $dosyaAdresi) or die("Yüklenemiyi");
+                        move_uploaded_file($_FILES["dosya"]["tmp_name"][$sira], $dosyaAdresi) or die("Dosya yüklenemiyor!");
                         $dosyalar = "{$dosyalar}{$dosyaAdresi},";
                     }
                 }

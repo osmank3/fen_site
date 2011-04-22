@@ -26,12 +26,11 @@
         <li><a href="?kategori=diger" title="Diğer">Diğer</a></li></ul>
 </div>
 
-
 <div class="sicerik yuvar">
     <?php include "sayfa.php" ?>
 </div>
 
 <div class="salt">
-    Bu sitenin tüm içeriği CC by-nc-sa ile lisanslanmıştır. <b>Site test aşamasındadır.</b>
+    Bu sitenin tüm içeriği CC by-nc-sa ile lisanslanmıştır. <strong>Site test aşamasındadır.</strong>
 </div>
 </div>

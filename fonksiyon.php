@@ -6,14 +6,16 @@ function girisyap($id, $kullanici)
     $_SESSION["giris"] = true;
     $_SESSION["kid"] = $id;
     $_SESSION["kullanici"] = $kullanici;
-    echo "<script> window.top.location = './'; </script>";
+    if ($_GET["kod"] or $_GET["hesap"] == "cikis") echo "<script> window.top.location = './'; </script>";
+    else echo "<script> window.top.location = '$_SERVER[HTTP_REFERER]'; </script>";
 }
 
 function aktifPosta($kod)
 {
     global $anasayfa;
+    global $siteAdi;
     
-    $metin =   "Fen Bilgisi sitesine üyeliğinizin gerçekleşmesi için aşağıdaki bağlantıya tıklayın
+    $metin =   "$siteAdi sitesine üyeliğinizin gerçekleşmesi için aşağıdaki bağlantıya tıklayın
                 \r<br />
                 \r<br />
                 \r<a href='{$anasayfa}?hesap=aktif&kod=$kod'>{$anasayfa}?hesap=aktif&kod=$kod</a>
@@ -27,8 +29,9 @@ function aktifPosta($kod)
 function kayipPosta($kod)
 {
     global $anasayfa;
+    global $siteAdi;
     
-    $metin =   "Fen Bilgisi sitesinde şifrenizi değiştirebilmeniz için oluşturulan bağlantı aşağıdadır
+    $metin =   "$siteAdi sitesinde şifrenizi değiştirebilmeniz için oluşturulan bağlantı aşağıdadır
                 \r<br />
                 \r<br />
                 \r<a href='{$anasayfa}?hesap=kayip&kod=$kod'>{$anasayfa}?hesap=kayip&kod=$kod</a>
@@ -112,7 +115,7 @@ function formgoster($formbicimi, $hata = "", $profil = NULL)
                     <form method='post' action='' enctype='multipart/form-data'>
                         <div class='ibolum'>Başlık <input class='yuvar sag' style='width:90%' size='55' type='text' name='baslik'/></div>
                         <input type='hidden' name='MAX_FILE_SIZE' value='20000000' />
-                        <input type='hidden' id='sinir' value='1' />
+                        <input type='hidden' id='dosyaSayisi' value='1' />
                         <div class='ibolum' id='dosyalar'>
                             <input class='yuvar r5' style='width:75%' type='file' name='dosya[]' id='dosya' />
                             <button class='yuvar r5' type='button' id='yenidosya'>Başka Dosyalar Ekle</button>
