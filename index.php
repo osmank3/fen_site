@@ -36,6 +36,11 @@ $(document).ready(function()
     }
 );
 </script>
+<script src='DD_roundies_0.0.2a.js'></script>
+<script>
+  /* IE only */
+  DD_roundies.addRule('.yuvar', '10px');
+</script>
 </head>
 <body>";
 

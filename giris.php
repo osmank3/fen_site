@@ -123,7 +123,7 @@ if ($_POST)
 
 echo   "<div class='sayfa yuvar'>
             <div class='sustresim'>
-                <a href='$anasayfa'><img src='fen.png' width='100%' height='150px' alt='' /></a>
+                <a href='$anasayfa'><img src='fen.png' width='100%' height='150px' border='0' alt='' /></a>
             </div>";
 
 if($_GET["kod"])
