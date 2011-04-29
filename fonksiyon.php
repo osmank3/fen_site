@@ -444,11 +444,12 @@ function grubaPosta($tablo, $id)
                 $kategori = kategoriUzun($bilgi["kategori"]);
                 $konu = $bilgi["baslik"];
                 $adresler = explode(",", $bilgi["adres"]);
+                $yazi = altsatir($bilgi[yazi]);
                 
                 $metin =   "Yazan: $kisiadi
                             \r<br />
                             \r<br />
-                            \r$bilgi[yazi]
+                            \r$yazi
                             \r<br />
                             \r<br />\n";
                 foreach ($adresler as $adres)
