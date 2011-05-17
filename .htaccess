@@ -1,0 +1,2 @@
+RewriteEngine on
+RewriteRule ^dosya/([^/]+)/?$ indir.php?dosya=$1 [L]

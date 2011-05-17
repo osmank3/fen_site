@@ -144,7 +144,7 @@ function formgoster($formbicimi, $hata = "", $profil = NULL)
             break;
         
         case "kaydol": //kaydolmak için form
-            echo   "<h4>Kaldol</h4>
+            echo   "<h4>Kaydol</h4>
                     <p>$hata</p>
                     <table align='center'>
                     <form method='post'>
