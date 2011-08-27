@@ -11,7 +11,7 @@ if ($_POST)
             $sorgu = "SELECT max(id) FROM {$dbOnek}yorum";
             $sonuc = mysql_query($sorgu, $db);
             $bilgi = mysql_fetch_assoc($sonuc);
-            grubaPosta("yorum", $bilgi["max(id)"]);
+            iletiPostala("yorum", $bilgi["max(id)"]);
 
             break;
             
@@ -42,7 +42,7 @@ if ($_POST)
                 $sorgu = "SELECT max(id) FROM {$dbOnek}icerik";
                 $sonuc = mysql_query($sorgu, $db);
                 $bilgi = mysql_fetch_assoc($sonuc);
-                grubaPosta("icerik", $bilgi["max(id)"]);
+                iletiPostala("icerik", $bilgi["max(id)"]);
                 
                 echo "<script>window.top.location = '?icerik={$bilgi['max(id)']}';</script>";
             }

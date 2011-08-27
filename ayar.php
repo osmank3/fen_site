@@ -1,7 +1,7 @@
 <?php
 //site ayarları
 $siteAdi = "Fen Bilgisi";
-$anasayfa = "http://localhost/~osman/fen/";
+$anasayfa = "http://localhost/~osmank3/fen/";
 $eposta = "osmank3@gmail.com";
 $grupEpostaDurum = TRUE;
 $grupEposta = "osmank3@gmail.com";

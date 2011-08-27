@@ -26,7 +26,7 @@ CREATE TABLE `fen_icerik` (
   `tarih` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `goster` enum('True','False') NOT NULL default 'True',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
 -- --------------------------------------------------------
 
@@ -43,8 +43,11 @@ CREATE TABLE `fen_kullanici` (
   `parola` text NOT NULL,
   `aktif` enum('False','True') NOT NULL default 'False',
   `yonetim` enum('False','True') NOT NULL default 'False',
+  `bilg_yeni_icerik` enum('False','True') NOT NULL default 'True',
+  `bilg_yeni_yorum` enum('False','True') NOT NULL default 'True',
+  `bilg_sade_takip` enum('False','True') NOT NULL default 'False',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 AUTO_INCREMENT=44 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
 -- --------------------------------------------------------
 
@@ -60,4 +63,4 @@ CREATE TABLE `fen_yorum` (
   `tarih` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `goster` enum('True','False') NOT NULL default 'True',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=59 DEFAULT CHARSET=utf8 AUTO_INCREMENT=59 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;

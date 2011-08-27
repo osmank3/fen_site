@@ -41,6 +41,37 @@ $(document).ready(function()
   /* IE only */
   DD_roundies.addRule('.yuvar', '10px');
 </script>
+<script>
+function bilg_gor()
+{
+    var rad1 = document.getElementById('bilg_rad1');
+    var rad2 = document.getElementById('bilg_rad2');
+    var check2 = document.getElementById('bilg_check2');
+    
+    if (document.bildir.bilg_check1.checked == true)
+    {
+        rad1.style.display='block';
+        rad2.style.display='block';
+    }
+    else
+    {
+        rad1.style.display='none';
+        rad2.style.display='none';
+        check2.style.display='none';
+    }
+    if (document.bildir.bilg_rad2s.checked == true)
+    {
+        if (document.bildir.bilg_check1.checked == true)
+        {
+            check2.style.display='block';
+        }
+    }
+    else
+    {
+        check2.style.display='none';
+    }
+}
+</script>
 </head>
 <body>";
 

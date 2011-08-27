@@ -90,7 +90,7 @@ function kisiadi($id)
     else { return ""; }
 }
 
-function formgoster($formbicimi, $hata = "", $profil = NULL)
+function formgoster($formbicimi, $hata = "", $ekicerik = NULL)
 {
     /* veri gönderme için kullanılacak formları göstermek için fonksiyon
      *
@@ -199,15 +199,46 @@ function formgoster($formbicimi, $hata = "", $profil = NULL)
             echo "<table>
                   <form method='post'>
                       <tr><td colspan='2'><p align='center'>$hata</p></td></tr>
-                      <tr><td>İsim:</td><td><input type='text' name='isim' value='$profil[isim]' /></td></tr>
-                      <tr><td> Soyisim:</td><td><input type='text' name='soyisim' value='$profil[soyisim]' /></td></tr>
-                      <tr><td> E-posta:</td><td><input type='text' name='email' value='$profil[posta]' /></td></tr>
+                      <tr><td>İsim:</td><td><input type='text' name='isim' value='$ekicerik[isim]' /></td></tr>
+                      <tr><td> Soyisim:</td><td><input type='text' name='soyisim' value='$ekicerik[soyisim]' /></td></tr>
+                      <tr><td> E-posta:</td><td><input type='text' name='email' value='$ekicerik[posta]' /></td></tr>
                       <tr><td></td><td align='right'>
                           <input type='hidden' name='formbicimi' value='profil' />
                           <input type='submit' value='Kaydet' />
                       </td></tr>
                   </form>
                   </table>";
+            break;
+            
+        case "bildir": //bilgilendirme ayarlarını düzenlemek için
+            echo   "<table width='100%'>
+                    <form method='post' name='bildir'>
+                        <tr><td colspan='5'><p align='center'>$hata</p></td></tr>
+                        <tr>
+                            <td colspan='4'><input type='checkbox' name='bilg_yeni_icerik' onClick='bilg_gor()' id='bilg_check1' value='True' ";
+                                if ($ekicerik["bilg_yeni_icerik"] == "True") echo "checked ";
+            echo   "            >Bildirimleri aç</input></td>
+                            <td align='right' width='20%'><input type='hidden' name='formbicimi' value='bildir' />
+                                <input type='submit' value='Kaydet' /></td>
+                        </tr><tr>
+                            <td width='10px'></td>
+                            <td colspan='4'><div id='bilg_rad1'><input type='radio' name='bilg_yeni_yorum' onClick='bilg_gor()' value='False' ";
+                                if ($ekicerik["bilg_yeni_yorum"] != "True") echo "checked ";
+            echo   "            />Sadece yeni içerikleri bildir.</div></td>
+                        </tr><tr>
+                            <td></td>
+                            <td colspan='4'><div id='bilg_rad2'><input type='radio' name='bilg_yeni_yorum' onClick='bilg_gor()' id='bilg_rad2s' value='True' ";
+                                if ($ekicerik["bilg_yeni_yorum"] == "True") echo "checked ";
+            echo   "            />Yeni içerikleri ve yorumları bildir.</div></td>
+                        </tr><tr>
+                            <td></td><td width='10px'></td>
+                            <td colspan='3'><div id='bilg_check2'><input type='checkbox' name='bilg_sade_takip' value='True' ";
+                                if ($ekicerik["bilg_sade_takip"] == "True") echo "checked ";
+            echo   "            />Sadece takip edilen yorumları bildir.</div></td>
+                        </tr>
+                    </form>
+                    <script>bilg_gor()</script>
+                    </table>";
             break;
             
         case "sifre": //Şifre değiştirmek için
@@ -225,13 +256,14 @@ function formgoster($formbicimi, $hata = "", $profil = NULL)
                     </form>
                     </table>";
             break;
+            
         case "kayipsifre":
             echo   "<h4>Yeni Parolanızı Girin</h4>
                     <p>$hata</p>
                     <form method='post'>
                         Yeni Parola:<input type='password' name='parola' tabindex='1' />
                         Parola Tekrarı:<input type='password' name='parolatekrar' tabindex='2' />
-                        <input type='hidden' name='kullaniciId' value='{$profil["id"]}' />
+                        <input type='hidden' name='kullaniciId' value='{$ekicerik["id"]}' />
                         <input type='hidden' name='formbicimi' value='kayipsifre' />
                         <input type='submit' value='Onayla' tabindex='3' />
                     </form>";
@@ -397,25 +429,49 @@ function profilTablola($id)
     {
         $bilgi = mysql_fetch_assoc($sonuc);
         
-        echo   "<p><table width='100%'>
-                <tr>
-                    <td>Kullanıcı Adı:</td><td>$bilgi[kullanici]</td>
-                </tr><tr>
-                    <td>İsim:</td><td>$bilgi[isim]</td>
-                </tr><tr>
-                    <td>Soyisim:</td><td>$bilgi[soyisim]</td>
-                </tr><tr>
-                    <td>E-posta:</td><td>$bilgi[posta]</td>
-                </tr>";
+        echo   "<div class='icerik yuvar r4'>
+                    <table width='100%'><tr>
+                        <td>Kullanıcı Adı:</td>
+                        <td>$bilgi[kullanici]</td>";
+                            if ($_SESSION["kid"] == $bilgi["id"]) echo "<td align='right'><a href='?hesap=ayarla&bicim=sifre' title='Şifre Değiştir'>Şifre Değiştir</a></td>";
+        echo   "    </tr></table>
+                </div>
+                <div class='icerik yuvar r4'>
+                    <table width='100%'><tr>
+                        <td>İsim:</td>
+                        <td>$bilgi[isim]</td>";
+                            if ($_SESSION["kid"] == $bilgi["id"]) echo "<td align='right'><a href='?hesap=ayarla&bicim=profil' title='Profil Düzenle'>Profil Düzenle</a></td>";
+        echo   "    </tr><tr>
+                        <td>Soyisim:</td>
+                        <td>$bilgi[soyisim]</td>
+                    </tr><tr>
+                        <td>E-posta:</td>
+                        <td>$bilgi[posta]</td>
+                    </tr></table>
+                </div>";
         if ($_SESSION["kid"] == $bilgi["id"])
         {
-            echo   "<tr><td><br /></td></tr>
-                    <tr>
-                        <td><a href='?hesap=ayarla&bicim=sifre' title='Şifre Değiştir'>Şifre Değiştir</a></td>
-                        <td><a href='?hesap=ayarla&bicim=profil' title='Profil Düzenle'>Profil Düzenle</a></td>
-                    </tr>";
+            echo   "<div class='icerik yuvar r4'>
+                        <table width='100%'><tr>
+                            <td>Yeni içerikleri bildirme</td>
+                            <td>";
+                                if ($bilgi["bilg_yeni_icerik"] == "True") echo "<strong>Açık</strong>";
+                                else echo "Kapalı";
+            echo   "        </td>
+                            <td align='right'><a href='?hesap=ayarla&bicim=bildir' title='Bildirileri Düzenle'>Bildirileri Düzenle</a></td>
+                        </tr><tr>
+                            <td>Yeni yorumlarda bilgilendirme</td>
+                            <td colspan='2'>";
+                                if ($bilgi["bilg_yeni_yorum"] == "True")
+                                {
+                                    if ($bilgi["bilg_sade_takip"] == "True") echo "Sadece takip edilenler";
+                                    else echo "Bütün yorumlar";
+                                }
+                                else echo "Kapalı";
+            echo   "        </td>
+                        </tr></table>
+                    </div>";
         }
-        echo   "</table></p>";
     }
 }
 
@@ -494,5 +550,120 @@ function grubaPosta($tablo, $id)
             }
             break;
     }
+}
+
+function kisiyePosta($tablo, $id)
+{
+    //yeni ileti ve yorumları kişilere postalayan fonksiyon
+    global $db;
+    global $dbOnek;
+    global $anasayfa;
+    global $eposta;
+    global $epostaBaslik;
+    
+    $takipedenler = FALSE;
+    
+    $k_sorgu = "SELECT id, posta, bilg_yeni_icerik, bilg_yeni_yorum, bilg_sade_takip FROM {$dbOnek}kullanici";
+    $k_sonuc = mysql_query($k_sorgu, $db);
+    while($k_bilgi = mysql_fetch_assoc($k_sonuc))
+    {
+        if ($_SESSION["kid"] == $k_bilgi["id"]) continue;
+        
+        switch($tablo)
+        {
+            case "icerik":
+                if ($k_bilgi["bilg_yeni_icerik"] == "True")
+                {
+                    $sorgu = "SELECT * FROM {$dbOnek}icerik WHERE id='$id'";
+                    $sonuc = mysql_query($sorgu, $db);
+                    if (mysql_num_rows($sonuc) == 1)
+                    {
+                        $bilgi = mysql_fetch_assoc($sonuc);
+                        $kisiadi = kisiadi($bilgi["k_id"]);
+                        $kategori = kategoriUzun($bilgi["kategori"]);
+                        $konu = $bilgi["baslik"];
+                        $adresler = explode(",", $bilgi["adres"]);
+                        $yazi = altsatir($bilgi[yazi]);
+                        
+                        $metin =   "Yazan: $kisiadi
+                                    \r<br />
+                                    \r<br />
+                                    \r$yazi
+                                    \r<br />
+                                    \r<br />\n";
+                        foreach ($adresler as $adres)
+                        {
+                            if ($adres == "") continue;
+                            $metin = $metin .  "Dosya: <a href='{$anasayfa}{$adres}'>{$anasayfa}{$adres}</a>
+                                                \r<br />\n";
+                        }
+                        $metin = $metin .  "<br />
+                                            \r$kategori
+                                            \r<br />
+                                            \r<br />
+                                            \r--Bu e-posta <a href='$anasayfa'>$anasayfa</a> tarafından otomatik oluşturulmuştur.--";
+                        
+                        
+                        mail( $k_bilgi["posta"], $konu, $metin, $epostaBaslik );
+                    }
+                }
+                break;
+            case "yorum":
+                if ($k_bilgi["bilg_yeni_yorum"] == "True")
+                {
+                    $sorgu = "SELECT * FROM {$dbOnek}yorum WHERE id='$id'";
+                    $sonuc = mysql_query($sorgu, $db);
+                    if (mysql_num_rows($sonuc) == 1)
+                    {
+                        $bilgi = mysql_fetch_assoc($sonuc);
+                        $kisiadi = kisiadi($bilgi["k_id"]);
+                        
+                        $sorgu2 = "SELECT baslik, k_id FROM {$dbOnek}icerik WHERE id='$bilgi[i_id]'";
+                        $sonuc2 = mysql_query($sorgu2, $db);
+                        $bilgi2 = mysql_fetch_assoc($sonuc2);
+                        $konu = $bilgi2["baslik"];
+                        
+                        $metin =   "Yorumlayan: $kisiadi
+                                    \r<br />
+                                    \r<br />
+                                    \r$bilgi[yazi]
+                                    \r<br />
+                                    \r<br />
+                                    \r--Bu e-posta <a href='$anasayfa'>$anasayfa</a> tarafından otomatik oluşturulmuştur.--";
+                        
+                        if (!$takipedenler)
+                        {
+                            $takipedenler = array(0 => $bilgi2["k_id"]);
+                            $t_sorgu = "SELECT k_id FROM {$dbOnek}yorum WHERE i_id='{$bilgi[i_id]}'";
+                            $t_sonuc = mysql_query($t_sorgu, $db);
+                            
+                            while ( $t_bilgi = mysql_fetch_assoc($t_sonuc))
+                            {
+                                if (!in_array($t_bilgi["k_id"], $takipedenler)) $takipedenler[] = $t_bilgi["k_id"];
+                            }
+                        }
+                        
+                        if ($k_bilgi["bilg_sade_takip"] == "True")
+                        {
+                            if (in_array($k_bilgi["id"], $takipedenler))
+                            {
+                                mail( $k_bilgi["posta"], "Re: $konu", $metin, $epostaBaslik );
+                            }
+                        }
+                        else
+                        {
+                            mail( $k_bilgi["posta"], "Re: $konu", $metin, $epostaBaslik );
+                        }
+                    }
+                }
+                break;
+        }
+    }
+}
+
+function iletiPostala($tablo, $id)
+{
+    grubaPosta($tablo, $id);
+    kisiyePosta($tablo, $id);
 }
 ?>
