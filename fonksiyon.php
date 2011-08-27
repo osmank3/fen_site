@@ -475,9 +475,9 @@ function profilTablola($id)
     }
 }
 
-function grubaPosta($tablo, $id)
+function iletiPostala($tablo, $id)
 {
-    //yeni içeriği google gruba postalayan fonksiyon 
+    //içerik ve yorumları e-posta ile bildirmek üzere yazılmış fonksiyon.
     global $db;
     global $dbOnek;
     global $anasayfa;
@@ -486,8 +486,9 @@ function grubaPosta($tablo, $id)
     global $grupEposta;
     global $grupEpostaDurum;
     
-    if (!$grupEpostaDurum) return;
+    $takipedenler = array();
     
+    //e-posta içeriğinin hazırlandığı kısmın --başı--
     switch($tablo)
     {
         case "icerik":
@@ -519,151 +520,73 @@ function grubaPosta($tablo, $id)
                                     \r<br />
                                     \r<br />
                                     \r--Bu e-posta <a href='$anasayfa'>$anasayfa</a> tarafından otomatik oluşturulmuştur.--";
-                
-                
-                mail( $grupEposta, $konu, $metin, $epostaBaslik );
             }
             break;
             
         case "yorum":
-            $sorgu = "SELECT * FROM {$dbOnek}yorum WHERE id='$id'";
-            $sonuc = mysql_query($sorgu, $db);
-            if (mysql_num_rows($sonuc) == 1)
+            $y_sorgu = "SELECT * FROM {$dbOnek}yorum WHERE id='$id'";
+            $y_sonuc = mysql_query($y_sorgu, $db);
+            if (mysql_num_rows($y_sonuc) == 1)
             {
-                $bilgi = mysql_fetch_assoc($sonuc);
-                $kisiadi = kisiadi($bilgi["k_id"]);
+                $y_bilgi = mysql_fetch_assoc($y_sonuc);
+                $kisiadi = kisiadi($y_bilgi["k_id"]);
                 
-                $sorgu2 = "SELECT baslik FROM {$dbOnek}icerik WHERE id='$bilgi[i_id]'";
-                $sonuc2 = mysql_query($sorgu2, $db);
-                $bilgi2 = mysql_fetch_assoc($sonuc2);
-                $konu = $bilgi2["baslik"];
+                $i_sorgu = "SELECT baslik, k_id FROM {$dbOnek}icerik WHERE id='$y_bilgi[i_id]'";
+                $i_sonuc = mysql_query($i_sorgu, $db);
+                $i_bilgi = mysql_fetch_assoc($i_sonuc);
+                $konu = "Re: $i_bilgi[baslik]";
                 
                 $metin =   "Yorumlayan: $kisiadi
                             \r<br />
                             \r<br />
-                            \r$bilgi[yazi]
+                            \r$y_bilgi[yazi]
                             \r<br />
                             \r<br />
                             \r--Bu e-posta <a href='$anasayfa'>$anasayfa</a> tarafından otomatik oluşturulmuştur.--";
                 
-                mail( $grupEposta, "Re: $konu", $metin, $epostaBaslik );
+                $takipedenler[] = $i_bilgi["k_id"];
+                $t_sorgu = "SELECT k_id FROM {$dbOnek}yorum WHERE i_id='{$y_bilgi[i_id]}'";
+                $t_sonuc = mysql_query($t_sorgu, $db);
+                
+                while ( $t_bilgi = mysql_fetch_assoc($t_sonuc))
+                {
+                    if (!in_array($t_bilgi["k_id"], $takipedenler)) $takipedenler[] = $t_bilgi["k_id"];
+                }
             }
             break;
     }
-}
-
-function kisiyePosta($tablo, $id)
-{
-    //yeni ileti ve yorumları kişilere postalayan fonksiyon
-    global $db;
-    global $dbOnek;
-    global $anasayfa;
-    global $eposta;
-    global $epostaBaslik;
+    //e-posta içeriğinin hazırlandığı kısmın --sonu--
     
-    $takipedenler = FALSE;
+    //gruba e-posta gönderim kısmı
+    if ($grupEpostaDurum)
+    {
+        mail( $grupEposta, $konu, $metin, $epostaBaslik );
+    }
     
+    //kişilere e-posta gönderen kısım
     $k_sorgu = "SELECT id, posta, bilg_yeni_icerik, bilg_yeni_yorum, bilg_sade_takip FROM {$dbOnek}kullanici";
     $k_sonuc = mysql_query($k_sorgu, $db);
     while($k_bilgi = mysql_fetch_assoc($k_sonuc))
     {
         if ($_SESSION["kid"] == $k_bilgi["id"]) continue;
-        
-        switch($tablo)
+        if ($k_bilgi["bilg_yeni_icerik"] == "True" and $tablo == "icerik")
         {
-            case "icerik":
-                if ($k_bilgi["bilg_yeni_icerik"] == "True")
+            mail( $k_bilgi["posta"], $konu, $metin, $epostaBaslik );
+        }
+        if ($k_bilgi["bilg_yeni_yorum"] == "True" and $tablo == "yorum")
+        {
+            if ($k_bilgi["bilg_sade_takip"] == "True")
+            {
+                if (in_array($k_bilgi["id"], $takipedenler))
                 {
-                    $sorgu = "SELECT * FROM {$dbOnek}icerik WHERE id='$id'";
-                    $sonuc = mysql_query($sorgu, $db);
-                    if (mysql_num_rows($sonuc) == 1)
-                    {
-                        $bilgi = mysql_fetch_assoc($sonuc);
-                        $kisiadi = kisiadi($bilgi["k_id"]);
-                        $kategori = kategoriUzun($bilgi["kategori"]);
-                        $konu = $bilgi["baslik"];
-                        $adresler = explode(",", $bilgi["adres"]);
-                        $yazi = altsatir($bilgi[yazi]);
-                        
-                        $metin =   "Yazan: $kisiadi
-                                    \r<br />
-                                    \r<br />
-                                    \r$yazi
-                                    \r<br />
-                                    \r<br />\n";
-                        foreach ($adresler as $adres)
-                        {
-                            if ($adres == "") continue;
-                            $metin = $metin .  "Dosya: <a href='{$anasayfa}{$adres}'>{$anasayfa}{$adres}</a>
-                                                \r<br />\n";
-                        }
-                        $metin = $metin .  "<br />
-                                            \r$kategori
-                                            \r<br />
-                                            \r<br />
-                                            \r--Bu e-posta <a href='$anasayfa'>$anasayfa</a> tarafından otomatik oluşturulmuştur.--";
-                        
-                        
-                        mail( $k_bilgi["posta"], $konu, $metin, $epostaBaslik );
-                    }
+                    mail( $k_bilgi["posta"], $konu, $metin, $epostaBaslik );
                 }
-                break;
-            case "yorum":
-                if ($k_bilgi["bilg_yeni_yorum"] == "True")
-                {
-                    $sorgu = "SELECT * FROM {$dbOnek}yorum WHERE id='$id'";
-                    $sonuc = mysql_query($sorgu, $db);
-                    if (mysql_num_rows($sonuc) == 1)
-                    {
-                        $bilgi = mysql_fetch_assoc($sonuc);
-                        $kisiadi = kisiadi($bilgi["k_id"]);
-                        
-                        $sorgu2 = "SELECT baslik, k_id FROM {$dbOnek}icerik WHERE id='$bilgi[i_id]'";
-                        $sonuc2 = mysql_query($sorgu2, $db);
-                        $bilgi2 = mysql_fetch_assoc($sonuc2);
-                        $konu = $bilgi2["baslik"];
-                        
-                        $metin =   "Yorumlayan: $kisiadi
-                                    \r<br />
-                                    \r<br />
-                                    \r$bilgi[yazi]
-                                    \r<br />
-                                    \r<br />
-                                    \r--Bu e-posta <a href='$anasayfa'>$anasayfa</a> tarafından otomatik oluşturulmuştur.--";
-                        
-                        if (!$takipedenler)
-                        {
-                            $takipedenler = array(0 => $bilgi2["k_id"]);
-                            $t_sorgu = "SELECT k_id FROM {$dbOnek}yorum WHERE i_id='{$bilgi[i_id]}'";
-                            $t_sonuc = mysql_query($t_sorgu, $db);
-                            
-                            while ( $t_bilgi = mysql_fetch_assoc($t_sonuc))
-                            {
-                                if (!in_array($t_bilgi["k_id"], $takipedenler)) $takipedenler[] = $t_bilgi["k_id"];
-                            }
-                        }
-                        
-                        if ($k_bilgi["bilg_sade_takip"] == "True")
-                        {
-                            if (in_array($k_bilgi["id"], $takipedenler))
-                            {
-                                mail( $k_bilgi["posta"], "Re: $konu", $metin, $epostaBaslik );
-                            }
-                        }
-                        else
-                        {
-                            mail( $k_bilgi["posta"], "Re: $konu", $metin, $epostaBaslik );
-                        }
-                    }
-                }
-                break;
+            }
+            else
+            {
+                mail( $k_bilgi["posta"], $konu, $metin, $epostaBaslik );
+            }
         }
     }
-}
-
-function iletiPostala($tablo, $id)
-{
-    grubaPosta($tablo, $id);
-    kisiyePosta($tablo, $id);
 }
 ?>
