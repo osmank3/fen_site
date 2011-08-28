@@ -14,16 +14,28 @@
 
 <div class="sanahat yuvar">
     <h4><a href="?sayfa=yeniicerik" title="İçerik ekle">+ Yeni İçerik</a></h4>
-    <h5>Kategoriler</h5><ul>
-        <li><a href="?kategori=bilimindogasi" title="Bilimin Doğası">Bilimin Doğası</a></li>
-        <li><a href="?kategori=cevre" title="Çevre Bilimi">Çevre Bilimi</a></li>
-        <li><a href="?kategori=fenlab" title="Fen Laboratuvarı">Fen Laboratuvarı</a></li>
-        <li><a href="?kategori=genetik" title="Genetik">Genetik</a></li>
-        <li><a href="?kategori=olcme" title="Ölçme Değerlendirme">Ölçme Değerlendirme</a></li>
-        <li><a href="?kategori=ozelogretim" title="Özel Öğretim">Özel Öğretim</a></li>
-        <li><a href="?kategori=toplum" title="Topluma Hizmet">Topluma Hizmet</a></li>
-        <li><a href="?kategori=yer" title="Yer Bilimi">Yer Bilimi</a></li>
-        <li><a href="?kategori=diger" title="Diğer">Diğer</a></li></ul>
+    <h5>Kategoriler</h5>
+    <ul class='kat'>
+        <?php
+            $sorgu = "SELECT * FROM {$dbOnek}kategori WHERE us_id IS NULL ORDER BY id DESC";
+            $sonuc = mysql_query($sorgu, $db);
+            while($bilgi = mysql_fetch_assoc($sonuc))
+            {
+                if ($bilgi["ustkategori"] == "False") echo "<li><a href='?kategori={$bilgi[id]}' title='{$bilgi[isim]}'>{$bilgi[isim]}</a></li>";
+                else
+                {
+                    echo "<li>$bilgi[isim] <ul class='kat'>";
+                    $ic_sorgu = "SELECT * FROM {$dbOnek}kategori WHERE us_id = '{$bilgi[id]}' ORDER BY id";
+                    $ic_sonuc = mysql_query($ic_sorgu, $db);
+                    while($ic_bilgi = mysql_fetch_assoc($ic_sonuc))
+                    {
+                        echo "<li><a href='?kategori={$ic_bilgi[id]}' title='{$ic_bilgi[isim]}'>{$ic_bilgi[isim]}</a></li>";
+                    }
+                    echo "</ul></li>";
+                }
+            }
+        ?>
+    </ul>
 </div>
 
 <div class="sicerik yuvar">

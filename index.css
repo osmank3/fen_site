@@ -9,6 +9,12 @@ a
     text-decoration:none;
 }
 
+ul.kat
+{
+    padding:0px;
+    margin-left:20px;
+}
+
 .sayfa
 {
     width:860px;

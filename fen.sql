@@ -31,6 +31,20 @@ CREATE TABLE `fen_icerik` (
 -- --------------------------------------------------------
 
 -- 
+-- Tablo yapısı : `fen_katagori`
+-- 
+
+CREATE TABLE  `fen_kategori` (
+  `id` VARCHAR( 64 ) NOT NULL ,
+  `us_id` VARCHAR( 64 ) NULL ,
+  `isim` TEXT NOT NULL ,
+  `ustkategori` enum('True','False') NOT NULL default 'False',
+  PRIMARY KEY (  `id` )
+) ENGINE = MYISAM DEFAULT CHARSET=utf8 ;
+
+-- --------------------------------------------------------
+
+-- 
 -- Tablo yapısı : `fen_kullanici`
 -- 
 

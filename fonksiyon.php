@@ -59,18 +59,17 @@ function dosyaAdiDuzelt($yazi)
 
 function kategoriUzun($kategori)
 {
-    $kategoriler = array();
-    $kategoriler["bilimindogasi"] = "Bilimin Doğası";
-    $kategoriler["cevre"] = "Çevre Bilimi";
-    $kategoriler["fenlab"] = "Fen Laboratuvarı";
-    $kategoriler["genetik"] = "Genetik";
-    $kategoriler["olcme"] = "Ölçme Değerlendirme";
-    $kategoriler["ozelogretim"] = "Özel Öğretim";
-    $kategoriler["toplum"] = "Topluma Hizmet";
-    $kategoriler["yer"] = "Yer Bilimi";
-    $kategoriler["diger"] = "Diğer";
+    global $db;
+    global $dbOnek;
     
-    return $kategoriler[$kategori];
+    $sorgu = "SELECT isim FROM {$dbOnek}kategori WHERE id = '$kategori'";
+    $sonuc = mysql_query($sorgu, $db);
+    if( mysql_num_rows($sonuc) == 1 )
+    {
+        $bilgi = mysql_fetch_assoc($sonuc);
+        return $bilgi["isim"];
+    }
+    else { return ""; }
 }
 
 function kisiadi($id)
@@ -95,6 +94,8 @@ function formgoster($formbicimi, $hata = "", $ekicerik = NULL)
     /* veri gönderme için kullanılacak formları göstermek için fonksiyon
      *
      * form biçimi girilmek zorunda, hata girilmesi isteğe bağlı */
+    global $db;
+    global $dbOnek;
     switch($formbicimi)
     {
         case "giris": //giriş bölümü için form
@@ -124,17 +125,27 @@ function formgoster($formbicimi, $hata = "", $ekicerik = NULL)
                         <div class='ibolum'>
                             Kategori:
                             <select name='kategori' class='yuvar r5'>
-                                <option value='diger'>Kategori Seçin</option>
-                                <option value='bilimindogasi'>Bilimin Doğası</option>
-                                <option value='cevre'>Çevre Bilimi</option>
-                                <option value='fenlab'>Fen Laboratuvarı</option>
-                                <option value='genetik'>Genetik</option>
-                                <option value='olcme'>Ölçme Değerlendirme</option>
-                                <option value='ozelogretim'>Özel Öğretim</option>
-                                <option value='toplum'>Topluma Hizmet</option>
-                                <option value='yer'>Yer Bilimi</option>
-                                <option value='diger'>Diğer</option>
-                            </select>
+                                <option value='diger'>Kategori Seçin</option>";
+                                
+                                $sorgu = "SELECT * FROM {$dbOnek}kategori WHERE us_id IS NULL ORDER BY id DESC";
+                                $sonuc = mysql_query($sorgu, $db);
+                                while($bilgi = mysql_fetch_assoc($sonuc))
+                                {
+                                    if ($bilgi["ustkategori"] == "False") echo "<option value='$bilgi[id]'>$bilgi[isim]</option>";
+                                    else
+                                    {
+                                        echo "<optgroup label='{$bilgi[isim]}'>";
+                                        $ic_sorgu = "SELECT * FROM {$dbOnek}kategori WHERE us_id = '{$bilgi[id]}' ORDER BY id";
+                                        $ic_sonuc = mysql_query($ic_sorgu, $db);
+                                        while($ic_bilgi = mysql_fetch_assoc($ic_sonuc))
+                                        {
+                                            echo "<option value='$ic_bilgi[id]'>$ic_bilgi[isim]</option>";
+                                        }
+                                        echo "</optgroup>";
+                                    }
+                                }
+                                
+            echo   "        </select>
                             <input type='hidden' name='formbicimi' value='icerik' />
                             <input class='yuvar sag r5' type='submit' value='Gönder' />
                         </div>
