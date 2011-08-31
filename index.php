@@ -15,6 +15,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 <meta http-equiv='content-style-type' content='text/css'>
 <link href='index.css' rel='stylesheet' type='text/css'>
 <script type='text/javascript' src='jquery-1.3.2.min.js'></script>
+<script type='text/javascript' src='fonksiyon.js'></script>
 <script>
 $(document).ready(function()
     {
@@ -40,37 +41,6 @@ $(document).ready(function()
 <script>
   /* IE only */
   DD_roundies.addRule('.yuvar', '10px');
-</script>
-<script>
-function bilg_gor()
-{
-    var rad1 = document.getElementById('bilg_rad1');
-    var rad2 = document.getElementById('bilg_rad2');
-    var check2 = document.getElementById('bilg_check2');
-    
-    if (document.bildir.bilg_check1.checked == true)
-    {
-        rad1.style.display='block';
-        rad2.style.display='block';
-    }
-    else
-    {
-        rad1.style.display='none';
-        rad2.style.display='none';
-        check2.style.display='none';
-    }
-    if (document.bildir.bilg_rad2s.checked == true)
-    {
-        if (document.bildir.bilg_check1.checked == true)
-        {
-            check2.style.display='block';
-        }
-    }
-    else
-    {
-        check2.style.display='none';
-    }
-}
 </script>
 </head>
 <body>";

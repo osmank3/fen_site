@@ -89,6 +89,25 @@ function kisiadi($id)
     else { return ""; }
 }
 
+function takipciListe($id)
+{
+    //içeriği takip edenlerin listesini dönen fonksiyon.
+    global $db;
+    global $dbOnek;
+    
+    $takipciler = array();
+    
+    $sorgu = "SELECT k_id FROM {$dbOnek}yorum WHERE i_id='{$id}' and takip='True'";
+    $sonuc = mysql_query($sorgu, $db);
+    
+    while ( $bilgi = mysql_fetch_assoc($sonuc))
+    {
+        if (!in_array($bilgi["k_id"], $takipciler)) $takipciler[] = $bilgi["k_id"];
+    }
+    
+    return $takipciler;
+}
+
 function formgoster($formbicimi, $hata = "", $ekicerik = NULL)
 {
     /* veri gönderme için kullanılacak formları göstermek için fonksiyon
@@ -215,41 +234,46 @@ function formgoster($formbicimi, $hata = "", $ekicerik = NULL)
                       <tr><td> E-posta:</td><td><input type='text' name='email' value='$ekicerik[posta]' /></td></tr>
                       <tr><td></td><td align='right'>
                           <input type='hidden' name='formbicimi' value='profil' />
-                          <input type='submit' value='Kaydet' />
+                          <input class='yuvar r5' type='submit' value='Kaydet' />
                       </td></tr>
                   </form>
                   </table>";
             break;
             
         case "bildir": //bilgilendirme ayarlarını düzenlemek için
-            echo   "<table width='100%'>
+            echo   "<p>$hata</p>
                     <form method='post' name='bildir'>
-                        <tr><td colspan='5'><p align='center'>$hata</p></td></tr>
-                        <tr>
-                            <td colspan='4'><input type='checkbox' name='bilg_yeni_icerik' onClick='bilg_gor()' id='bilg_check1' value='True' ";
-                                if ($ekicerik["bilg_yeni_icerik"] == "True") echo "checked ";
-            echo   "            >Bildirimleri aç</input></td>
-                            <td align='right' width='20%'><input type='hidden' name='formbicimi' value='bildir' />
-                                <input type='submit' value='Kaydet' /></td>
-                        </tr><tr>
-                            <td width='10px'></td>
-                            <td colspan='4'><div id='bilg_rad1'><input type='radio' name='bilg_yeni_yorum' onClick='bilg_gor()' value='False' ";
-                                if ($ekicerik["bilg_yeni_yorum"] != "True") echo "checked ";
-            echo   "            />Sadece yeni içerikleri bildir.</div></td>
-                        </tr><tr>
-                            <td></td>
-                            <td colspan='4'><div id='bilg_rad2'><input type='radio' name='bilg_yeni_yorum' onClick='bilg_gor()' id='bilg_rad2s' value='True' ";
-                                if ($ekicerik["bilg_yeni_yorum"] == "True") echo "checked ";
-            echo   "            />Yeni içerikleri ve yorumları bildir.</div></td>
-                        </tr><tr>
-                            <td></td><td width='10px'></td>
-                            <td colspan='3'><div id='bilg_check2'><input type='checkbox' name='bilg_sade_takip' value='True' ";
-                                if ($ekicerik["bilg_sade_takip"] == "True") echo "checked ";
-            echo   "            />Sadece takip edilen yorumları bildir.</div></td>
-                        </tr>
-                    </form>
-                    <script>bilg_gor()</script>
-                    </table>";
+                    <ul class='kat' style='list-style-type:none;'>
+                        <li>
+                            <input type='checkbox' name='bilg_yeni_icerik' onClick='bilg_gor()' id='bilg_check1' value='True' ";
+                            if ($ekicerik["bilg_yeni_icerik"] == "True") echo "checked ";
+            echo   "        />Bildirimleri aç
+                            <span class='sag'>
+                                <input type='hidden' name='formbicimi' value='bildir' />
+                                <input class='yuvar r5' type='submit' value='Kaydet' />
+                            </span>
+                        </li><li>
+                            <ul id='bilg_acma' class='kat' style='list-style-type:none;'>
+                                <li>
+                                    <input type='radio' name='bilg_yeni_yorum' onClick='bilg_gor()' value='False' ";
+                                    if ($ekicerik["bilg_yeni_yorum"] != "True") echo "checked ";
+            echo   "                />Sadece yeni içerikleri bildir.
+                                </li><li>
+                                    <input type='radio' name='bilg_yeni_yorum' onClick='bilg_gor()' id='bilg_rad2s' value='True' ";
+                                    if ($ekicerik["bilg_yeni_yorum"] == "True") echo "checked ";
+            echo   "                />Yeni içerikleri ve yorumları bildir.
+                                </li><li>
+                                    <ul id='bilg_sade' class='kat' style='list-style-type:none;'>
+                                        <li><input type='checkbox' name='bilg_sade_takip' value='True' ";
+                                            if ($ekicerik["bilg_sade_takip"] == "True") echo "checked ";
+            echo   "                        />Sadece takip edilen yorumları bildir.
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    </form>";
             break;
             
         case "sifre": //Şifre değiştirmek için
@@ -262,7 +286,7 @@ function formgoster($formbicimi, $hata = "", $ekicerik = NULL)
                     <tr><td> Parola(tekrar):</td><td><input type='password' name='parolatekrar' /></td></tr>
                     <tr><td></td><td align='right'>
                         <input type='hidden' name='formbicimi' value='sifre' />
-                        <input type='submit' value='Şifre Değiştir' />
+                        <input class='yuvar r5' type='submit' value='Şifre Değiştir' />
                     </td></tr>
                     </form>
                     </table>";
@@ -312,6 +336,9 @@ function tablola($id)
                             <a href='?icerik=$id'><strong>$bilgi[baslik]</strong></a>
                         </div>
                         <div class='sag'>";
+                            if (in_array($_SESSION["kid"], takipciListe($id))) echo "<span id='takip$id'><button class='yuvar r5' onClick='takip(0, $id, $_SESSION[kid])'>Takip Etme</button></span>";
+                            else echo "<span id='takip$id'><button class='yuvar r5' onClick='takip(1, $id, $_SESSION[kid])'>Takip Et</button></span>";
+                            // buraya takip etme ve takibi bırakma düğmesi eklenecek.
                             if ($_SESSION["kid"] == $bilgi["k_id"])  echo "<a href='?sil=icerik&sil_id=$id' title='Sil'>Sil</a>";
         echo   "        </div>
                     </div>
@@ -497,8 +524,6 @@ function iletiPostala($tablo, $id)
     global $grupEposta;
     global $grupEpostaDurum;
     
-    $takipedenler = array();
-    
     //e-posta içeriğinin hazırlandığı kısmın --başı--
     switch($tablo)
     {
@@ -542,7 +567,7 @@ function iletiPostala($tablo, $id)
                 $y_bilgi = mysql_fetch_assoc($y_sonuc);
                 $kisiadi = kisiadi($y_bilgi["k_id"]);
                 
-                $i_sorgu = "SELECT baslik, k_id FROM {$dbOnek}icerik WHERE id='$y_bilgi[i_id]'";
+                $i_sorgu = "SELECT baslik FROM {$dbOnek}icerik WHERE id='$y_bilgi[i_id]'";
                 $i_sonuc = mysql_query($i_sorgu, $db);
                 $i_bilgi = mysql_fetch_assoc($i_sonuc);
                 $konu = "Re: $i_bilgi[baslik]";
@@ -555,14 +580,7 @@ function iletiPostala($tablo, $id)
                             \r<br />
                             \r--Bu e-posta <a href='$anasayfa'>$anasayfa</a> tarafından otomatik oluşturulmuştur.--";
                 
-                $takipedenler[] = $i_bilgi["k_id"];
-                $t_sorgu = "SELECT k_id FROM {$dbOnek}yorum WHERE i_id='{$y_bilgi[i_id]}'";
-                $t_sonuc = mysql_query($t_sorgu, $db);
-                
-                while ( $t_bilgi = mysql_fetch_assoc($t_sonuc))
-                {
-                    if (!in_array($t_bilgi["k_id"], $takipedenler)) $takipedenler[] = $t_bilgi["k_id"];
-                }
+                $takipciler = takipciListe($y_bilgi["i_id"]);
             }
             break;
     }
@@ -588,7 +606,7 @@ function iletiPostala($tablo, $id)
         {
             if ($k_bilgi["bilg_sade_takip"] == "True")
             {
-                if (in_array($k_bilgi["id"], $takipedenler))
+                if (in_array($k_bilgi["id"], $takipciler))
                 {
                     mail( $k_bilgi["posta"], $konu, $metin, $epostaBaslik );
                 }

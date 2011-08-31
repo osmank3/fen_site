@@ -11,6 +11,7 @@ if ($_POST)
             $sorgu = "SELECT max(id) FROM {$dbOnek}yorum";
             $sonuc = mysql_query($sorgu, $db);
             $bilgi = mysql_fetch_assoc($sonuc);
+            
             iletiPostala("yorum", $bilgi["max(id)"]);
 
             break;
@@ -42,9 +43,42 @@ if ($_POST)
                 $sorgu = "SELECT max(id) FROM {$dbOnek}icerik";
                 $sonuc = mysql_query($sorgu, $db);
                 $bilgi = mysql_fetch_assoc($sonuc);
+                
+                $sorgu = "INSERT INTO {$dbOnek}yorum (k_id, i_id, goster) VALUES
+                          ('$_SESSION[kid]', '{$bilgi['max(id)']}', 'False')";
+                mysql_query($sorgu, $db);
+                
                 iletiPostala("icerik", $bilgi["max(id)"]);
                 
                 echo "<script>window.top.location = '?icerik={$bilgi['max(id)']}';</script>";
+            }
+            
+            break;
+        
+        case "takip":
+            include "mysql.php";
+            include "ayar.php";
+            include "fonksiyon.php";
+            if ($_POST["durum"] == "takipet")
+            {
+                $sorgu = "SELECT * FROM {$dbOnek}yorum WHERE i_id='{$_POST[i_id]}' and k_id='{$_POST[k_id]}'";
+                $sonuc = mysql_query($sorgu, $db);
+                if (mysql_num_rows($sonuc) > 0)
+                {
+                    $k_sorgu = "UPDATE {$dbOnek}yorum SET takip='True' WHERE i_id = '{$_POST[i_id]}' and k_id = '{$_POST[k_id]}'";
+                    mysql_query($k_sorgu, $db);
+                }
+                else
+                {
+                    $k_sorgu = "INSERT INTO {$dbOnek}yorum (k_id, i_id, goster) VALUES
+                                ('{$_POST[k_id]}', '{$_POST[i_id]}', 'False')";
+                    mysql_query($k_sorgu, $db);
+                }
+            }
+            elseif ($_POST["durum"] == "takipetme")
+            {
+                $k_sorgu = "UPDATE {$dbOnek}yorum SET takip='False' WHERE i_id = '{$_POST[i_id]}' and k_id = '{$_POST[k_id]}'";
+                mysql_query($k_sorgu, $db);
             }
             
             break;
