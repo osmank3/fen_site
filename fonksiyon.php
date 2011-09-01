@@ -324,6 +324,15 @@ function tablola($id)
         $sorgu2 = "SELECT id, yazi, k_id, tarih, goster FROM {$dbOnek}yorum WHERE i_id='$id' ORDER BY id";
         $sonuc2 = mysql_query($sorgu2, $db);
         
+        $k_sorgu = "SELECT bilg_sade_takip FROM {$dbOnek}kullanici WHERE id = '{$bilgi['k_id']}'";
+        $k_sonuc = mysql_query($k_sorgu, $db);
+        if (mysql_num_rows($k_sonuc) == 1)
+        {
+            $k_bilgi = mysql_fetch_assoc($k_sonuc);
+            if ($k_bilgi["bilg_sade_takip"] == "True") $takip = True;
+        }
+        else $takip = False;
+        
         $kisi = kisiadi($bilgi["k_id"]);
         $yazi = altsatir($bilgi["yazi"]);
         $adresler = explode(",", $bilgi["adres"]);
@@ -336,9 +345,11 @@ function tablola($id)
                             <a href='?icerik=$id'><strong>$bilgi[baslik]</strong></a>
                         </div>
                         <div class='sag'>";
-                            if (in_array($_SESSION["kid"], takipciListe($id))) echo "<span id='takip$id'><button class='yuvar r5' onClick='takip(0, $id, $_SESSION[kid])'>Takip Etme</button></span>";
-                            else echo "<span id='takip$id'><button class='yuvar r5' onClick='takip(1, $id, $_SESSION[kid])'>Takip Et</button></span>";
-                            // buraya takip etme ve takibi bırakma düğmesi eklenecek.
+                            if ($takip)
+                            {
+                                if (in_array($_SESSION["kid"], takipciListe($id))) echo "<span id='takip$id'><button class='yuvar r5' onClick='takip(0, $id, $_SESSION[kid])'>Takip Etme</button></span>";
+                                else echo "<span id='takip$id'><button class='yuvar r5' onClick='takip(1, $id, $_SESSION[kid])'>Takip Et</button></span>";
+                            }
                             if ($_SESSION["kid"] == $bilgi["k_id"])  echo "<a href='?sil=icerik&sil_id=$id' title='Sil'>Sil</a>";
         echo   "        </div>
                     </div>
