@@ -13,6 +13,19 @@
 -- --------------------------------------------------------
 
 -- 
+-- Tablo yapısı : `fen_ayar`
+-- 
+
+CREATE TABLE  `fen_ayar` (
+  `anahtar` VARCHAR( 64 ) NOT NULL ,
+  `deger` TEXT NULL ,
+  PRIMARY KEY (  `anahtar` )
+) ENGINE = MYISAM DEFAULT CHARSET=utf8 ;
+
+
+-- --------------------------------------------------------
+
+-- 
 -- Tablo yapısı : `fen_icerik`
 -- 
 
@@ -20,7 +33,7 @@ CREATE TABLE `fen_icerik` (
   `id` int(11) NOT NULL auto_increment,
   `k_id` int(11) NOT NULL,
   `baslik` text NOT NULL,
-  `adres` text,
+  `adres` text NULL,
   `yazi` text NOT NULL,
   `kategori` text NOT NULL,
   `tarih` timestamp NOT NULL default CURRENT_TIMESTAMP,

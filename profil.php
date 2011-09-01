@@ -9,9 +9,9 @@ if ($_POST)
             elseif(!$_POST["email"]) { $hata = "E-posta adresi girin!"; }
             else
             {
-                $sorgu = "UPDATE {$dbOnek}kullanici SET isim = '$_POST[isim]', soyisim = '$_POST[soyisim]',
+                $sorgu = "UPDATE {$DBONEK}kullanici SET isim = '$_POST[isim]', soyisim = '$_POST[soyisim]',
                                   posta = '$_POST[email]' WHERE id = '$_SESSION[kid]'";
-                mysql_query($sorgu,$db);
+                mysql_query($sorgu,$DB);
                 echo   "<script>
                             alert('Ayarlarınız kaydedildi.');
                             window.top.location = './?hesap=goster';
@@ -26,10 +26,10 @@ if ($_POST)
             if (isset($_POST["bilg_yeni_icerik"])) $icerik = $_POST["bilg_yeni_icerik"];
             if (isset($_POST["bilg_yeni_yorum"]) and $icerik == "True") $yorum = $_POST["bilg_yeni_yorum"];
             if (isset($_POST["bilg_sade_takip"]) and $yorum == "True") $sade = $_POST["bilg_sade_takip"];
-            $sorgu = "UPDATE {$dbOnek}kullanici SET bilg_yeni_icerik = '$icerik',
+            $sorgu = "UPDATE {$DBONEK}kullanici SET bilg_yeni_icerik = '$icerik',
                                     bilg_yeni_yorum = '$yorum', bilg_sade_takip = '$sade'
                                     WHERE id = '$_SESSION[kid]'";
-            mysql_query($sorgu,$db);
+            mysql_query($sorgu,$DB);
             echo   "<script>
                         alert('Ayarlarınız kaydedildi.');
                         window.top.location = './?hesap=goster';
@@ -43,8 +43,8 @@ if ($_POST)
             elseif($_POST["parola"] != $_POST["parolatekrar"]) { $hata = "Yeni parolalar uyuşmuyor!"; }
             else
             {
-                $sorgu = "SELECT parola FROM {$dbOnek}kullanici WHERE id = '$_SESSION[kid]'";
-                $sonuc = mysql_query($sorgu,$db);
+                $sorgu = "SELECT parola FROM {$DBONEK}kullanici WHERE id = '$_SESSION[kid]'";
+                $sonuc = mysql_query($sorgu,$DB);
 
                 if( mysql_num_rows($sonuc) == 1 )
                 {
@@ -52,8 +52,8 @@ if ($_POST)
                     if ($bilgi["parola"] == md5($_POST["eskiparola"]))
                     {
                         $yeniParola = md5($_POST["parola"]);
-                        $sorgu = "UPDATE {$dbOnek}kullanici SET parola = '$yeniParola' WHERE id = '$_SESSION[kid]'";
-                        mysql_query($sorgu,$db);
+                        $sorgu = "UPDATE {$DBONEK}kullanici SET parola = '$yeniParola' WHERE id = '$_SESSION[kid]'";
+                        mysql_query($sorgu,$DB);
                         echo   "<script>
                                     alert('Ayarlarınız kaydedildi.');
                                     window.top.location = './?hesap=goster';
@@ -68,8 +68,8 @@ if ($_POST)
 switch ($bicim)
 {
     case "profil":
-        $sorgu = "SELECT * FROM {$dbOnek}kullanici WHERE id='$_SESSION[kid]'";
-        $sonuc = mysql_query($sorgu,$db);
+        $sorgu = "SELECT * FROM {$DBONEK}kullanici WHERE id='$_SESSION[kid]'";
+        $sonuc = mysql_query($sorgu,$DB);
         
         if( mysql_num_rows($sonuc) == 1 )
         {
@@ -83,8 +83,8 @@ switch ($bicim)
         break;
         
     case "bildir":
-        $sorgu = "SELECT * FROM {$dbOnek}kullanici WHERE id='$_SESSION[kid]'";
-        $sonuc = mysql_query($sorgu,$db);
+        $sorgu = "SELECT * FROM {$DBONEK}kullanici WHERE id='$_SESSION[kid]'";
+        $sonuc = mysql_query($sorgu,$DB);
         
         if( mysql_num_rows($sonuc) == 1 )
         {

@@ -27,15 +27,15 @@ if ($_GET)
         switch ($_GET["sil"])
         {
             case "icerik":
-                $sorgu = "UPDATE {$dbOnek}icerik SET goster='False' WHERE id=$_GET[sil_id]";
-                mysql_query($sorgu, $db);
+                $sorgu = "UPDATE {$DBONEK}icerik SET goster='False' WHERE id=$_GET[sil_id]";
+                mysql_query($sorgu, $DB);
                 unset($_POST);
                 echo "<script> document.location.href = '$_SERVER[HTTP_REFERER]' </script>";
                 break;
             case "yorum":
                 unset($_POST);
-                $sorgu = "UPDATE {$dbOnek}yorum SET goster='False' WHERE id=$_GET[sil_id]";
-                mysql_query($sorgu, $db);
+                $sorgu = "UPDATE {$DBONEK}yorum SET goster='False' WHERE id=$_GET[sil_id]";
+                mysql_query($sorgu, $DB);
                 echo "<script> document.location.href = '$_SERVER[HTTP_REFERER]' </script>";
                 break;
         }

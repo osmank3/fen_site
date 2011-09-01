@@ -1,5 +1,5 @@
 <?php
-$epostaBaslik = "MIME-Version: 1.0\r\nContent-type: text/html; charset=utf-8\r\nFrom: $eposta";
+$epostaBaslik = "MIME-Version: 1.0\r\nContent-type: text/html; charset=utf-8\r\nFrom: {$AYAR["Site E-Posta"]}";
 
 function girisyap($id, $kullanici)
 {
@@ -12,13 +12,12 @@ function girisyap($id, $kullanici)
 
 function aktifPosta($kod)
 {
-    global $anasayfa;
-    global $siteAdi;
+    global $AYAR;
     
-    $metin =   "$siteAdi sitesine üyeliğinizin gerçekleşmesi için aşağıdaki bağlantıya tıklayın
+    $metin =   "{$AYAR["Site Adı"]} sitesine üyeliğinizin gerçekleşmesi için aşağıdaki bağlantıya tıklayın
                 \r<br />
                 \r<br />
-                \r<a href='{$anasayfa}?hesap=aktif&kod=$kod'>{$anasayfa}?hesap=aktif&kod=$kod</a>
+                \r<a href='{$AYAR["Anasayfa"]}?hesap=aktif&kod=$kod'>{$AYAR["Anasayfa"]}?hesap=aktif&kod=$kod</a>
                 \r<br />
                 \r<br />
                 \rBağlantıya tıklanamıyorsa tarayıcınızın adres çubuğuna yapıştırınız." ;
@@ -28,13 +27,12 @@ function aktifPosta($kod)
 
 function kayipPosta($kod)
 {
-    global $anasayfa;
-    global $siteAdi;
+    global $AYAR;
     
-    $metin =   "$siteAdi sitesinde şifrenizi değiştirebilmeniz için oluşturulan bağlantı aşağıdadır
+    $metin =   "{$AYAR["Site Adı"]} sitesinde şifrenizi değiştirebilmeniz için oluşturulan bağlantı aşağıdadır
                 \r<br />
                 \r<br />
-                \r<a href='{$anasayfa}?hesap=kayip&kod=$kod'>{$anasayfa}?hesap=kayip&kod=$kod</a>
+                \r<a href='{$AYAR["Anasayfa"]}?hesap=kayip&kod=$kod'>{$AYAR["Anasayfa"]}?hesap=kayip&kod=$kod</a>
                 \r<br />
                 \r<br />
                 \rBağlantıya tıklanamıyorsa tarayıcınızın adres çubuğuna yapıştırınız.";
@@ -59,11 +57,11 @@ function dosyaAdiDuzelt($yazi)
 
 function kategoriUzun($kategori)
 {
-    global $db;
-    global $dbOnek;
+    global $DB;
+    global $DBONEK;
     
-    $sorgu = "SELECT isim FROM {$dbOnek}kategori WHERE id = '$kategori'";
-    $sonuc = mysql_query($sorgu, $db);
+    $sorgu = "SELECT isim FROM {$DBONEK}kategori WHERE id = '$kategori'";
+    $sonuc = mysql_query($sorgu, $DB);
     if( mysql_num_rows($sonuc) == 1 )
     {
         $bilgi = mysql_fetch_assoc($sonuc);
@@ -75,11 +73,11 @@ function kategoriUzun($kategori)
 function kisiadi($id)
 {
     //kişi adlarını "isim soyisim" şeklinde dönen fonksiyon
-    global $db;
-    global $dbOnek;
+    global $DB;
+    global $DBONEK;
     
-    $sorgu = "SELECT isim, soyisim FROM {$dbOnek}kullanici WHERE id = '$id'";
-    $kisi = mysql_query($sorgu,$db);
+    $sorgu = "SELECT isim, soyisim FROM {$DBONEK}kullanici WHERE id = '$id'";
+    $kisi = mysql_query($sorgu,$DB);
     if( mysql_num_rows($kisi) == 1 )
     {
         $bilgi = mysql_fetch_assoc($kisi);
@@ -92,13 +90,13 @@ function kisiadi($id)
 function takipciListe($id)
 {
     //içeriği takip edenlerin listesini dönen fonksiyon.
-    global $db;
-    global $dbOnek;
+    global $DB;
+    global $DBONEK;
     
     $takipciler = array();
     
-    $sorgu = "SELECT k_id FROM {$dbOnek}yorum WHERE i_id='{$id}' and takip='True'";
-    $sonuc = mysql_query($sorgu, $db);
+    $sorgu = "SELECT k_id FROM {$DBONEK}yorum WHERE i_id='{$id}' and takip='True'";
+    $sonuc = mysql_query($sorgu, $DB);
     
     while ( $bilgi = mysql_fetch_assoc($sonuc))
     {
@@ -113,8 +111,8 @@ function formgoster($formbicimi, $hata = "", $ekicerik = NULL)
     /* veri gönderme için kullanılacak formları göstermek için fonksiyon
      *
      * form biçimi girilmek zorunda, hata girilmesi isteğe bağlı */
-    global $db;
-    global $dbOnek;
+    global $DB;
+    global $DBONEK;
     switch($formbicimi)
     {
         case "giris": //giriş bölümü için form
@@ -146,16 +144,16 @@ function formgoster($formbicimi, $hata = "", $ekicerik = NULL)
                             <select name='kategori' class='yuvar r5'>
                                 <option value='diger'>Kategori Seçin</option>";
                                 
-                                $sorgu = "SELECT * FROM {$dbOnek}kategori WHERE us_id IS NULL ORDER BY id DESC";
-                                $sonuc = mysql_query($sorgu, $db);
+                                $sorgu = "SELECT * FROM {$DBONEK}kategori WHERE us_id IS NULL ORDER BY id DESC";
+                                $sonuc = mysql_query($sorgu, $DB);
                                 while($bilgi = mysql_fetch_assoc($sonuc))
                                 {
                                     if ($bilgi["ustkategori"] == "False") echo "<option value='$bilgi[id]'>$bilgi[isim]</option>";
                                     else
                                     {
                                         echo "<optgroup label='{$bilgi[isim]}'>";
-                                        $ic_sorgu = "SELECT * FROM {$dbOnek}kategori WHERE us_id = '{$bilgi[id]}' ORDER BY id";
-                                        $ic_sonuc = mysql_query($ic_sorgu, $db);
+                                        $ic_sorgu = "SELECT * FROM {$DBONEK}kategori WHERE us_id = '{$bilgi[id]}' ORDER BY id";
+                                        $ic_sonuc = mysql_query($ic_sorgu, $DB);
                                         while($ic_bilgi = mysql_fetch_assoc($ic_sonuc))
                                         {
                                             echo "<option value='$ic_bilgi[id]'>$ic_bilgi[isim]</option>";
@@ -311,22 +309,22 @@ function tablola($id)
     /* verileri tablolamak için fonksiyon
      *
      * tablodaki id'si verilmek zorunda. */
-    global $dbOnek;
-    global $db;
+    global $DBONEK;
+    global $DB;
     
-    $sorgu = "SELECT * FROM {$dbOnek}icerik WHERE id='$id'";
-    $sonuc = mysql_query($sorgu,$db);
+    $sorgu = "SELECT * FROM {$DBONEK}icerik WHERE id='$id'";
+    $sonuc = mysql_query($sorgu,$DB);
 
     if( mysql_num_rows($sonuc) == 1 )
     {
         $bilgi = mysql_fetch_assoc($sonuc);
         if ($bilgi["goster"] == "False") return; //gizlenmiş öğeler için tablo oluşturmaz.
        
-        $sorgu2 = "SELECT id, yazi, k_id, tarih, goster FROM {$dbOnek}yorum WHERE i_id='$id' ORDER BY id";
-        $sonuc2 = mysql_query($sorgu2, $db);
+        $sorgu2 = "SELECT id, yazi, k_id, tarih, goster FROM {$DBONEK}yorum WHERE i_id='$id' ORDER BY id";
+        $sonuc2 = mysql_query($sorgu2, $DB);
         
-        $k_sorgu = "SELECT bilg_sade_takip FROM {$dbOnek}kullanici WHERE id = '{$_SESSION['kid']}'";
-        $k_sonuc = mysql_query($k_sorgu, $db);
+        $k_sorgu = "SELECT bilg_sade_takip FROM {$DBONEK}kullanici WHERE id = '{$_SESSION['kid']}'";
+        $k_sonuc = mysql_query($k_sorgu, $DB);
         if (mysql_num_rows($k_sonuc) == 1)
         {
             $k_bilgi = mysql_fetch_assoc($k_sonuc);
@@ -469,11 +467,11 @@ function profilTablola($id)
     /* profilleri tablolamak için fonksiyon
      *
      * tablodaki id'si verilmek zorunda. */
-    global $dbOnek;
-    global $db;
+    global $DBONEK;
+    global $DB;
     
-    $sorgu = "SELECT * FROM {$dbOnek}kullanici WHERE id='$id'";
-    $sonuc = mysql_query($sorgu,$db);
+    $sorgu = "SELECT * FROM {$DBONEK}kullanici WHERE id='$id'";
+    $sonuc = mysql_query($sorgu,$DB);
 
     if( mysql_num_rows($sonuc) == 1 )
     {
@@ -528,20 +526,17 @@ function profilTablola($id)
 function iletiPostala($tablo, $id)
 {
     //içerik ve yorumları e-posta ile bildirmek üzere yazılmış fonksiyon.
-    global $db;
-    global $dbOnek;
-    global $anasayfa;
-    global $eposta;
+    global $DB;
+    global $DBONEK;
+    global $AYAR;
     global $epostaBaslik;
-    global $grupEposta;
-    global $grupEpostaDurum;
     
     //e-posta içeriğinin hazırlandığı kısmın --başı--
     switch($tablo)
     {
         case "icerik":
-            $sorgu = "SELECT * FROM {$dbOnek}icerik WHERE id='$id'";
-            $sonuc = mysql_query($sorgu, $db);
+            $sorgu = "SELECT * FROM {$DBONEK}icerik WHERE id='$id'";
+            $sonuc = mysql_query($sorgu, $DB);
             if (mysql_num_rows($sonuc) == 1)
             {
                 $bilgi = mysql_fetch_assoc($sonuc);
@@ -560,27 +555,27 @@ function iletiPostala($tablo, $id)
                 foreach ($adresler as $adres)
                 {
                     if ($adres == "") continue;
-                    $metin = $metin .  "Dosya: <a href='{$anasayfa}{$adres}'>{$anasayfa}{$adres}</a>
+                    $metin = $metin .  "Dosya: <a href='{$AYAR["Anasayfa"]}{$adres}'>{$AYAR["Anasayfa"]}{$adres}</a>
                                         \r<br />\n";
                 }
                 $metin = $metin .  "<br />
                                     \r$kategori
                                     \r<br />
                                     \r<br />
-                                    \r--Bu e-posta <a href='$anasayfa'>$anasayfa</a> tarafından otomatik oluşturulmuştur.--";
+                                    \r--Bu e-posta <a href='{$AYAR["Anasayfa"]}'>{$AYAR["Anasayfa"]}</a> tarafından otomatik oluşturulmuştur.--";
             }
             break;
             
         case "yorum":
-            $y_sorgu = "SELECT * FROM {$dbOnek}yorum WHERE id='$id'";
-            $y_sonuc = mysql_query($y_sorgu, $db);
+            $y_sorgu = "SELECT * FROM {$DBONEK}yorum WHERE id='$id'";
+            $y_sonuc = mysql_query($y_sorgu, $DB);
             if (mysql_num_rows($y_sonuc) == 1)
             {
                 $y_bilgi = mysql_fetch_assoc($y_sonuc);
                 $kisiadi = kisiadi($y_bilgi["k_id"]);
                 
-                $i_sorgu = "SELECT baslik FROM {$dbOnek}icerik WHERE id='$y_bilgi[i_id]'";
-                $i_sonuc = mysql_query($i_sorgu, $db);
+                $i_sorgu = "SELECT baslik FROM {$DBONEK}icerik WHERE id='$y_bilgi[i_id]'";
+                $i_sonuc = mysql_query($i_sorgu, $DB);
                 $i_bilgi = mysql_fetch_assoc($i_sonuc);
                 $konu = "Re: $i_bilgi[baslik]";
                 
@@ -590,7 +585,7 @@ function iletiPostala($tablo, $id)
                             \r$y_bilgi[yazi]
                             \r<br />
                             \r<br />
-                            \r--Bu e-posta <a href='$anasayfa'>$anasayfa</a> tarafından otomatik oluşturulmuştur.--";
+                            \r--Bu e-posta <a href='{$AYAR["Anasayfa"]}'>{$AYAR["Anasayfa"]}</a> tarafından otomatik oluşturulmuştur.--";
                 
                 $takipciler = takipciListe($y_bilgi["i_id"]);
             }
@@ -599,14 +594,14 @@ function iletiPostala($tablo, $id)
     //e-posta içeriğinin hazırlandığı kısmın --sonu--
     
     //gruba e-posta gönderim kısmı
-    if ($grupEpostaDurum)
+    if ($AYAR["Grup E-Posta Durum"] == 1)
     {
-        mail( $grupEposta, $konu, $metin, $epostaBaslik );
+        mail( $AYAR["Grup E-Posta"], $konu, $metin, $epostaBaslik );
     }
     
     //kişilere e-posta gönderen kısım
-    $k_sorgu = "SELECT id, posta, bilg_yeni_icerik, bilg_yeni_yorum, bilg_sade_takip FROM {$dbOnek}kullanici";
-    $k_sonuc = mysql_query($k_sorgu, $db);
+    $k_sorgu = "SELECT id, posta, bilg_yeni_icerik, bilg_yeni_yorum, bilg_sade_takip FROM {$DBONEK}kullanici";
+    $k_sonuc = mysql_query($k_sorgu, $DB);
     while($k_bilgi = mysql_fetch_assoc($k_sonuc))
     {
         if ($_SESSION["kid"] == $k_bilgi["id"]) continue;

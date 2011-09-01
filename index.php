@@ -1,6 +1,5 @@
 <?php
 session_start();
-include "mysql.php";
 include "ayar.php";
 include "kkontrol.php";
 include "fonksiyon.php";
@@ -45,11 +44,11 @@ $(document).ready(function()
 </head>
 <body>";
 
-if ($bakimda)
+if ($BAKIMDA)
 {
     echo "<h2 style='text-align:center;margin-top:240px;'>Site Bakıma Alınmıştır...<br />Kısa sürede kullanıma açılır</h2>";
 }
-elseif ($girilmis)
+elseif ($GIRILMIS)
 {
     include "temel.php";
 }

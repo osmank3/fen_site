@@ -1,11 +1,11 @@
 <?php
-include "ayar.php";
+include "mysql_ayar.php";
 
 //veritabanına bağlan
-$db = mysql_connect($dbSunucu, $dbKullanici, $dbParola) or die("HATA : " . mysql_error());
+$DB = mysql_connect(DBSUNUCU, DBKULLANICI, DBPAROLA) or die("HATA : " . mysql_error());
 
 //veritabanı tablosu seç
-mysql_select_db($dbTablo, $db) or die("HATA : " . mysql_error());
+mysql_select_db(DBTABLO, $DB) or die("HATA : " . mysql_error());
 
 //veritabanı dil kodlaması seç
 mysql_query("SET NAMES 'utf8'");

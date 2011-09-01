@@ -10,8 +10,8 @@ if ($_POST)
                 { $hata = "Parola girin!"; }
             else
             {
-                $sorgu = "SELECT id, parola, aktif FROM {$dbOnek}kullanici WHERE kullanici = '$_POST[giriskullanici]'";
-                $sonuc = mysql_query($sorgu,$db);
+                $sorgu = "SELECT id, parola, aktif FROM {$DBONEK}kullanici WHERE kullanici = '$_POST[giriskullanici]'";
+                $sonuc = mysql_query($sorgu,$DB);
 
                 if( mysql_num_rows($sonuc) == 1 )
                 {
@@ -41,17 +41,17 @@ if ($_POST)
             elseif($_POST["parola"] != $_POST["parolatekrar"]) { $hata = "Parolalar uyuşmuyor"; }
             else
             {
-                $sorgu = "SELECT * FROM {$dbOnek}kullanici WHERE kullanici = '$_POST[kullanici]'";
+                $sorgu = "SELECT * FROM {$DBONEK}kullanici WHERE kullanici = '$_POST[kullanici]'";
                 
-                if( mysql_num_rows(mysql_query($sorgu, $db)) != 1 )
+                if( mysql_num_rows(mysql_query($sorgu, $DB)) != 1 )
                 {
                     $aktifKod = md5($_POST["kullanici"], $raw_output = null);
                     $parola = md5($_POST["parola"], $raw_output = null);
                     
-                    $sorgu = "INSERT INTO {$dbOnek}kullanici (kullanici, isim, soyisim, posta, parola)
+                    $sorgu = "INSERT INTO {$DBONEK}kullanici (kullanici, isim, soyisim, posta, parola)
                         VALUES
                         ('$_POST[kullanici]', '$_POST[isim]', '$_POST[soyisim]', '$_POST[email]', '$parola')";
-                    mysql_query($sorgu,$db);
+                    mysql_query($sorgu,$DB);
                     
                     $posta_metin = aktifPosta($aktifKod);
                     
@@ -77,8 +77,8 @@ if ($_POST)
                 { $hata = "Kullanıcı adı girin!"; }
             else
             {
-                $sorgu = "SELECT * FROM {$dbOnek}kullanici WHERE kullanici = '$_POST[kayipkullanici]'";
-                $sonuc = mysql_query($sorgu,$db);
+                $sorgu = "SELECT * FROM {$DBONEK}kullanici WHERE kullanici = '$_POST[kayipkullanici]'";
+                $sonuc = mysql_query($sorgu,$DB);
                 
                 if( mysql_num_rows($sonuc) == 1 )
                 {
@@ -106,13 +106,13 @@ if ($_POST)
             else
             {
                 $yeniParola = md5($_POST["parola"]);
-                $sorgu = "UPDATE {$dbOnek}kullanici SET parola = '$yeniParola' WHERE id = '$_POST[kullaniciId]'";
-                mysql_query($sorgu,$db);
+                $sorgu = "UPDATE {$DBONEK}kullanici SET parola = '$yeniParola' WHERE id = '$_POST[kullaniciId]'";
+                mysql_query($sorgu,$DB);
                 
                 echo   "<script> alert('Parolanız değiştirildi.'); </script>";
 
-                $sorgu = "SELECT * FROM {$dbOnek}kullanici WHERE id = '$_POST[kullaniciId]'";
-                $sonuc = mysql_query($sorgu,$db);
+                $sorgu = "SELECT * FROM {$DBONEK}kullanici WHERE id = '$_POST[kullaniciId]'";
+                $sonuc = mysql_query($sorgu,$DB);
 
                 $bilgi = mysql_fetch_assoc($sonuc);
                 
@@ -131,15 +131,15 @@ if($_GET["kod"])
 {
     if ($_GET["hesap"] == "aktif")
     {
-        $sorgu = "SELECT kullanici FROM {$dbOnek}kullanici";
-        $sonuc = mysql_query($sorgu,$db);
+        $sorgu = "SELECT kullanici FROM {$DBONEK}kullanici";
+        $sonuc = mysql_query($sorgu,$DB);
         while ($satir = mysql_fetch_array($sonuc))
         {
             if($_GET["kod"] == md5($satir["kullanici"], $raw_output = null))
             {
-                $sorgu = "UPDATE {$dbOnek}kullanici SET aktif='True'
+                $sorgu = "UPDATE {$DBONEK}kullanici SET aktif='True'
                     WHERE kullanici = '$satir[kullanici]'";
-                mysql_query($sorgu,$db);
+                mysql_query($sorgu,$DB);
                 echo "<script> 
                           alert('Hesabınız aktifleştirildi.');
                           window.top.location = './';
@@ -150,8 +150,8 @@ if($_GET["kod"])
     }
     elseif ($_GET["hesap"] == "kayip")
     {
-        $sorgu = "SELECT * FROM {$dbOnek}kullanici";
-        $sonuc = mysql_query($sorgu,$db);
+        $sorgu = "SELECT * FROM {$DBONEK}kullanici";
+        $sonuc = mysql_query($sorgu,$DB);
         $durum = TRUE;
         while ($profil = mysql_fetch_array($sonuc))
         {

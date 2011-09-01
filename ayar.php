@@ -1,17 +1,20 @@
 <?php
 //site ayarları
-$siteAdi = "Fen Bilgisi";
-$anasayfa = "http://localhost/~osmank3/fen/";
-$eposta = "osmank3@gmail.com";
-$grupEpostaDurum = TRUE;
-$grupEposta = "osmank3@gmail.com";
-$bakimda = FALSE;
-$yuklemeYeri = "dosya";
 
-//veritabanı ayarları
-$dbSunucu = "localhost";
-$dbKullanici = "fen";
-$dbParola = "123321";
-$dbTablo = "fen";
-$dbOnek = "fen_";
+//siteyi bakıma alma durumu
+$BAKIMDA = FALSE;
+
+if (!$BAKIMDA)
+{
+    include "mysql.php";
+    $AYAR = array();
+    
+    $sorgu = "SELECT * FROM {$DBONEK}ayar";
+    $sonuc = mysql_query($sorgu, $DB);
+    
+    while ($bilgi = mysql_fetch_assoc($sonuc))
+    {
+        $AYAR[$bilgi["anahtar"]] = $bilgi["deger"];
+    }
+}
 ?>
