@@ -13,7 +13,7 @@ if ($_POST)
                                   posta = '$_POST[email]' WHERE id = '$_SESSION[kid]'";
                 mysql_query($sorgu,$db);
                 echo   "<script>
-                            alert('Profiliniz değiştirildi.');
+                            alert('Ayarlarınız kaydedildi.');
                             window.top.location = './?hesap=goster';
                         </script>";
             }
@@ -31,7 +31,7 @@ if ($_POST)
                                     WHERE id = '$_SESSION[kid]'";
             mysql_query($sorgu,$db);
             echo   "<script>
-                        alert('Bildirilme ayarlarınız değiştirildi.');
+                        alert('Ayarlarınız kaydedildi.');
                         window.top.location = './?hesap=goster';
                     </script>";
             break;
@@ -55,7 +55,7 @@ if ($_POST)
                         $sorgu = "UPDATE {$dbOnek}kullanici SET parola = '$yeniParola' WHERE id = '$_SESSION[kid]'";
                         mysql_query($sorgu,$db);
                         echo   "<script>
-                                    alert('Parolanız değiştirildi.');
+                                    alert('Ayarlarınız kaydedildi.');
                                     window.top.location = './?hesap=goster';
                                 </script>";
                     }

@@ -273,7 +273,8 @@ function formgoster($formbicimi, $hata = "", $ekicerik = NULL)
                             </ul>
                         </li>
                     </ul>
-                    </form>";
+                    </form>
+                    <script>bilg_gor()</script>";
             break;
             
         case "sifre": //Şifre değiştirmek için
@@ -324,7 +325,7 @@ function tablola($id)
         $sorgu2 = "SELECT id, yazi, k_id, tarih, goster FROM {$dbOnek}yorum WHERE i_id='$id' ORDER BY id";
         $sonuc2 = mysql_query($sorgu2, $db);
         
-        $k_sorgu = "SELECT bilg_sade_takip FROM {$dbOnek}kullanici WHERE id = '{$bilgi['k_id']}'";
+        $k_sorgu = "SELECT bilg_sade_takip FROM {$dbOnek}kullanici WHERE id = '{$_SESSION['kid']}'";
         $k_sonuc = mysql_query($k_sorgu, $db);
         if (mysql_num_rows($k_sonuc) == 1)
         {
