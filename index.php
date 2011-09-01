@@ -13,29 +13,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 <meta http-equiv='content-type' content='application/xhtml+xml; charset=UTF-8'>
 <meta http-equiv='content-style-type' content='text/css'>
 <link href='index.css' rel='stylesheet' type='text/css'>
-<script type='text/javascript' src='jquery-1.3.2.min.js'></script>
 <script type='text/javascript' src='fonksiyon.js'></script>
-<script>
-$(document).ready(function()
-    {
-        $('#yenidosya').click(function ()
-            {
-                var dosyaSayisi = parseInt($('#dosyaSayisi').val());
-                if (dosyaSayisi <= 4)
-                {
-                    dosyaSayisi += 1
-                    $('#dosyalar').append(\"<div><input class='yuvar r5' style='width:75%' type='file' name='dosya[]' id='dosya' /></div>\");
-                    $('#dosyaSayisi').val(dosyaSayisi);
-                    if (parseInt($('#dosyaSayisi').val()) == 5)
-                    {
-                        $('#yenidosya').remove();
-                    }
-                }
-            }
-        );
-    }
-);
-</script>
 <script src='DD_roundies_0.0.2a.js'></script>
 <script>
   /* IE only */

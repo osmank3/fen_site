@@ -39,3 +39,23 @@ function takip(stat, id, k_id)
         document.getElementById('takip'+id).innerHTML = "<button class='yuvar r5' onClick='takip(0,"+id+","+k_id+")'>Takip Etme</button>";
     }
 }
+
+function dosyaekle()
+{
+    var dosyaSayisi = parseInt(document.getElementById("dosyaSayisi").value);
+    var dosya = document.createElement("input");
+    dosya.setAttribute("class", "yuvar r5");
+    dosya.setAttribute("type", "file");
+    dosya.setAttribute("name", "dosya[]");
+    dosya.style.width="75%";
+    if (dosyaSayisi <= 4)
+    {
+        dosyaSayisi += 1
+        document.getElementById("dosyalar").appendChild(dosya);
+        document.getElementById("dosyaSayisi").value = dosyaSayisi;
+        if (dosyaSayisi == 5)
+        {
+            document.getElementById("yenidosya").style.display = "none";
+        }
+    }
+}

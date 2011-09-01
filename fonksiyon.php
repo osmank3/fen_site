@@ -135,8 +135,8 @@ function formgoster($formbicimi, $hata = "", $ekicerik = NULL)
                         <input type='hidden' name='MAX_FILE_SIZE' value='20000000' />
                         <input type='hidden' id='dosyaSayisi' value='1' />
                         <div class='ibolum' id='dosyalar'>
-                            <input class='yuvar r5' style='width:75%' type='file' name='dosya[]' id='dosya' />
-                            <button class='yuvar r5' type='button' id='yenidosya'>Başka Dosyalar Ekle</button>
+                            <button class='yuvar r5 sag' id='yenidosya' type='button' onClick='dosyaekle()'>Başka Dosyalar Ekle</button>
+                            <input class='yuvar r5' style='width:75%' type='file' name='dosya[]' />
                         </div>
                         <div class='ibolum'><textarea class='yuvar rbk' style='width:99%;height:7em;' name='yazi' aria-required='true'></textarea></div>
                         <div class='ibolum'>
