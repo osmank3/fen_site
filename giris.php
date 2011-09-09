@@ -55,11 +55,11 @@ if ($_POST)
                     
                     $posta_metin = aktifPosta($aktifKod);
                     
-                    $mail = mail( $_POST["email"], "$siteAdi aktivasyon",
+                    $mail = mail( $_POST["email"], "{$AYAR["Site Adı"]} aktivasyon",
                                   $posta_metin, $epostaBaslik );
                     if ($mail)
                     {
-                        $hata = "$siteAdi sitesine üyeliğinizin tamamlanması için e-posta adresinize gönderilen aktivasyon bağlantısına tıklamanız gerekmektedir.";
+                        $hata = "{$AYAR["Site Adı"]} sitesine üyeliğinizin tamamlanması için e-posta adresinize gönderilen aktivasyon bağlantısına tıklamanız gerekmektedir.";
                     }
                     else { $hata = "E-posta gönderilemiyor!"; }
                 }
@@ -87,7 +87,7 @@ if ($_POST)
                     
                     $posta_metin = kayipPosta($kayipKod);
                     
-                    $mail = mail( $bilgi["posta"], "$siteAdi şifre sıfılama",
+                    $mail = mail( $bilgi["posta"], "{$AYAR["Site Adı"]} şifre sıfılama",
                                   $posta_metin, $epostaBaslik );
                     if ($mail)
                     {
@@ -124,7 +124,7 @@ if ($_POST)
 
 echo   "<div class='sayfa yuvar'>
             <div class='sustresim'>
-                <a href='$anasayfa'><img src='fen.png' width='100%' height='150px' border='0' alt='' /></a>
+                <a href='{$AYAR["Anasayfa"]}'><img src='fen.png' width='100%' height='150px' border='0' alt='' /></a>
             </div>";
 
 if($_GET["kod"])

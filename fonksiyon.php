@@ -311,6 +311,7 @@ function tablola($id)
      * tablodaki id'si verilmek zorunda. */
     global $DBONEK;
     global $DB;
+    global $AYAR;
     
     $sorgu = "SELECT * FROM {$DBONEK}icerik WHERE id='$id'";
     $sonuc = mysql_query($sorgu,$DB);
@@ -344,7 +345,7 @@ function tablola($id)
                             <a href='?icerik=$id'><strong>$bilgi[baslik]</strong></a>
                         </div>
                         <div class='sag'>";
-                            if ($takip)
+                            if ($takip and $AYAR["Kişi E-Posta Durum"] == 1)
                             {
                                 if (in_array($_SESSION["kid"], takipciListe($id))) echo "<span id='takip$id'><button class='yuvar r5' onClick='takip(0, $id, $_SESSION[kid])'>Takip Etme</button></span>";
                                 else echo "<span id='takip$id'><button class='yuvar r5' onClick='takip(1, $id, $_SESSION[kid])'>Takip Et</button></span>";
@@ -404,8 +405,10 @@ function tablola($id)
 
 function sayfala($sonuc, $sayfa=1)
 {
+    global $AYAR;
+    
     $icerikSayisi = mysql_num_rows($sonuc);
-    if ($icerikSayisi <= 10)
+    if ($icerikSayisi <= $AYAR["Sayfada İçerik Sayısı"])
     {
         while($satir = mysql_fetch_array($sonuc))
         {
@@ -414,15 +417,15 @@ function sayfala($sonuc, $sayfa=1)
     }
     else
     {
-        $sayfaSayisi = intval($icerikSayisi / 10);
-        if ($icerikSayisi%10 != 0) $sayfaSayisi += 1;
+        $sayfaSayisi = intval($icerikSayisi / $AYAR["Sayfada İçerik Sayısı"]);
+        if ($icerikSayisi%$AYAR["Sayfada İçerik Sayısı"] != 0) $sayfaSayisi += 1;
         
-        $siradakiNo = ($sayfa - 1) * 10;
+        $siradakiNo = ($sayfa - 1) * $AYAR["Sayfada İçerik Sayısı"];
         $donguSira = 1;
         
         while($satir = mysql_fetch_array($sonuc))
         {
-            if ($donguSira > $siradakiNo and $donguSira <= ($siradakiNo + 10))
+            if ($donguSira > $siradakiNo and $donguSira <= ($siradakiNo + $AYAR["Sayfada İçerik Sayısı"]))
             {
                 tablola($satir["id"]);
             }
@@ -469,6 +472,7 @@ function profilTablola($id)
      * tablodaki id'si verilmek zorunda. */
     global $DBONEK;
     global $DB;
+    global $AYAR;
     
     $sorgu = "SELECT * FROM {$DBONEK}kullanici WHERE id='$id'";
     $sonuc = mysql_query($sorgu,$DB);
@@ -497,7 +501,7 @@ function profilTablola($id)
                         <td>$bilgi[posta]</td>
                     </tr></table>
                 </div>";
-        if ($_SESSION["kid"] == $bilgi["id"])
+        if ($_SESSION["kid"] == $bilgi["id"] and $AYAR["Kişi E-Posta Durum"] == 1)
         {
             echo   "<div class='icerik yuvar r4'>
                         <table width='100%'><tr>
@@ -600,27 +604,30 @@ function iletiPostala($tablo, $id)
     }
     
     //kişilere e-posta gönderen kısım
-    $k_sorgu = "SELECT id, posta, bilg_yeni_icerik, bilg_yeni_yorum, bilg_sade_takip FROM {$DBONEK}kullanici";
-    $k_sonuc = mysql_query($k_sorgu, $DB);
-    while($k_bilgi = mysql_fetch_assoc($k_sonuc))
+    if ($AYAR["Kişi E-Posta Durum"] == 1)
     {
-        if ($_SESSION["kid"] == $k_bilgi["id"]) continue;
-        if ($k_bilgi["bilg_yeni_icerik"] == "True" and $tablo == "icerik")
+        $k_sorgu = "SELECT id, posta, bilg_yeni_icerik, bilg_yeni_yorum, bilg_sade_takip FROM {$DBONEK}kullanici";
+        $k_sonuc = mysql_query($k_sorgu, $DB);
+        while($k_bilgi = mysql_fetch_assoc($k_sonuc))
         {
-            mail( $k_bilgi["posta"], $konu, $metin, $epostaBaslik );
-        }
-        if ($k_bilgi["bilg_yeni_yorum"] == "True" and $tablo == "yorum")
-        {
-            if ($k_bilgi["bilg_sade_takip"] == "True")
+            if ($_SESSION["kid"] == $k_bilgi["id"]) continue;
+            if ($k_bilgi["bilg_yeni_icerik"] == "True" and $tablo == "icerik")
             {
-                if (in_array($k_bilgi["id"], $takipciler))
+                mail( $k_bilgi["posta"], $konu, $metin, $epostaBaslik );
+            }
+            if ($k_bilgi["bilg_yeni_yorum"] == "True" and $tablo == "yorum")
+            {
+                if ($k_bilgi["bilg_sade_takip"] == "True")
+                {
+                    if (in_array($k_bilgi["id"], $takipciler))
+                    {
+                        mail( $k_bilgi["posta"], $konu, $metin, $epostaBaslik );
+                    }
+                }
+                else
                 {
                     mail( $k_bilgi["posta"], $konu, $metin, $epostaBaslik );
                 }
-            }
-            else
-            {
-                mail( $k_bilgi["posta"], $konu, $metin, $epostaBaslik );
             }
         }
     }
