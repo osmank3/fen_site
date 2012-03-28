@@ -63,9 +63,7 @@ CREATE TABLE  `fen_kategori` (
 
 CREATE TABLE `fen_kullanici` (
   `id` int(11) NOT NULL auto_increment,
-  `kullanici` text NOT NULL,
   `isim` text NOT NULL,
-  `soyisim` text NOT NULL,
   `posta` text NOT NULL,
   `parola` text NOT NULL,
   `aktif` enum('False','True') NOT NULL default 'False',
