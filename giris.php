@@ -5,12 +5,12 @@ if ($_POST)
     {
         case "giris":
             if (!$_POST["giriskullanici"])
-                { $hata = "Kullanıcı adı girin!"; }
+                { $hata = "E-posta girin!"; }
             elseif(!$_POST["girisparola"])
                 { $hata = "Parola girin!"; }
             else
             {
-                $sorgu = "SELECT id, parola, aktif FROM {$DBONEK}kullanici WHERE kullanici = '$_POST[giriskullanici]'";
+                $sorgu = "SELECT id, parola, aktif FROM {$DBONEK}kullanici WHERE posta = '$_POST[giriskullanici]'";
                 $sonuc = mysql_query($sorgu,$DB);
 
                 if( mysql_num_rows($sonuc) == 1 )
@@ -19,38 +19,36 @@ if ($_POST)
                     if ($bilgi["parola"] == md5($_POST["girisparola"]))
                     {
                         if ($bilgi["aktif"] == "True")
-                        { girisyap($bilgi["id"], $_POST["giriskullanici"]); }
+                        { girisyap($bilgi["id"]); }
                         else
                         { $hata = "Kullanıcı henüz aktifleştirilmemiş!"; }
                     }
                     else
-                    { $hata = "Kullanıcı adı veya şifre hatalı!"; }
+                    { $hata = "E-posta veya şifre hatalı!"; }
                 }
                 else
-                { $hata = "Kullanıcı kayıtlı değil!"; }
+                { $hata = "E-posta kayıtlı değil!"; }
             }
             break;
         
         case "kaydol":
             if (!$_POST["isim"]) { $hata = "İsim girin!"; }
-            elseif(!$_POST["soyisim"]) { $hata = "Soyisim girin!"; }
             elseif(!$_POST["email"]) { $hata = "E-posta adresi girin!"; }
-            elseif(!$_POST["kullanici"]) { $hata = "Kullanıcı adı girin!"; }
             elseif(!$_POST["parola"]) { $hata = "Parola girin!"; }
             elseif(!$_POST["parolatekrar"]) { $hata = "Parola tekrarını girin"; }
             elseif($_POST["parola"] != $_POST["parolatekrar"]) { $hata = "Parolalar uyuşmuyor"; }
             else
             {
-                $sorgu = "SELECT * FROM {$DBONEK}kullanici WHERE kullanici = '$_POST[kullanici]'";
+                $sorgu = "SELECT * FROM {$DBONEK}kullanici WHERE posta = '$_POST[email]'";
                 
                 if( mysql_num_rows(mysql_query($sorgu, $DB)) != 1 )
                 {
-                    $aktifKod = md5($_POST["kullanici"], $raw_output = null);
+                    $aktifKod = md5($_POST["isim"] . $_POST["email"], $raw_output = null);
                     $parola = md5($_POST["parola"], $raw_output = null);
                     
-                    $sorgu = "INSERT INTO {$DBONEK}kullanici (kullanici, isim, soyisim, posta, parola)
+                    $sorgu = "INSERT INTO {$DBONEK}kullanici (isim, posta, parola)
                         VALUES
-                        ('$_POST[kullanici]', '$_POST[isim]', '$_POST[soyisim]', '$_POST[email]', '$parola')";
+                        ('$_POST[isim]', '$_POST[email]', '$parola')";
                     mysql_query($sorgu,$DB);
                     
                     $posta_metin = aktifPosta($aktifKod);
@@ -65,8 +63,8 @@ if ($_POST)
                 }
                 else
                 {
-                    unset($_POST["kullanici"]);
-                    $hata = "Kullanıcı adı zaten kayıtlı farklı bir kullanıcı adı deneyin.";
+                    unset($_POST["eposta"]);
+                    $hata = "E-posta zaten kayıtlı farklı bir e-posta deneyin.";
                 }
         
             }
@@ -74,16 +72,16 @@ if ($_POST)
             
         case "kayip":
             if (!$_POST["kayipkullanici"])
-                { $hata = "Kullanıcı adı girin!"; }
+                { $hata = "E-posta girin!"; }
             else
             {
-                $sorgu = "SELECT * FROM {$DBONEK}kullanici WHERE kullanici = '$_POST[kayipkullanici]'";
+                $sorgu = "SELECT * FROM {$DBONEK}kullanici WHERE posta = '$_POST[kayipkullanici]'";
                 $sonuc = mysql_query($sorgu,$DB);
                 
                 if( mysql_num_rows($sonuc) == 1 )
                 {
                     $bilgi = mysql_fetch_assoc($sonuc);
-                    $kayipKod = md5($bilgi["kullanici"] . $bilgi["parola"], $raw_output = null);
+                    $kayipKod = md5($bilgi["posta"] . $bilgi["parola"], $raw_output = null);
                     
                     $posta_metin = kayipPosta($kayipKod);
                     
@@ -95,7 +93,7 @@ if ($_POST)
                     }
                     else { $hata = "E-posta gönderilemiyor!"; }
                 }
-                else { $hata = "Kullanıcı adı kayıtlı değil!"; }
+                else { $hata = "E-posta kayıtlı değil!"; }
             }
             break;
             
@@ -116,7 +114,7 @@ if ($_POST)
 
                 $bilgi = mysql_fetch_assoc($sonuc);
                 
-                girisyap($bilgi["id"], $bilgi["kullanici"]);
+                girisyap($bilgi["id"]);
             }
             break;
     }
@@ -131,14 +129,14 @@ if($_GET["kod"])
 {
     if ($_GET["hesap"] == "aktif")
     {
-        $sorgu = "SELECT kullanici FROM {$DBONEK}kullanici";
+        $sorgu = "SELECT isim, posta FROM {$DBONEK}kullanici";
         $sonuc = mysql_query($sorgu,$DB);
         while ($satir = mysql_fetch_array($sonuc))
         {
-            if($_GET["kod"] == md5($satir["kullanici"], $raw_output = null))
+            if($_GET["kod"] == md5($satir["isim"] . $satir["posta"], $raw_output = null))
             {
                 $sorgu = "UPDATE {$DBONEK}kullanici SET aktif='True'
-                    WHERE kullanici = '$satir[kullanici]'";
+                    WHERE posta = '$satir[posta]'";
                 mysql_query($sorgu,$DB);
                 echo "<script> 
                           alert('Hesabınız aktifleştirildi.');
@@ -155,7 +153,7 @@ if($_GET["kod"])
         $durum = TRUE;
         while ($profil = mysql_fetch_array($sonuc))
         {
-            $kodnormal = $profil["kullanici"] . $profil["parola"];
+            $kodnormal = $profil["posta"] . $profil["parola"];
             if($_GET["kod"] == md5($kodnormal, $raw_output = null))
             {
                 

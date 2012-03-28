@@ -1,11 +1,10 @@
 <?php
-$epostaBaslik = "MIME-Version: 1.0\r\nContent-type: text/html; charset=utf-8\r\nFrom: {$AYAR["Site E-Posta"]}";
+$epostaBaslik = "MIME-Version: 1.0\r\nContent-type: text/html; charset=utf-8\r\nFrom: {$AYAR["Site Adı"]} <{$AYAR["Site E-Posta"]}>";
 
-function girisyap($id, $kullanici)
+function girisyap($id)
 {
     $_SESSION["giris"] = true;
     $_SESSION["kid"] = $id;
-    $_SESSION["kullanici"] = $kullanici;
     if ($_GET["kod"] or $_GET["hesap"] == "cikis") echo "<script> window.top.location = './'; </script>";
     else echo "<script> window.top.location = '$_SERVER[HTTP_REFERER]'; </script>";
 }
@@ -76,13 +75,12 @@ function kisiadi($id)
     global $DB;
     global $DBONEK;
     
-    $sorgu = "SELECT isim, soyisim FROM {$DBONEK}kullanici WHERE id = '$id'";
+    $sorgu = "SELECT isim FROM {$DBONEK}kullanici WHERE id = '$id'";
     $kisi = mysql_query($sorgu,$DB);
     if( mysql_num_rows($kisi) == 1 )
     {
         $bilgi = mysql_fetch_assoc($kisi);
-        $kisi = "$bilgi[isim] $bilgi[soyisim]";
-        return $kisi;
+        return $bilgi["isim"];
     }
     else { return ""; }
 }
@@ -119,7 +117,7 @@ function formgoster($formbicimi, $hata = "", $ekicerik = NULL)
             echo   "<h4>Giriş</h4>
                     <p>$hata</p>
                     <form method='post'>
-                        Kullanıcı Adı:<input type='text' name='giriskullanici' tabindex='1' ";
+                        E-posta:<input type='text' name='giriskullanici' tabindex='1' ";
                             if ($_POST["giriskullanici"]) echo "value='$_POST[giriskullanici]'";
             echo   "        />
                         Parola:<input type='password' name='girisparola' tabindex='2' />
@@ -130,15 +128,15 @@ function formgoster($formbicimi, $hata = "", $ekicerik = NULL)
         
         case "icerik":
             echo   "<div class='icerik yuvar r4'>
+                    Aşağıdaki büyük beyaz alanın doldurulması <strong>zorunludur</strong>...<br />İlk 60 karakter başlık olarak alınacaktır.
                     <form method='post' action='' enctype='multipart/form-data'>
-                        <div class='ibolum'>Başlık <input class='yuvar sag' style='width:90%' size='55' type='text' name='baslik'/></div>
+                        <div class='ibolum'><textarea class='yuvar rbk' style='width:99%;height:7em;' name='yazi' aria-required='true'></textarea></div>
                         <input type='hidden' name='MAX_FILE_SIZE' value='20000000' />
                         <input type='hidden' id='dosyaSayisi' value='1' />
                         <div class='ibolum' id='dosyalar'>
                             <button class='yuvar r5 sag' id='yenidosya' type='button' onClick='dosyaekle()'>Başka Dosyalar Ekle</button>
                             <input class='yuvar r5' style='width:75%' type='file' name='dosya[]' />
                         </div>
-                        <div class='ibolum'><textarea class='yuvar rbk' style='width:99%;height:7em;' name='yazi' aria-required='true'></textarea></div>
                         <div class='ibolum'>
                             Kategori:
                             <select name='kategori' class='yuvar r5'>
@@ -181,16 +179,6 @@ function formgoster($formbicimi, $hata = "", $ekicerik = NULL)
                             <td><input type='text' name='isim' tabindex='4' ";
                                 if ($_POST["isim"]) echo "value='$_POST[isim]' ";
             echo   "            /></td>
-                            <td>Kullanıcı Adı:</td>
-                            <td><input type='text' name='kullanici' tabindex='7' ";
-                                if ($_POST["kullanici"]) echo "value='$_POST[kullanici]' ";
-            echo   "            /></td>
-                        </tr>
-                        <tr>
-                            <td>Soyisim:</td>
-                            <td><input type='text' name='soyisim' tabindex='5' ";
-                                if ($_POST["soyisim"]) echo "value='$_POST[soyisim]' ";
-            echo   "            /></td>
                             <td>Parola:</td>
                             <td><input type='password' name='parola' tabindex='8' /></td>
                         </tr>
@@ -215,7 +203,7 @@ function formgoster($formbicimi, $hata = "", $ekicerik = NULL)
             echo   "<h4>Kayıp Parola</h4>
                     <p>$hata</p>
                     <form method='post'>
-                        Kullanıcı Adı:<input type='text' name='kayipkullanici' tabindex='11' ";
+                        E-posta:<input type='text' name='kayipkullanici' tabindex='11' ";
                             if ($_POST["kayipkullanici"]) echo "value='$_POST[kayipkullanici]'";
             echo   "        />
                         <input type='hidden' name='formbicimi' value='kayip' />
@@ -228,7 +216,6 @@ function formgoster($formbicimi, $hata = "", $ekicerik = NULL)
                   <form method='post'>
                       <tr><td colspan='2'><p align='center'>$hata</p></td></tr>
                       <tr><td>İsim:</td><td><input type='text' name='isim' value='$ekicerik[isim]' /></td></tr>
-                      <tr><td> Soyisim:</td><td><input type='text' name='soyisim' value='$ekicerik[soyisim]' /></td></tr>
                       <tr><td> E-posta:</td><td><input type='text' name='email' value='$ekicerik[posta]' /></td></tr>
                       <tr><td></td><td align='right'>
                           <input type='hidden' name='formbicimi' value='profil' />
@@ -483,23 +470,14 @@ function profilTablola($id)
         
         echo   "<div class='icerik yuvar r4'>
                     <table width='100%'><tr>
-                        <td>Kullanıcı Adı:</td>
-                        <td>$bilgi[kullanici]</td>";
-                            if ($_SESSION["kid"] == $bilgi["id"]) echo "<td align='right'><a href='?hesap=ayarla&bicim=sifre' title='Şifre Değiştir'>Şifre Değiştir</a></td>";
-        echo   "    </tr></table>
-                </div>
-                <div class='icerik yuvar r4'>
-                    <table width='100%'><tr>
                         <td>İsim:</td>
                         <td>$bilgi[isim]</td>";
                             if ($_SESSION["kid"] == $bilgi["id"]) echo "<td align='right'><a href='?hesap=ayarla&bicim=profil' title='Profil Düzenle'>Profil Düzenle</a></td>";
         echo   "    </tr><tr>
-                        <td>Soyisim:</td>
-                        <td>$bilgi[soyisim]</td>
-                    </tr><tr>
                         <td>E-posta:</td>
-                        <td>$bilgi[posta]</td>
-                    </tr></table>
+                        <td>$bilgi[posta]</td>";
+                            if ($_SESSION["kid"] == $bilgi["id"]) echo "<td align='right'><a href='?hesap=ayarla&bicim=sifre' title='Şifre Değiştir'>Şifre Değiştir</a></td>";
+        echo   "    </tr></table>
                 </div>";
         if ($_SESSION["kid"] == $bilgi["id"] and $AYAR["Kişi E-Posta Durum"] == 1)
         {

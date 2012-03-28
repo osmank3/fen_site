@@ -2,9 +2,9 @@
 $GIRILMIS = false;
 $KULLANICI = null;
 
-if ( !empty($_SESSION["giris"]) && !empty($_SESSION["kullanici"]) )
+if ( !empty($_SESSION["giris"]) && !empty($_SESSION["kid"]) )
 {
     $GIRILMIS = true;
-    $KULLANICI = $_SESSION["kullanici"];
+    $KULLANICI = $_SESSION["kid"];
 }
 ?>

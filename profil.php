@@ -5,11 +5,10 @@ if ($_POST)
     {
         case "profil":
             if (!$_POST["isim"]) { $hata = "İsim girin!"; }
-            elseif(!$_POST["soyisim"]) { $hata = "Soyisim girin!"; }
             elseif(!$_POST["email"]) { $hata = "E-posta adresi girin!"; }
             else
             {
-                $sorgu = "UPDATE {$DBONEK}kullanici SET isim = '$_POST[isim]', soyisim = '$_POST[soyisim]',
+                $sorgu = "UPDATE {$DBONEK}kullanici SET isim = '$_POST[isim]',
                                   posta = '$_POST[email]' WHERE id = '$_SESSION[kid]'";
                 mysql_query($sorgu,$DB);
                 echo   "<script>

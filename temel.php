@@ -2,7 +2,6 @@
 <div class="sust">
     <div class="sol"><?php echo "<a href='{$AYAR["Anasayfa"]}' title='Ana Sayfa'>";?>Ana Sayfa</a></div>
     <div class="sag">
-        <?php echo $KULLANICI; ?>
         <a href="?hesap=goster" title="Profil">Profil</a>
         <a href="?hesap=cikis" title="Çıkış">Çıkış</a>
     </div>

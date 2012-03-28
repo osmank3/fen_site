@@ -4,21 +4,23 @@ if ($_POST)
     switch($_POST["formbicimi"])
     {
         case "yorum":
-            $sorgu = "INSERT INTO {$DBONEK}yorum (k_id, i_id, yazi) VALUES
-                      ('$_SESSION[kid]', '$_POST[id]', '$_POST[yazi]')";
-            mysql_query($sorgu, $DB);
-            
-            $sorgu = "SELECT max(id) FROM {$DBONEK}yorum";
-            $sonuc = mysql_query($sorgu, $DB);
-            $bilgi = mysql_fetch_assoc($sonuc);
-            
-            iletiPostala("yorum", $bilgi["max(id)"]);
+            if (mb_strlen($_POST["yazi"], "utf-8") > 0)
+            {
+                $sorgu = "INSERT INTO {$DBONEK}yorum (k_id, i_id, yazi) VALUES
+                          ('$_SESSION[kid]', '$_POST[id]', '$_POST[yazi]')";
+                mysql_query($sorgu, $DB);
+                
+                $sorgu = "SELECT max(id) FROM {$DBONEK}yorum";
+                $sonuc = mysql_query($sorgu, $DB);
+                $bilgi = mysql_fetch_assoc($sonuc);
+                
+                iletiPostala("yorum", $bilgi["max(id)"]);
+            }
 
             break;
             
         case "icerik":
-            if (!$_POST["baslik"]) {echo "Başlık girin!";}
-            elseif(!$_POST["yazi"]) {echo "Yazı girin!";}
+            if (!$_POST["yazi"]) {echo "Yazı girilmeli!";}
             else
             {
                 $dosyalar = "";
@@ -36,8 +38,13 @@ if ($_POST)
                         $dosyalar = "{$dosyalar}{$dosyaAdresi},";
                     }
                 }
+                
+                if (mb_strlen($_POST["yazi"], "utf-8") > 60) $baslik = mb_substr($_POST["yazi"], 0, 60, "utf-8") . "...";
+                else $baslik = $_POST["yazi"];
+                
+                
                 $sorgu = "INSERT INTO {$DBONEK}icerik (k_id, baslik, adres, yazi, kategori) VALUES
-                          ('$_SESSION[kid]', '$_POST[baslik]', '$dosyalar', '$_POST[yazi]', '$_POST[kategori]')";
+                          ('$_SESSION[kid]', '$baslik', '$dosyalar', '$_POST[yazi]', '$_POST[kategori]')";
                 mysql_query($sorgu, $DB);
                 
                 $sorgu = "SELECT max(id) FROM {$DBONEK}icerik";

@@ -7,7 +7,6 @@ if ($_GET)
         {
             case "cikis":
                 unset($_SESSION["giris"]);
-                unset($_SESSION["kullanici"]);
                 unset($_SESSION["kid"]);
                 echo "<script> window.top.location = './'; </script>";
                 break;
