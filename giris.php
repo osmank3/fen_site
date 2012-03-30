@@ -129,19 +129,31 @@ if($_GET["kod"])
 {
     if ($_GET["hesap"] == "aktif")
     {
-        $sorgu = "SELECT isim, posta FROM {$DBONEK}kullanici";
+        $sorgu = "SELECT id, isim, posta, aktif FROM {$DBONEK}kullanici";
         $sonuc = mysql_query($sorgu,$DB);
         while ($satir = mysql_fetch_array($sonuc))
         {
             if($_GET["kod"] == md5($satir["isim"] . $satir["posta"], $raw_output = null))
             {
-                $sorgu = "UPDATE {$DBONEK}kullanici SET aktif='True'
-                    WHERE posta = '$satir[posta]'";
-                mysql_query($sorgu,$DB);
-                echo "<script> 
-                          alert('Hesabınız aktifleştirildi.');
+                if ($satir["aktif"] == "True")
+                {
+                    echo "<script> 
                           window.top.location = './';
-                      </script>";
+                          </script>";
+                }
+                else
+                {
+                    $sorgu = "UPDATE {$DBONEK}kullanici SET aktif='True'
+                        WHERE posta = '$satir[posta]'";
+                    mysql_query($sorgu,$DB);
+                    
+                    echo "<script> 
+                              alert('Hesabınız aktifleştirildi.');
+                          </script>";
+                    
+                    girisyap($satir["id"]);
+                }
+                
                 break;
             }
         }

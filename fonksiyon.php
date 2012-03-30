@@ -502,6 +502,23 @@ function profilTablola($id)
                         </tr></table>
                     </div>";
         }
+        
+        //Taha Doğan'ın yoğun isteği üzerine kişinin son 10 yazısını gösteren kısımdır
+        
+        $sorgu2 = "SELECT id, baslik, tarih FROM {$DBONEK}icerik WHERE k_id = '{$id}' AND goster = 'True' ORDER BY id DESC LIMIT 10";
+        $sonuc2 = mysql_query($sorgu2,$DB);
+        if( mysql_num_rows($sonuc2) > 0 )
+        {
+            echo   "<div class='icerik yuvar r4'>
+                        Paylaştığı Son 10 İçerik:
+                        <ul width='100%'>";
+            while ($bilgi2 = mysql_fetch_array($sonuc2))
+            {
+                echo   "<li><a href='?icerik={$bilgi2[id]}'>{$bilgi2[baslik]}</a><span class='sag'>{$bilgi2[tarih]}</span></li>";
+            }
+            echo   "    </ul>
+                    </div>";
+        }
     }
 }
 
