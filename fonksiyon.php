@@ -93,7 +93,7 @@ function takipciListe($id)
     
     $takipciler = array();
     
-    $sorgu = "SELECT k_id FROM {$DBONEK}yorum WHERE i_id='{$id}' and takip='True'";
+    $sorgu = "SELECT k_id FROM {$DBONEK}takip WHERE i_id='{$id}' and takip='True'";
     $sonuc = mysql_query($sorgu, $DB);
     
     while ( $bilgi = mysql_fetch_assoc($sonuc))
@@ -311,7 +311,7 @@ function tablola($id)
         $sorgu2 = "SELECT id, yazi, k_id, tarih, goster FROM {$DBONEK}yorum WHERE i_id='$id' ORDER BY id";
         $sonuc2 = mysql_query($sorgu2, $DB);
         
-        $k_sorgu = "SELECT bilg_sade_takip FROM {$DBONEK}kullanici WHERE id = '{$_SESSION['kid']}'";
+        $k_sorgu = "SELECT bilg_sade_takip FROM {$DBONEK}kullanici WHERE id = '{$_SESSION[kid]}'";
         $k_sonuc = mysql_query($k_sorgu, $DB);
         if (mysql_num_rows($k_sonuc) == 1)
         {

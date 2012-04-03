@@ -86,7 +86,22 @@ CREATE TABLE `fen_yorum` (
   `i_id` int(11) NOT NULL,
   `yazi` text NULL,
   `tarih` timestamp NOT NULL default CURRENT_TIMESTAMP,
-  `takip` enum('False','True') NOT NULL default 'True',
   `goster` enum('True','False') NOT NULL default 'True',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tablo yapısı : `fen_takip`
+-- 
+
+CREATE TABLE `fen_takip` (
+  `id` int(11) NOT NULL auto_increment,
+  `k_id` int(11) NOT NULL,
+  `i_id` int(11) NOT NULL,
+  `takip` enum('False','True') NOT NULL default 'True',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+
+

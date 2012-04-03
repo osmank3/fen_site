@@ -4,11 +4,31 @@ if ($_POST)
     switch($_POST["formbicimi"])
     {
         case "yorum":
-            if (mb_strlen($_POST["yazi"], "utf-8") > 0)
+            if (mb_strlen(trim($_POST["yazi"]), "utf-8") > 0)
             {
+                //Yorumu veritabanına kaydetme kısmı
+                
                 $sorgu = "INSERT INTO {$DBONEK}yorum (k_id, i_id, yazi) VALUES
                           ('$_SESSION[kid]', '$_POST[id]', '$_POST[yazi]')";
                 mysql_query($sorgu, $DB);
+                
+                //Takip etme kısmı
+                
+                $sorgu = "SELECT * FROM {$DBONEK}takip WHERE i_id='{$_POST[id]}' and k_id='{$_SESSION[kid]}'";
+                $sonuc = mysql_query($sorgu, $DB);
+                if (mysql_num_rows($sonuc) > 0)
+                {
+                    $k_sorgu = "UPDATE {$DBONEK}takip SET takip='True' WHERE i_id = '{$_POST[id]}' and k_id = '{$_SESSION[kid]}'";
+                    mysql_query($k_sorgu, $DB);
+                }
+                else
+                {
+                    $k_sorgu = "INSERT INTO {$DBONEK}takip (k_id, i_id) VALUES
+                                ('{$_SESSION[kid]}', '{$_POST[id]}')";
+                    mysql_query($k_sorgu, $DB);
+                }
+                
+                //Posta gönderme kısmı
                 
                 $sorgu = "SELECT max(id) FROM {$DBONEK}yorum";
                 $sonuc = mysql_query($sorgu, $DB);
@@ -23,6 +43,8 @@ if ($_POST)
             if (!$_POST["yazi"]) {echo "Yazı girilmeli!";}
             else
             {
+                //Dosya algılama/kaydetme kısmı
+                
                 $dosyalar = "";
                 foreach ($_FILES["dosya"]["error"] as $sira => $hata)
                 {
@@ -39,25 +61,31 @@ if ($_POST)
                     }
                 }
                 
+                //Başlık ayırma kısmı
+                
                 if (mb_strlen($_POST["yazi"], "utf-8") > 60) $baslik = mb_substr($_POST["yazi"], 0, 60, "utf-8") . "...";
                 else $baslik = $_POST["yazi"];
                 
+                //İçeriği veritabanına kaydetme kısmı
                 
                 $sorgu = "INSERT INTO {$DBONEK}icerik (k_id, baslik, adres, yazi, kategori) VALUES
                           ('$_SESSION[kid]', '$baslik', '$dosyalar', '$_POST[yazi]', '$_POST[kategori]')";
                 mysql_query($sorgu, $DB);
                 
+                //Takip etme ve posta gönderme kısmı
+                
                 $sorgu = "SELECT max(id) FROM {$DBONEK}icerik";
                 $sonuc = mysql_query($sorgu, $DB);
                 $bilgi = mysql_fetch_assoc($sonuc);
+                $maxId = $bilgi["max(id)"];
                 
-                $sorgu = "INSERT INTO {$DBONEK}yorum (k_id, i_id, goster) VALUES
-                          ('$_SESSION[kid]', '{$bilgi['max(id)']}', 'False')";
+                $sorgu = "INSERT INTO {$DBONEK}takip (k_id, i_id) VALUES
+                          ('$_SESSION[kid]', '$maxId')";
                 mysql_query($sorgu, $DB);
                 
-                iletiPostala("icerik", $bilgi["max(id)"]);
+                iletiPostala("icerik", $maxId);
                 
-                echo "<script>window.top.location = '?icerik={$bilgi['max(id)']}';</script>";
+                echo "<script>window.top.location = '?icerik=$maxId';</script>";
             }
             
             break;
@@ -68,23 +96,27 @@ if ($_POST)
             include "fonksiyon.php";
             if ($_POST["durum"] == "takipet")
             {
-                $sorgu = "SELECT * FROM {$DBONEK}yorum WHERE i_id='{$_POST[i_id]}' and k_id='{$_POST[k_id]}'";
+                //Takip etme kısmı
+                
+                $sorgu = "SELECT * FROM {$DBONEK}takip WHERE i_id='{$_POST[i_id]}' and k_id='{$_POST[k_id]}'";
                 $sonuc = mysql_query($sorgu, $DB);
                 if (mysql_num_rows($sonuc) > 0)
                 {
-                    $k_sorgu = "UPDATE {$DBONEK}yorum SET takip='True' WHERE i_id = '{$_POST[i_id]}' and k_id = '{$_POST[k_id]}'";
+                    $k_sorgu = "UPDATE {$DBONEK}takip SET takip='True' WHERE i_id = '{$_POST[i_id]}' and k_id = '{$_POST[k_id]}'";
                     mysql_query($k_sorgu, $DB);
                 }
                 else
                 {
-                    $k_sorgu = "INSERT INTO {$DBONEK}yorum (k_id, i_id, goster) VALUES
-                                ('{$_POST[k_id]}', '{$_POST[i_id]}', 'False')";
+                    $k_sorgu = "INSERT INTO {$DBONEK}takip (k_id, i_id) VALUES
+                                ('{$_POST[k_id]}', '{$_POST[i_id]}')";
                     mysql_query($k_sorgu, $DB);
                 }
             }
             elseif ($_POST["durum"] == "takipetme")
             {
-                $k_sorgu = "UPDATE {$DBONEK}yorum SET takip='False' WHERE i_id = '{$_POST[i_id]}' and k_id = '{$_POST[k_id]}'";
+                //Takip bırakma kısmı
+            
+                $k_sorgu = "UPDATE {$DBONEK}takip SET takip='False' WHERE i_id = '{$_POST[i_id]}' and k_id = '{$_POST[k_id]}'";
                 mysql_query($k_sorgu, $DB);
             }
             
