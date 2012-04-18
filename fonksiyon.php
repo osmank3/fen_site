@@ -1,5 +1,5 @@
 <?php
-$epostaBaslik = "MIME-Version: 1.0\r\nContent-type: text/html; charset=utf-8\r\nFrom: {$AYAR["Site Adı"]} <{$AYAR["Site E-Posta"]}>";
+$epostaBaslik = "MIME-Version: 1.0\r\nContent-type: text/html; charset=utf-8\r\nFrom: {$AYAR["Site Adı"]} <{$AYAR["Site E-Posta"]}>\r\n";
 
 function girisyap($id)
 {
@@ -601,6 +601,8 @@ function iletiPostala($tablo, $id)
     //kişilere e-posta gönderen kısım
     if ($AYAR["Kişi E-Posta Durum"] == 1)
     {
+        $postalanacaklar = "BCC: ";
+        
         $k_sorgu = "SELECT id, posta, bilg_yeni_icerik, bilg_yeni_yorum, bilg_sade_takip FROM {$DBONEK}kullanici";
         $k_sonuc = mysql_query($k_sorgu, $DB);
         while($k_bilgi = mysql_fetch_assoc($k_sonuc))
@@ -608,7 +610,8 @@ function iletiPostala($tablo, $id)
             if ($_SESSION["kid"] == $k_bilgi["id"]) continue;
             if ($k_bilgi["bilg_yeni_icerik"] == "True" and $tablo == "icerik")
             {
-                mail( $k_bilgi["posta"], $konu, $metin, $epostaBaslik );
+                $postalanacaklar .= "<{$k_bilgi[posta]}>,";
+                //mail( $k_bilgi["posta"], $konu, $metin, $epostaBaslik );
             }
             if ($k_bilgi["bilg_yeni_yorum"] == "True" and $tablo == "yorum")
             {
@@ -616,15 +619,19 @@ function iletiPostala($tablo, $id)
                 {
                     if (in_array($k_bilgi["id"], $takipciler))
                     {
-                        mail( $k_bilgi["posta"], $konu, $metin, $epostaBaslik );
+                        $postalanacaklar .= "<{$k_bilgi[posta]}>,";
+                        //mail( $k_bilgi["posta"], $konu, $metin, $epostaBaslik );
                     }
                 }
                 else
                 {
-                    mail( $k_bilgi["posta"], $konu, $metin, $epostaBaslik );
+                    $postalanacaklar .= "<{$k_bilgi[posta]}>,";
+                    //mail( $k_bilgi["posta"], $konu, $metin, $epostaBaslik );
                 }
             }
         }
+        $postalanacaklar .= "\r\n";
+        mail( "", $konu, $metin, $epostaBaslik . $postalanacaklar);
     }
 }
 ?>

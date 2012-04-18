@@ -6,6 +6,18 @@ if ($_POST)
         case "yorum":
             if (mb_strlen(trim($_POST["yazi"]), "utf-8") > 0)
             {
+                //yorumu iki defa göndermeyi engelleyen kısım
+                $sorgu = "SELECT k_id, i_id, yazi FROM {$DBONEK}yorum ORDER BY id DESC LIMIT 1";
+                $sonuc = mysql_query($sorgu, $DB);
+                if (mysql_num_rows($sonuc) == 1)
+                {
+                    $bilgi = mysql_fetch_assoc($sonuc);
+                    if ($_POST["yazi"] == $bilgi["yazi"] & $_SESSION["kid"] == $bilgi["k_id"] & $_POST["id"] == $bilgi["i_id"])
+                    {
+                        break;
+                    }
+                }
+                
                 //Yorumu veritabanına kaydetme kısmı
                 
                 $sorgu = "INSERT INTO {$DBONEK}yorum (k_id, i_id, yazi) VALUES
